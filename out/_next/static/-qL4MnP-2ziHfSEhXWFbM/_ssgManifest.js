@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fmodules\u002F[module]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
