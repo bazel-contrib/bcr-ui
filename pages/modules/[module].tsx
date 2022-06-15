@@ -18,7 +18,7 @@ const MODULES_ROOT_DIR = path.join(
 const ModulePage: NextPage = (props) => {
   const router = useRouter();
   const { module } = router.query;
-  const metadata = props.metadata as any as Metadata;
+  const metadata = (props as any).metadata as any as Metadata;
 
   const latestVersion = metadata.versions[metadata.versions.length - 1];
   // TODO: Is there a good way to statically analyze MODULE.bazel to get that data?
@@ -97,7 +97,7 @@ interface Metadata {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { module } = params;
+  const { module } = params as any;
 
   const metadataJsonPath = path.join(MODULES_ROOT_DIR, module, "metadata.json");
   const metadataContents = await fs.readFile(metadataJsonPath);
