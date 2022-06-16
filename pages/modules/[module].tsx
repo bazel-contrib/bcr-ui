@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { Header, USER_GUIDE_LINK } from "../../components/Header";
 import { Footer } from "../../components/Footer";
 import {
+  getCompatibilityLevelOfVersion,
   getModuleMetadata,
   getSubmissionCommitOfVersion,
   listModuleNames,
@@ -20,8 +21,6 @@ const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
   const { module } = router.query;
 
   const latestVersion = metadata.versions[metadata.versions.length - 1];
-  // TODO: Is there a good way to statically analyze MODULE.bazel to get that data?
-  const compatibilityLevel = "?";
 
   return (
     <div className="flex flex-col">
@@ -63,7 +62,7 @@ const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
                         <div className="rounded-full border h-14 w-14 grid place-items-center">
                           {version.version}
                         </div>
-                        <div>compatibility level {compatibilityLevel}</div>
+                        <div>compatibility level {version.compatibilityLevel}</div>
                         <a
                           href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
                           className="ml-auto text-link-color hover:text-link-color-hover"
@@ -118,6 +117,7 @@ interface VersionInfo {
     authorDate: string;
     authorDateRel: string;
   };
+  compatibilityLevel: number,
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -128,6 +128,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     metadata.versions.map(async (version) => ({
       version,
       submission: await getSubmissionCommitOfVersion(module, version),
+      compatibilityLevel: await getCompatibilityLevelOfVersion(module, version)
     }))
   );
 

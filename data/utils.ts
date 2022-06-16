@@ -69,3 +69,20 @@ export const getSubmissionCommitOfVersion = async (
 
   return commits[commits.length - 1] as any;
 };
+
+// TODO: find a more robust way to do this
+export const getCompatibilityLevelOfVersion = async (
+    module: string,
+    version: string
+): Promise<number> => {
+  const moduleFilePath = path.join(MODULES_ROOT_DIR, module, version, 'MODULE.bazel')
+  const moduleFileContents = (await fs.readFile(moduleFilePath)).toString();
+
+  const PATTERN = "compatibility_level = ";
+  const pos = moduleFileContents.search(PATTERN);
+  const posAfterPattern = pos + PATTERN.length;
+  const nextCharsAfterPos = moduleFileContents.slice(posAfterPattern);
+  const [level] = nextCharsAfterPos.split(",");
+
+  return Promise.resolve(parseInt(level, 10))
+}
