@@ -2,18 +2,10 @@ import { promises as fs } from "fs";
 import path from "path";
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import styles from "../../styles/Home.module.css";
 import { useRouter } from "next/router";
 import { Header, USER_GUIDE_LINK } from "../../components/Header";
 import { Footer } from "../../components/Footer";
-
-const MODULES_ROOT_DIR = path.join(
-  process.cwd(),
-  "data",
-  "bazel-central-registry",
-  "modules"
-);
+import {getModuleMetadata, listModuleNames, Metadata} from "../../data/utils";
 
 const ModulePage: NextPage = (props) => {
   const router = useRouter();
@@ -76,7 +68,7 @@ const ModulePage: NextPage = (props) => {
                 <div>
                   <h3 className="font-bold text-xl mt-2">Homepage</h3>
                   <div>
-                    <a href={metadata.homepage}>{metadata.homepage}</a>
+                    <a href={metadata.homepage} className="text-link-color hover:text-link-color-hover">{metadata.homepage}</a>
                   </div>
                 </div>
                 <div>
@@ -102,22 +94,10 @@ const ModulePage: NextPage = (props) => {
   );
 };
 
-interface Metadata {
-  homepage?: string;
-  maintainers: Array<{
-    email?: string;
-    github?: string;
-    name?: string;
-  }>;
-  versions: Array<string>;
-}
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { module } = params as any;
-
-  const metadataJsonPath = path.join(MODULES_ROOT_DIR, module, "metadata.json");
-  const metadataContents = await fs.readFile(metadataJsonPath);
-  const metadata: Metadata = JSON.parse(metadataContents.toString());
+  const metadata = await getModuleMetadata(module);
 
   return {
     props: {
@@ -127,7 +107,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export async function getStaticPaths() {
-  const modulesNames = await fs.readdir(MODULES_ROOT_DIR);
+  const modulesNames = await listModuleNames();
 
   const paths = modulesNames.map((name) => ({
     params: { module: name },
