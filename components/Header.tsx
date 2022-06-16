@@ -11,9 +11,9 @@ export const Header: React.FC<HeaderProps> = () => {
   return (
       <nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 bg-bzl-green">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center cursor-pointer">
             <span
-                className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Bazel Central Registry</span>
+                className="self-center text-xl font-semibold whitespace-nowrap dark:text-white cursor-pointer">Bazel Central Registry</span>
           </Link>
           <div className="flex md:order-1 transform translate-x-1/4">
             <button type="button" data-collapse-toggle="mobile-menu-3" aria-controls="mobile-menu-3"

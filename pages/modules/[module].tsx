@@ -6,7 +6,7 @@ import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 import { useRouter } from "next/router";
 import { Header, USER_GUIDE_LINK } from "../../components/Header";
-import {Footer} from "../../components/Footer";
+import { Footer } from "../../components/Footer";
 
 const MODULES_ROOT_DIR = path.join(
   process.cwd(),
@@ -46,7 +46,8 @@ const ModulePage: NextPage = (props) => {
                   <p>
                     To start using this module, make sure you have set up Bzlmod
                     according to the <a href={USER_GUIDE_LINK}>user guide</a>,
-                    and add the following to your <code>MODULE.bazel</code> file:
+                    and add the following to your <code>MODULE.bazel</code>{" "}
+                    file:
                   </p>
                   <div className="p-2 mt-4 rounded bg-gray-200">
                     <code>{`bazel_dep(name = "${module}", version = "${latestVersion}")`}</code>
@@ -56,7 +57,10 @@ const ModulePage: NextPage = (props) => {
                 <div>
                   <ul className="mt-4">
                     {metadata.versions.reverse().map((version) => (
-                      <li key={version} className="border rounded p-2 mt-2 flex items-center gap-4">
+                      <li
+                        key={version}
+                        className="border rounded p-2 mt-2 flex items-center gap-4"
+                      >
                         <div className="rounded-full border h-14 w-14 grid place-items-center">
                           {version}
                         </div>
@@ -70,9 +74,21 @@ const ModulePage: NextPage = (props) => {
               <div id="metadata" className="mt-4 pl-2">
                 <h2 className="text-2xl font-bold mt-4">Metadata</h2>
                 <div>
-                  <h3 className="font-bold text-xl mt-2">Repository</h3>
+                  <h3 className="font-bold text-xl mt-2">Homepage</h3>
                   <div>
                     <a href={metadata.homepage}>{metadata.homepage}</a>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-bold text-xl mt-2">Maintainers</h3>
+                  <div>
+                    <ul>
+                      {metadata.maintainers.map(({ name, email, github }) => (
+                        <li key="name">
+                          <span>{name}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -80,8 +96,8 @@ const ModulePage: NextPage = (props) => {
           </div>
         </div>
       </main>
-      <div className="flex-grow"/>
-      <Footer/>
+      <div className="flex-grow" />
+      <Footer />
     </div>
   );
 };

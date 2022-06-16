@@ -39,14 +39,7 @@ const Home: NextPage = () => {
             <h2 className="font-bold text-lg">Highlighted modules</h2>
             <div className="grid grid-cols-2 gap-8 mt-4">
               {HIGHLIGHTED_MODULES.map(({ module, version }) => (
-                  <a key={module} href={`/modules/${module}`}>
-                <div className="w-48 h-24 border rounded flex flex-col items-center justify-center shadow-sm hover:shadow-lg">
-                  <div className="font-bold">{module}</div>
-                  <div>
-                    {version}
-                  </div>
-                </div>
-                  </a>
+                <ModuleCard key={module} {...{ module, version }} />
               ))}
             </div>
           </div>
@@ -57,8 +50,20 @@ const Home: NextPage = () => {
   );
 };
 
-const ModuleCard = () => {
-  return <div></div>;
+interface ModuleCardProps {
+  module: string;
+  version: string;
+}
+
+const ModuleCard: React.FC<ModuleCardProps> = ({ module, version }) => {
+  return (
+    <a href={`/modules/${module}`}>
+      <div className="w-48 h-24 border rounded flex flex-col items-center justify-center shadow-sm hover:shadow-lg">
+        <div className="font-bold">{module}</div>
+        <div>{version}</div>
+      </div>
+    </a>
+  );
 };
 
 export default Home;
