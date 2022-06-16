@@ -1,3 +1,0 @@
-[submodule "data/bazel-central-registry"]
-	path = data/bazel-central-registry
-	url = git@github.com:bazelbuild/bazel-central-registry.git
