@@ -2,20 +2,47 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import {GetStaticProps} from "next";
+import {buildSearchIndex, SearchIndexEntry} from "../data/utils";
+import Fuse from "fuse.js";
 
-// TODO: fetch correct version during build
-const HIGHLIGHTED_MODULES = [
-  { module: "rules_nodejs", version: "0.1.0" },
-  { module: "stardoc", version: "0.2.0" },
-  { module: "rules_python", version: "2.1.0" },
-  { module: "apple_support", version: "0.0.0" },
-];
+interface SearchPageProps {
+  searchIndex: SearchIndexEntry[]
+}
 
-const Home: NextPage = () => {
+const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
+  const [searchResults, setSearchResults] = useState<SearchIndexEntry[]>([]);
+
   const router = useRouter()
-  const [searchQueryInput, setSearchQueryInput] = useState<string>("")
+  const searchQuery = router.query.q;
+
+  const getSearchQuery = (): string | null => {
+    if (!searchQuery || typeof searchQuery !== "string") {
+      return null;
+    }
+    return searchQuery
+  }
+
+  const [searchQueryInput, setSearchQueryInput] = useState<string>(getSearchQuery() || "")
+
+  const fuseIndex = new Fuse(searchIndex, {
+    includeScore: true,
+    threshold: 0.4,
+    keys: ["module"],
+  });
+
+  useEffect(() => {
+    if (!searchQuery || typeof searchQuery !== "string") {
+      return;
+    }
+    const results = fuseIndex.search(searchQuery)
+    setSearchResults(results.map((n) => n.item))
+  }, [searchQuery])
+  useEffect(() => {
+    setSearchQueryInput(getSearchQuery() || "");
+  }, [searchQuery])
 
   const handleSearchKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === "Enter") {
@@ -24,7 +51,7 @@ const Home: NextPage = () => {
   }
 
   const handleSubmitSearch = () => {
-    router.push({pathname: "/search", query: {...router.query, q: searchQueryInput}})
+    router.push({pathname: router.pathname, query: {...router.query, q: searchQueryInput}})
   }
 
   return (
@@ -37,26 +64,21 @@ const Home: NextPage = () => {
       <Header />
       <main>
         <div className="max-w-4xl w-4xl mx-auto mt-8 flex flex-col items-center">
-          <h1 className="text-bzl-green font-bold text-6xl">
-            Bazel Central Registry
-          </h1>
-          <div className="text-bzl-green text-4xl">
-            Home of all your bzlmod modules!
-          </div>
           <input
             type="text"
-            autoFocus
             id="search-navbar"
+            autoFocus
             className="my-6 h-12 block p-2 pl-10 w-full max-w-xl text-gray-900 bg-white rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500"
             placeholder="Search for module..."
+            value={searchQueryInput}
             onChange={(e) => setSearchQueryInput(e.target.value)}
             onKeyDown={handleSearchKeydown}
             onSubmit={handleSubmitSearch}
           />
           <div>
-            <h2 className="font-bold text-lg">Highlighted modules</h2>
-            <div className="grid grid-cols-2 gap-8 mt-4">
-              {HIGHLIGHTED_MODULES.map(({ module, version }) => (
+            <h2 className="font-bold text-lg">Search results</h2>
+            <div className="grid grid-cols-1 gap-8 mt-4">
+              {searchResults.map(({ module, version }) => (
                 <ModuleCard key={module} {...{ module, version }} />
               ))}
             </div>
@@ -67,6 +89,17 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const searchIndex = await buildSearchIndex();
+
+  return {
+    props: {
+      searchIndex,
+    },
+  };
+};
+
 
 interface ModuleCardProps {
   module: string;
@@ -84,4 +117,4 @@ const ModuleCard: React.FC<ModuleCardProps> = ({ module, version }) => {
   );
 };
 
-export default Home;
+export default Search;
