@@ -1,5 +1,6 @@
 import path from "path";
 import { promises as fs } from "fs";
+import { gitlogPromise } from "gitlog";
 
 export const MODULES_ROOT_DIR = path.join(
   process.cwd(),
@@ -37,10 +38,34 @@ export interface SearchIndexEntry {
 
 export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
   const moduleNames = await listModuleNames();
-  return Promise.all(moduleNames.map(async (module) => {
-    const metadata = await getModuleMetadata(module);
-    const latestVersion = metadata.versions[metadata.versions.length - 1];
+  return Promise.all(
+    moduleNames.map(async (module) => {
+      const metadata = await getModuleMetadata(module);
+      const latestVersion = metadata.versions[metadata.versions.length - 1];
 
-    return { module, version: latestVersion };
-  }));
+      return { module, version: latestVersion };
+    })
+  );
+};
+
+export interface Commit {
+  hash: string;
+  authorDate: string;
+  authorDateRel: string;
+}
+
+export const getSubmissionCommitOfVersion = async (
+  module: string,
+  version: string
+): Promise<Commit> => {
+  const options = {
+    repo: path.join(process.cwd(), "data", "bazel-central-registry"),
+    number: 10,
+    file: `modules/${module}/${version}/source.json`,
+    fields: ["hash", "authorDate", "authorDateRel"] as any
+  };
+
+  const commits = await gitlogPromise(options)
+
+  return commits[commits.length - 1] as any;
 };

@@ -1,16 +1,23 @@
-import { promises as fs } from "fs";
-import path from "path";
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Header, USER_GUIDE_LINK } from "../../components/Header";
 import { Footer } from "../../components/Footer";
-import {getModuleMetadata, listModuleNames, Metadata} from "../../data/utils";
+import {
+  getModuleMetadata,
+  getSubmissionCommitOfVersion,
+  listModuleNames,
+  Metadata,
+} from "../../data/utils";
 
-const ModulePage: NextPage = (props) => {
+interface ModulePageProps {
+  metadata: Metadata;
+  versionInfos: VersionInfo[];
+}
+
+const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
   const router = useRouter();
   const { module } = router.query;
-  const metadata = (props as any).metadata as any as Metadata;
 
   const latestVersion = metadata.versions[metadata.versions.length - 1];
   // TODO: Is there a good way to statically analyze MODULE.bazel to get that data?
@@ -48,16 +55,21 @@ const ModulePage: NextPage = (props) => {
                 <h2 className="text-2xl font-bold mt-4">Version history</h2>
                 <div>
                   <ul className="mt-4">
-                    {metadata.versions.reverse().map((version) => (
+                    {versionInfos.reverse().map((version) => (
                       <li
-                        key={version}
+                        key={version.version}
                         className="border rounded p-2 mt-2 flex items-center gap-4"
                       >
                         <div className="rounded-full border h-14 w-14 grid place-items-center">
-                          {version}
+                          {version.version}
                         </div>
                         <div>compatibility level {compatibilityLevel}</div>
-                        <div className="ml-auto">published ? ago</div>
+                        <a
+                          href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
+                          className="ml-auto text-link-color hover:text-link-color-hover"
+                        >
+                          published {version.submission.authorDateRel}
+                        </a>
                       </li>
                     ))}
                   </ul>
@@ -68,7 +80,12 @@ const ModulePage: NextPage = (props) => {
                 <div>
                   <h3 className="font-bold text-xl mt-2">Homepage</h3>
                   <div>
-                    <a href={metadata.homepage} className="text-link-color hover:text-link-color-hover">{metadata.homepage}</a>
+                    <a
+                      href={metadata.homepage}
+                      className="text-link-color hover:text-link-color-hover"
+                    >
+                      {metadata.homepage}
+                    </a>
                   </div>
                 </div>
                 <div>
@@ -94,14 +111,30 @@ const ModulePage: NextPage = (props) => {
   );
 };
 
+interface VersionInfo {
+  version: string;
+  submission: {
+    hash: string;
+    authorDate: string;
+    authorDateRel: string;
+  };
+}
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { module } = params as any;
   const metadata = await getModuleMetadata(module);
 
+  const versionInfos = await Promise.all(
+    metadata.versions.map(async (version) => ({
+      version,
+      submission: await getSubmissionCommitOfVersion(module, version),
+    }))
+  );
+
   return {
     props: {
       metadata,
+      versionInfos,
     },
   };
 };
