@@ -1,0 +1,9 @@
+on:
+  repository_dispatch:
+    types: [on-bcr-trigger]
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      bcrCommitHash: ${{ github.event.client_payload.bcrCommitHash }}
+    secrets: inherit
