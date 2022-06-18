@@ -12,6 +12,9 @@ import {
   Metadata,
   ModuleInfo,
 } from '../../data/utils'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -127,7 +130,25 @@ const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
                     <ul>
                       {metadata.maintainers.map(({ name, email, github }) => (
                         <li key="name">
-                          <span>{name}</span>
+                          <span>
+                            {email && (
+                              <a
+                                className="text-link-color hover:text-link-color-hover cursor-pointer mr-1"
+                                href={`mailto:${email}`}
+                              >
+                                <FontAwesomeIcon icon={faEnvelope} />
+                              </a>
+                            )}
+                            {github && (
+                              <a
+                                className="text-link-color hover:text-link-color-hover cursor-pointer mr-1"
+                                href={`https://github.com/${github}`}
+                              >
+                                <FontAwesomeIcon icon={faGithub} />
+                              </a>
+                            )}
+                            {name}
+                          </span>
                         </li>
                       ))}
                     </ul>
