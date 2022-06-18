@@ -26,6 +26,10 @@ jobs:
         with:
           version: 6.0.2
 
+      - name: Build required binaries
+        run: |
+          ./build_bins.sh
+
       - name: Checkout BCR submodule
         run: |
           git submodule update --init -- data/bazel-central-registry

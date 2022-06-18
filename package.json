@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "execa": "^6.1.0",
     "fuse.js": "^6.6.2",
     "gitlog": "^4.0.4",
     "next": "12.1.6",
