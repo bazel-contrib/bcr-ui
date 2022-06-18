@@ -1,41 +1,44 @@
-import React, { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import React, { useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 interface HeaderProps {}
 
-export const USER_GUIDE_LINK = "https://bazel.build/docs/bzlmod";
+export const USER_GUIDE_LINK = 'https://bazel.build/docs/bzlmod'
 export const CONTRIBUTE_CTA_LINK =
-  "https://github.com/bazelbuild/bazel-central-registry#roles";
+  'https://github.com/bazelbuild/bazel-central-registry#roles'
 
 export const Header: React.FC<HeaderProps> = () => {
-  const router = useRouter();
-  const [searchQueryInput, setSearchQueryInput] = useState<string>("");
+  const router = useRouter()
+  const [searchQueryInput, setSearchQueryInput] = useState<string>('')
 
   const handleSearchKeydown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    if (event.code === "Enter") {
-      handleSubmitSearch();
+    if (event.code === 'Enter') {
+      handleSubmitSearch()
     }
-  };
+  }
 
   const handleSubmitSearch = () => {
     router.push({
-      pathname: "/search",
+      pathname: '/search',
       query: { ...router.query, q: searchQueryInput },
-    });
-  };
+    })
+  }
 
   return (
     <nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 bg-bzl-green">
-      <div className="container flex flex-wrap justify-between items-center mx-auto">
-        <Link href="/" className="flex items-center cursor-pointer">
-          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white cursor-pointer">
-            Bazel Central Registry
-          </span>
-        </Link>
-        <div className="flex md:order-1 transform translate-x-1/4">
+      <div className="container flex flex-wrap items-center mx-auto">
+        <div className="flex flex-1 items-center">
+          <Link href="/" className="flex items-center cursor-pointer">
+            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white cursor-pointer">
+              Bazel Central Registry
+            </span>
+          </Link>
+          <div className="ml-2 px-2 rounded bg-amber-300">EXPERIMENTAL</div>
+        </div>
+        <div className="flex flex-1 md:order-1 transform translate-x-1/4">
           <button
             type="button"
             data-collapse-toggle="mobile-menu-3"
@@ -115,7 +118,7 @@ export const Header: React.FC<HeaderProps> = () => {
           </button>
         </div>
         <div
-          className="hidden justify-between items-center w-full md:flex md:w-auto md:order-2"
+          className="flex flex-1 hidden justify-end items-center w-full md:flex md:w-auto md:order-2"
           id="mobile-menu-3"
         >
           <div className="relative mt-3 md:hidden">
@@ -164,5 +167,5 @@ export const Header: React.FC<HeaderProps> = () => {
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}

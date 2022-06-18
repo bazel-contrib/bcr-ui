@@ -75,13 +75,13 @@ const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
                         <div className="rounded-full border h-14 w-14 grid place-items-center">
                           {version.version}
                         </div>
-                        <div>
+                        <div className="self-end text-gray-500">
                           compatibility level{' '}
                           {version.moduleInfo.compatibilityLevel}
                         </div>
                         <a
                           href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
-                          className="ml-auto text-link-color hover:text-link-color-hover"
+                          className="ml-auto self-end text-link-color hover:text-link-color-hover"
                         >
                           published {version.submission.authorDateRel}
                         </a>

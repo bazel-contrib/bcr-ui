@@ -1,30 +1,35 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { Header } from "../components/Header";
-import { Footer } from "../components/Footer";
-import React, {useState} from "react";
-import {useRouter} from "next/router";
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import { Header } from '../components/Header'
+import { Footer } from '../components/Footer'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 
 // TODO: fetch correct version during build
 const HIGHLIGHTED_MODULES = [
-  { module: "rules_nodejs", version: "0.1.0" },
-  { module: "stardoc", version: "0.2.0" },
-  { module: "rules_python", version: "2.1.0" },
-  { module: "apple_support", version: "0.0.0" },
-];
+  { module: 'rules_nodejs', version: '0.1.0' },
+  { module: 'stardoc', version: '0.2.0' },
+  { module: 'rules_python', version: '2.1.0' },
+  { module: 'apple_support', version: '0.0.0' },
+]
 
 const Home: NextPage = () => {
   const router = useRouter()
-  const [searchQueryInput, setSearchQueryInput] = useState<string>("")
+  const [searchQueryInput, setSearchQueryInput] = useState<string>('')
 
-  const handleSearchKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code === "Enter") {
+  const handleSearchKeydown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.code === 'Enter') {
       handleSubmitSearch()
     }
   }
 
   const handleSubmitSearch = () => {
-    router.push({pathname: "/search", query: {...router.query, q: searchQueryInput}})
+    router.push({
+      pathname: '/search',
+      query: { ...router.query, q: searchQueryInput },
+    })
   }
 
   return (
@@ -42,6 +47,10 @@ const Home: NextPage = () => {
           </h1>
           <div className="text-bzl-green text-4xl">
             Home of all your bzlmod modules!
+          </div>
+          <div className="mt-4 ml-2 px-2 rounded bg-amber-300">
+            As of Bazel 5.X, bzlmod and the Bazel Central Registry are in an
+            experimental status.
           </div>
           <input
             type="text"
@@ -65,12 +74,12 @@ const Home: NextPage = () => {
       </main>
       <Footer />
     </div>
-  );
-};
+  )
+}
 
 interface ModuleCardProps {
-  module: string;
-  version: string;
+  module: string
+  version: string
 }
 
 const ModuleCard: React.FC<ModuleCardProps> = ({ module, version }) => {
@@ -81,7 +90,7 @@ const ModuleCard: React.FC<ModuleCardProps> = ({ module, version }) => {
         <div>{version}</div>
       </div>
     </a>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
