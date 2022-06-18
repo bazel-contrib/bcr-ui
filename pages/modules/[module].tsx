@@ -5,7 +5,6 @@ import { Header, USER_GUIDE_LINK } from '../../components/Header'
 import { Footer } from '../../components/Footer'
 import {
   extractModuleInfo,
-  getCompatibilityLevelOfVersion,
   getModuleMetadata,
   getSubmissionCommitOfVersion,
   listModuleNames,
@@ -19,26 +18,28 @@ import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 interface ModulePageProps {
   metadata: Metadata
   versionInfos: VersionInfo[]
+  selectedVersion: string
 }
 
-const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
+const ModulePage: NextPage<ModulePageProps> = ({
+  metadata,
+  versionInfos,
+  selectedVersion,
+}) => {
   const router = useRouter()
   const { module } = router.query
 
-  const latestVersion = metadata.versions[metadata.versions.length - 1]
-  const version = latestVersion
-
-  const versionInfo = versionInfos.find((n) => n.version === version)
+  const versionInfo = versionInfos.find((n) => n.version === selectedVersion)
   if (!versionInfo) {
     throw Error(
-      `Version information for version \`${version}\` of module \`${module}\` could not be retrieved`
+      `Version information for version \`${selectedVersion}\` of module \`${module}\` could not be retrieved`
     )
   }
 
   return (
     <div className="flex flex-col">
       <Head>
-        <title>Bazel Central Registry | {module}</title>
+        <title>{`Bazel Central Registry | ${module}`}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -48,7 +49,7 @@ const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
           <div className="border rounded p-4 divide-y">
             <div>
               <span className="text-3xl">{module}</span>
-              <span className="text-lg ml-2">{latestVersion}</span>
+              <span className="text-lg ml-2">{selectedVersion}</span>
             </div>
             <div className="mt-4 flex divide-x gap-2">
               <div>
@@ -61,7 +62,7 @@ const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
                     file:
                   </p>
                   <div className="p-2 mt-4 rounded bg-gray-200">
-                    <code>{`bazel_dep(name = "${module}", version = "${latestVersion}")`}</code>
+                    <code>{`bazel_dep(name = "${module}", version = "${selectedVersion}")`}</code>
                   </div>
                 </div>
                 <h2 className="text-2xl font-bold mt-4">Version history</h2>
@@ -72,9 +73,11 @@ const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
                         key={version.version}
                         className="border rounded p-2 mt-2 flex items-center gap-4"
                       >
-                        <div className="rounded-full border h-14 w-14 grid place-items-center">
-                          {version.version}
-                        </div>
+                        <a href={`/modules/${module}/${version.version}`}>
+                          <div className="rounded-full border h-14 w-14 grid place-items-center hover:border-gray-800">
+                            {version.version}
+                          </div>
+                        </a>
                         <div className="self-end text-gray-500">
                           compatibility level{' '}
                           {version.moduleInfo.compatibilityLevel}
@@ -89,15 +92,20 @@ const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
                     ))}
                   </ul>
                 </div>
-                <h2 className="text-2xl font-bold mt-4">Dependencies</h2>
+                <h2 className="text-2xl font-bold mt-4">
+                  Dependencies{' '}
+                  <small className="text-sm font-normal text-gray-500">
+                    (of version {selectedVersion})
+                  </small>
+                </h2>
                 <div>
                   <ul className="mt-4">
                     {versionInfo.moduleInfo.dependencies.map((dependency) => (
                       <a
                         key={dependency.module}
-                        href={`/modules/${dependency.module}`}
+                        href={`/modules/${dependency.module}/${dependency.version}`}
                       >
-                        <li className="border rounded p-2 mt-2 flex items-center gap-4">
+                        <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
                           <div className="rounded-full border h-14 w-14 grid place-items-center">
                             {dependency.version}
                           </div>
@@ -165,7 +173,7 @@ const ModulePage: NextPage<ModulePageProps> = ({ metadata, versionInfos }) => {
   )
 }
 
-interface VersionInfo {
+export interface VersionInfo {
   version: string
   submission: {
     hash: string
@@ -187,10 +195,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }))
   )
 
+  const latestVersion = metadata.versions[metadata.versions.length - 1]
+  const selectedVersion = latestVersion
+
   return {
     props: {
       metadata,
       versionInfos,
+      selectedVersion,
     },
   }
 }
@@ -206,7 +218,6 @@ export async function getStaticPaths() {
     paths,
     // TODO: fallback true?
     fallback: false,
-    // fallback: true, false or "blocking" // See the "fallback" section below
   }
 }
 

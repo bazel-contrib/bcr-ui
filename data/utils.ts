@@ -27,6 +27,11 @@ export const listModuleNames = async (): Promise<string[]> => {
   return await fs.readdir(MODULES_ROOT_DIR)
 }
 
+export const listModuleVersions = async (module: string): Promise<string[]> => {
+  const metadata = await getModuleMetadata(module)
+  return metadata.versions
+}
+
 export const getModuleMetadata = async (module: string): Promise<Metadata> => {
   const metadataJsonPath = path.join(MODULES_ROOT_DIR, module, 'metadata.json')
   const metadataContents = await fs.readFile(metadataJsonPath)
