@@ -71,23 +71,38 @@ const ModulePage: NextPage<ModulePageProps> = ({
                     {versionInfos.reverse().map((version) => (
                       <li
                         key={version.version}
-                        className="border rounded p-2 mt-2 flex items-center gap-4"
+                        className="border rounded p-2 mt-2 flex items-stretch gap-4"
                       >
                         <a href={`/modules/${module}/${version.version}`}>
                           <div className="rounded-full border h-14 w-14 grid place-items-center hover:border-gray-800">
                             {version.version}
                           </div>
                         </a>
-                        <div className="self-end text-gray-500">
-                          compatibility level{' '}
-                          {version.moduleInfo.compatibilityLevel}
+                        <div className="flex flex-1 justify-between">
+                          <div className="flex flex-col justify-between">
+                            <div />
+                            <div className="self-end text-gray-500">
+                              compatibility level{' '}
+                              {version.moduleInfo.compatibilityLevel}
+                            </div>
+                          </div>
+                          <div className="flex justify-end">
+                            <div className="flex flex-col justify-between items-end">
+                              <a
+                                href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
+                                className="text-link-color hover:text-link-color-hover"
+                              >
+                                view in repository
+                              </a>
+                              <a
+                                href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
+                                className="text-link-color hover:text-link-color-hover"
+                              >
+                                published {version.submission.authorDateRel}
+                              </a>
+                            </div>
+                          </div>
                         </div>
-                        <a
-                          href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
-                          className="ml-auto self-end text-link-color hover:text-link-color-hover"
-                        >
-                          published {version.submission.authorDateRel}
-                        </a>
                       </li>
                     ))}
                   </ul>
