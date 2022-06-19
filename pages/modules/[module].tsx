@@ -14,6 +14,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
+import { CopyCode } from '../../components/CopyCode'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -61,9 +62,9 @@ const ModulePage: NextPage<ModulePageProps> = ({
                     and add the following to your <code>MODULE.bazel</code>{' '}
                     file:
                   </p>
-                  <div className="p-2 mt-4 rounded bg-gray-200">
-                    <code>{`bazel_dep(name = "${module}", version = "${selectedVersion}")`}</code>
-                  </div>
+                  <CopyCode
+                    code={`bazel_dep(name = "${module}", version = "${selectedVersion}")`}
+                  />
                 </div>
                 <h2 className="text-2xl font-bold mt-4">Version history</h2>
                 <div>

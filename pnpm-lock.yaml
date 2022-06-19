@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@floating-ui/react-dom': ^0.7.2
   '@fortawesome/fontawesome-svg-core': ^6.1.1
   '@fortawesome/free-brands-svg-icons': ^6.1.1
   '@fortawesome/free-regular-svg-icons': ^6.1.1
@@ -24,6 +25,7 @@ specifiers:
   typescript: 4.7.3
 
 dependencies:
+  '@floating-ui/react-dom': 0.7.2_zslnhrumrmjiaznigdttriuiiy
   '@fortawesome/fontawesome-svg-core': 6.1.1
   '@fortawesome/free-brands-svg-icons': 6.1.1
   '@fortawesome/free-regular-svg-icons': 6.1.1
@@ -81,6 +83,30 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@floating-ui/core/0.7.3:
+    resolution: {integrity: sha512-buc8BXHmG9l82+OQXOFU3Kr2XQx9ys01U/Q9HMIrZ300iLc8HLMgh7dcCqgYzAzf4BkoQvDcXf5Y+CuEZ5JBYg==}
+    dev: false
+
+  /@floating-ui/dom/0.5.3:
+    resolution: {integrity: sha512-vpjWB1uC7rajvgA58uzlJZgtWqrdDQLw+XVA3w63ZTmsWwRmVd0Gl5Dy9VMAViI9cP7hBWaJt23Jy3AVgVYnoQ==}
+    dependencies:
+      '@floating-ui/core': 0.7.3
+    dev: false
+
+  /@floating-ui/react-dom/0.7.2_zslnhrumrmjiaznigdttriuiiy:
+    resolution: {integrity: sha512-1T0sJcpHgX/u4I1OzIEhlcrvkUN8ln39nz7fMoE/2HDHrPiMFoOGR7++GYyfUmIQHkkrTinaeQsO3XWubjSvGg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      '@floating-ui/dom': 0.5.3
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      use-isomorphic-layout-effect: 1.1.2_ihkhab3gpahsyb3ahx7z7w4mhq
+    transitivePeerDependencies:
+      - '@types/react'
+    dev: false
 
   /@fortawesome/fontawesome-common-types/6.1.1:
     resolution: {integrity: sha512-wVn5WJPirFTnzN6tR95abCx+ocH+3IFLXAgyavnf9hUmN0CfWoDjPT/BAWsUVwSlYYVBeCLJxaqi7ZGe4uSjBA==}
@@ -286,7 +312,6 @@ packages:
 
   /@types/prop-types/15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
-    dev: true
 
   /@types/react-dom/18.0.5:
     resolution: {integrity: sha512-OWPWTUrY/NIrjsAPkAk1wW9LZeIjSvkXRhclsFO8CZcZGCOg2G0YZy4ft+rOyYxy8B7ui5iZzi9OkDebZ7/QSA==}
@@ -300,11 +325,9 @@ packages:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.2
       csstype: 3.1.0
-    dev: true
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
-    dev: true
 
   /@typescript-eslint/parser/5.28.0_ud6rd4xtew5bv4yhvkvu24pzm4:
     resolution: {integrity: sha512-ekqoNRNK1lAcKhZESN/PdpVsWbP9jtiNqzFWkp/yAUdZvJalw2heCYuqRmM5eUJSIYEkgq5sGOjq+ZqsLMjtRA==}
@@ -625,7 +648,6 @@ packages:
 
   /csstype/3.1.0:
     resolution: {integrity: sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA==}
-    dev: true
 
   /damerau-levenshtein/1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
@@ -2214,6 +2236,19 @@ packages:
     dependencies:
       punycode: 2.1.1
     dev: true
+
+  /use-isomorphic-layout-effect/1.1.2_ihkhab3gpahsyb3ahx7z7w4mhq:
+    resolution: {integrity: sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@types/react': 18.0.12
+      react: 18.2.0
+    dev: false
 
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
