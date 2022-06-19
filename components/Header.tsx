@@ -38,7 +38,7 @@ export const Header: React.FC<HeaderProps> = () => {
           </Link>
           <div className="ml-2 px-2 rounded bg-amber-300">EXPERIMENTAL</div>
         </div>
-        <div className="flex flex-1 md:order-1 transform translate-x-1/4">
+        <div className="flex flex-1 gap-4 items-center md:order-1 transform translate-x-1/4">
           <button
             type="button"
             data-collapse-toggle="mobile-menu-3"
@@ -84,6 +84,12 @@ export const Header: React.FC<HeaderProps> = () => {
               onSubmit={handleSubmitSearch}
             />
           </div>
+          <a
+            href={'/all-modules'}
+            className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-gray-300 md:p-0"
+          >
+            Browse all modules
+          </a>
           <button
             data-collapse-toggle="mobile-menu-3"
             type="button"

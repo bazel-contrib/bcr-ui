@@ -1,57 +1,65 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { Header } from "../components/Header";
-import { Footer } from "../components/Footer";
-import React, {useEffect, useState} from "react";
-import {useRouter} from "next/router";
-import {GetStaticProps} from "next";
-import {buildSearchIndex, SearchIndexEntry} from "../data/utils";
-import Fuse from "fuse.js";
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import { Header } from '../components/Header'
+import { Footer } from '../components/Footer'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { GetStaticProps } from 'next'
+import { buildSearchIndex, SearchIndexEntry } from '../data/utils'
+import Fuse from 'fuse.js'
+import { ModuleCard } from '../components/ModuleCard'
 
 interface SearchPageProps {
   searchIndex: SearchIndexEntry[]
 }
 
 const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
-  const [searchResults, setSearchResults] = useState<SearchIndexEntry[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchIndexEntry[]>([])
 
   const router = useRouter()
-  const searchQuery = router.query.q;
+  const searchQuery = router.query.q
 
   const getSearchQuery = (): string | null => {
-    if (!searchQuery || typeof searchQuery !== "string") {
-      return null;
+    if (!searchQuery || typeof searchQuery !== 'string') {
+      return null
     }
     return searchQuery
   }
 
-  const [searchQueryInput, setSearchQueryInput] = useState<string>(getSearchQuery() || "")
+  const [searchQueryInput, setSearchQueryInput] = useState<string>(
+    getSearchQuery() || ''
+  )
 
   const fuseIndex = new Fuse(searchIndex, {
     includeScore: true,
     threshold: 0.4,
-    keys: ["module"],
-  });
+    keys: ['module'],
+  })
 
   useEffect(() => {
-    if (!searchQuery || typeof searchQuery !== "string") {
-      return;
+    if (!searchQuery || typeof searchQuery !== 'string') {
+      return
     }
     const results = fuseIndex.search(searchQuery)
     setSearchResults(results.map((n) => n.item))
   }, [searchQuery])
   useEffect(() => {
-    setSearchQueryInput(getSearchQuery() || "");
+    setSearchQueryInput(getSearchQuery() || '')
   }, [searchQuery])
 
-  const handleSearchKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code === "Enter") {
+  const handleSearchKeydown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.code === 'Enter') {
       handleSubmitSearch()
     }
   }
 
   const handleSubmitSearch = () => {
-    router.push({pathname: router.pathname, query: {...router.query, q: searchQueryInput}})
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, q: searchQueryInput },
+    })
   }
 
   return (
@@ -87,34 +95,17 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
       </main>
       <Footer />
     </div>
-  );
-};
+  )
+}
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const searchIndex = await buildSearchIndex();
+  const searchIndex = await buildSearchIndex()
 
   return {
     props: {
       searchIndex,
     },
-  };
-};
-
-
-interface ModuleCardProps {
-  module: string;
-  version: string;
+  }
 }
 
-const ModuleCard: React.FC<ModuleCardProps> = ({ module, version }) => {
-  return (
-    <a href={`/modules/${module}`}>
-      <div className="w-48 h-24 border rounded flex flex-col items-center justify-center shadow-sm hover:shadow-lg">
-        <div className="font-bold">{module}</div>
-        <div>{version}</div>
-      </div>
-    </a>
-  );
-};
-
-export default Search;
+export default Search
