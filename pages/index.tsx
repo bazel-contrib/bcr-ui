@@ -4,18 +4,45 @@ import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import { buildSearchIndex, SearchIndexEntry } from '../data/utils'
+import { ModuleCard } from '../components/ModuleCard'
+import { GetStaticProps } from 'next'
+import { parseISO } from 'date-fns'
 
 // TODO: fetch correct version during build
+// const HIGHLIGHTED_MODULES = [
+//   { module: 'rules_nodejs', version: '0.1.0' },
+//   { module: 'stardoc', version: '0.2.0' },
+//   { module: 'rules_python', version: '2.1.0' },
+//   { module: 'apple_support', version: '0.0.0' },
+// ]
 const HIGHLIGHTED_MODULES = [
-  { module: 'rules_nodejs', version: '0.1.0' },
-  { module: 'stardoc', version: '0.2.0' },
-  { module: 'rules_python', version: '2.1.0' },
-  { module: 'apple_support', version: '0.0.0' },
+  'rules_nodejs',
+  'stardoc',
+  'rules_python',
+  'apple_support',
 ]
 
-const Home: NextPage = () => {
+interface HomePageProps {
+  searchIndex: SearchIndexEntry[]
+}
+
+const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
   const router = useRouter()
   const [searchQueryInput, setSearchQueryInput] = useState<string>('')
+
+  const highlightedModules: SearchIndexEntry[] = searchIndex.filter((n) => {
+    return HIGHLIGHTED_MODULES.includes(n.module)
+  })
+  let recentlyUpdatedModules: (SearchIndexEntry & {
+    authorDateParsed: Date
+  })[] = searchIndex.map((n) => {
+    return Object.assign({}, n, { authorDateParsed: parseISO(n.authorDateIso) })
+  })
+  recentlyUpdatedModules.sort(
+    (a, b) => (b.authorDateParsed as any) - (a.authorDateParsed as any)
+  )
+  recentlyUpdatedModules = recentlyUpdatedModules.slice(0, 10)
 
   const handleSearchKeydown = (
     event: React.KeyboardEvent<HTMLInputElement>
@@ -62,12 +89,27 @@ const Home: NextPage = () => {
             onKeyDown={handleSearchKeydown}
             onSubmit={handleSubmitSearch}
           />
-          <div>
-            <h2 className="font-bold text-lg">Highlighted modules</h2>
-            <div className="grid grid-cols-2 gap-8 mt-4">
-              {HIGHLIGHTED_MODULES.map(({ module, version }) => (
-                <ModuleCard key={module} {...{ module, version }} />
-              ))}
+          <div className="flex gap-8">
+            <div>
+              <h2 className="font-bold text-lg">Highlighted modules</h2>
+              <div className="grid grid-cols-1 gap-8 mt-4">
+                {highlightedModules.map(({ module, version }) => (
+                  <ModuleCard key={module} {...{ module, version }} />
+                ))}
+              </div>
+            </div>
+            <div>
+              <h2 className="font-bold text-lg">Recently updated</h2>
+              <div className="grid grid-cols-1 gap-8 mt-4">
+                {recentlyUpdatedModules.map(
+                  ({ module, version, authorDateRel }) => (
+                    <ModuleCard
+                      key={module}
+                      {...{ module, version, authorDateRel }}
+                    />
+                  )
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -77,20 +119,14 @@ const Home: NextPage = () => {
   )
 }
 
-interface ModuleCardProps {
-  module: string
-  version: string
-}
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const searchIndex = await buildSearchIndex()
 
-const ModuleCard: React.FC<ModuleCardProps> = ({ module, version }) => {
-  return (
-    <a href={`/modules/${module}`}>
-      <div className="w-48 h-24 border rounded flex flex-col items-center justify-center shadow-sm hover:shadow-lg">
-        <div className="font-bold">{module}</div>
-        <div>{version}</div>
-      </div>
-    </a>
-  )
+  return {
+    props: {
+      searchIndex,
+    },
+  }
 }
 
 export default Home

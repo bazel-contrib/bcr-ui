@@ -1,4 +1,5 @@
 import path from 'path'
+import { formatISO, parse } from 'date-fns'
 import { execa } from 'execa'
 import { promises as fs } from 'fs'
 import { gitlogPromise } from 'gitlog'
@@ -43,6 +44,9 @@ export const getModuleMetadata = async (module: string): Promise<Metadata> => {
 export interface SearchIndexEntry {
   module: string
   version: string
+  authorDate: string
+  authorDateIso: string
+  authorDateRel: string
 }
 
 export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
@@ -52,7 +56,21 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
       const metadata = await getModuleMetadata(module)
       const latestVersion = metadata.versions[metadata.versions.length - 1]
 
-      return { module, version: latestVersion }
+      const { authorDate, authorDateRel } = await getSubmissionCommitOfVersion(
+        module,
+        latestVersion
+      )
+      const authorDateIso = formatISO(
+        parse(authorDate, 'yyyy-MM-dd HH:mm:ss xxxx', new Date())
+      )
+
+      return {
+        module,
+        version: latestVersion,
+        authorDate,
+        authorDateRel,
+        authorDateIso,
+      }
     })
   )
 }
