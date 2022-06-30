@@ -1,5 +1,6 @@
 import type { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Header, USER_GUIDE_LINK } from '../../components/Header'
 import { Footer } from '../../components/Footer'
@@ -41,7 +42,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
     <div className="flex flex-col">
       <Head>
         <title>{`Bazel Central Registry | ${module}`}</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/bazel-central-registry/favicon.png" />
       </Head>
 
       <Header />
@@ -74,11 +75,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
                         key={version.version}
                         className="border rounded p-2 mt-2 flex items-stretch gap-4"
                       >
-                        <a href={`/modules/${module}/${version.version}`}>
+                        <Link href={`/modules/${module}/${version.version}`}>
                           <div className="rounded-full border h-14 w-14 grid place-items-center hover:border-gray-800">
                             {version.version}
                           </div>
-                        </a>
+                        </Link>
                         <div className="flex flex-1 justify-between">
                           <div className="flex flex-col justify-between">
                             <div />
@@ -117,7 +118,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 <div>
                   <ul className="mt-4">
                     {versionInfo.moduleInfo.dependencies.map((dependency) => (
-                      <a
+                      <Link
                         key={dependency.module}
                         href={`/modules/${dependency.module}/${dependency.version}`}
                       >
@@ -127,7 +128,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                           </div>
                           <div>{dependency.module}</div>
                         </li>
-                      </a>
+                      </Link>
                     ))}
                     {versionInfo.moduleInfo.dependencies.length === 0 && (
                       <span>No dependencies</span>
