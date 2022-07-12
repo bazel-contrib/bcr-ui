@@ -24,7 +24,7 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
     <div className="flex flex-col">
       <Head>
         <title>Bazel Central Registry</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/bazel-central-registry/favicon.png" />
       </Head>
 
       <Header />

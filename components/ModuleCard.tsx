@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 export interface ModuleCardProps {
   module: string
@@ -12,7 +13,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
   authorDateRel,
 }) => {
   return (
-    <a href={`/modules/${module}`}>
+    <Link href={`/modules/${module}`}>
       <div className="w-96 h-24 border rounded flex flex-col items-center justify-center shadow-sm hover:shadow-lg">
         <div className="w-full p-4 flex justify-between">
           <div>
@@ -28,6 +29,6 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   )
 }

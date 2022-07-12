@@ -84,12 +84,12 @@ export const Header: React.FC<HeaderProps> = () => {
               onSubmit={handleSubmitSearch}
             />
           </div>
-          <a
+          <Link
             href={'/all-modules'}
             className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-gray-300 md:p-0"
           >
             Browse all modules
-          </a>
+          </Link>
           <button
             data-collapse-toggle="mobile-menu-3"
             type="button"
