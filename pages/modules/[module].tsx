@@ -76,9 +76,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
                         className="border rounded p-2 mt-2 flex items-stretch gap-4"
                       >
                         <Link href={`/modules/${module}/${version.version}`}>
-                          <div className="rounded-full border h-14 w-14 grid place-items-center hover:border-gray-800">
-                            {version.version}
-                          </div>
+                          <a>
+                            <div className="rounded-full border h-14 w-14 grid place-items-center hover:border-gray-800">
+                              {version.version}
+                            </div>
+                          </a>
                         </Link>
                         <div className="flex flex-1 justify-between">
                           <div className="flex flex-col justify-between">
@@ -122,12 +124,14 @@ const ModulePage: NextPage<ModulePageProps> = ({
                         key={dependency.module}
                         href={`/modules/${dependency.module}/${dependency.version}`}
                       >
-                        <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                          <div className="rounded-full border h-14 w-14 grid place-items-center">
-                            {dependency.version}
-                          </div>
-                          <div>{dependency.module}</div>
-                        </li>
+                        <a>
+                          <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                            <div className="rounded-full border h-14 w-14 grid place-items-center">
+                              {dependency.version}
+                            </div>
+                            <div>{dependency.module}</div>
+                          </li>
+                        </a>
                       </Link>
                     ))}
                     {versionInfo.moduleInfo.dependencies.length === 0 && (

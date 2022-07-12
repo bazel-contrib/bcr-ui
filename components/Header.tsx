@@ -32,9 +32,11 @@ export const Header: React.FC<HeaderProps> = () => {
       <div className="container flex flex-wrap items-center mx-auto">
         <div className="flex flex-1 items-center">
           <Link href="/" className="flex items-center cursor-pointer">
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white cursor-pointer">
-              Bazel Central Registry
-            </span>
+            <a>
+              <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white cursor-pointer">
+                Bazel Central Registry
+              </span>
+            </a>
           </Link>
           <div className="ml-2 px-2 rounded bg-amber-300">EXPERIMENTAL</div>
         </div>
@@ -84,11 +86,10 @@ export const Header: React.FC<HeaderProps> = () => {
               onSubmit={handleSubmitSearch}
             />
           </div>
-          <Link
-            href={'/all-modules'}
-            className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-gray-300 md:p-0"
-          >
-            Browse all modules
+          <Link href={'/all-modules'}>
+            <a className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-gray-300 md:p-0">
+              Browse all modules
+            </a>
           </Link>
           <button
             data-collapse-toggle="mobile-menu-3"
