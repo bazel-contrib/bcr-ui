@@ -63,7 +63,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
     <div className="flex flex-col">
       <Head>
         <title>Bazel Central Registry</title>
-        <link rel="icon" href="/bazel-central-registry/favicon.png" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
 
       <Header />

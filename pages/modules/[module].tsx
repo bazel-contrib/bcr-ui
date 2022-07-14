@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
+import React from 'react'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -42,7 +43,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
     <div className="flex flex-col">
       <Head>
         <title>{`Bazel Central Registry | ${module}`}</title>
-        <link rel="icon" href="/bazel-central-registry/favicon.png" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
 
       <Header />
