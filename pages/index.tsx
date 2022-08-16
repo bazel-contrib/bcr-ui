@@ -73,7 +73,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
             Bazel Central Registry
           </h1>
           <div className="text-bzl-green text-4xl">
-            Home of all your bzlmod modules!
+            Home of all your bazel modules!
           </div>
           <div className="mt-4 ml-2 px-2 rounded bg-amber-300">
             As of Bazel 5.X, bzlmod and the Bazel Central Registry are in an
