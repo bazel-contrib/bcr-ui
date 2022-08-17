@@ -28,11 +28,11 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
       </Head>
 
       <Header />
-      <main>
+      <main className="m-4 l:m-0">
         <div className="max-w-4xl w-4xl mx-auto mt-8 flex flex-col items-center">
           <div>
             <h2 className="font-bold text-lg">All modules</h2>
-            <div className="grid grid-cols-1 gap-8 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
               {searchIndex.map(({ module, version, authorDateRel }) => (
                 <ModuleCard
                   key={module}

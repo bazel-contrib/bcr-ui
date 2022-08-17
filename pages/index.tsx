@@ -67,7 +67,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
       </Head>
 
       <Header />
-      <main>
+      <main className="m-4 l:m-0">
         <div className="max-w-4xl w-4xl mx-auto mt-8 flex flex-col items-center">
           <h1 className="text-bzl-green font-bold text-6xl">
             Bazel Central Registry
@@ -89,7 +89,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
             onKeyDown={handleSearchKeydown}
             onSubmit={handleSubmitSearch}
           />
-          <div className="flex gap-8">
+          <div className="w-full max-w-xl flex flex-col gap-8 md:grid md:grid-cols-2 md:flex-row">
             <div>
               <h2 className="font-bold text-lg">Highlighted modules</h2>
               <div className="grid grid-cols-1 gap-8 mt-4">
