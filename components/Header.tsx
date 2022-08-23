@@ -40,7 +40,7 @@ export const Header: React.FC<HeaderProps> = () => {
           </Link>
           <div className="ml-2 px-2 rounded bg-amber-300">EXPERIMENTAL</div>
         </div>
-        <div className="flex flex-1 gap-4 items-center md:order-1 transform translate-x-1/4">
+        <div className="flex flex-1 gap-4 items-center md:order-1 transform md:translate-x-1/4">
           <button
             type="button"
             data-collapse-toggle="mobile-menu-3"
