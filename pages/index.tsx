@@ -89,7 +89,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
             onKeyDown={handleSearchKeydown}
             onSubmit={handleSubmitSearch}
           />
-          <div className="w-full max-w-xl flex flex-col gap-8 md:grid md:grid-cols-2 md:flex-row">
+          <div className="w-full max-w-4xl flex flex-col gap-8 md:grid md:grid-cols-2 md:flex-row">
             <div>
               <h2 className="font-bold text-lg">Highlighted modules</h2>
               <div className="grid grid-cols-1 gap-8 mt-4">
