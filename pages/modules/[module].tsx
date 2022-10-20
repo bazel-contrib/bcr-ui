@@ -1,4 +1,5 @@
 import type { GetStaticProps, NextPage } from 'next'
+import compareVersions from 'compare-versions';
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -208,16 +209,18 @@ export interface VersionInfo {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { module } = params as any
   const metadata = await getModuleMetadata(module)
+  const { versions } = metadata;
+  versions.sort(compareVersions)
 
   const versionInfos: VersionInfo[] = await Promise.all(
-    metadata.versions.map(async (version) => ({
+    versions.map(async (version) => ({
       version,
       submission: await getSubmissionCommitOfVersion(module, version),
       moduleInfo: await extractModuleInfo(module, version),
     }))
   )
 
-  const latestVersion = metadata.versions[metadata.versions.length - 1]
+  const latestVersion = versions[metadata.versions.length - 1]
   const selectedVersion = latestVersion
 
   return {

@@ -7,13 +7,16 @@ import {
   listModuleNames,
   listModuleVersions,
 } from '../../../data/utils'
+import compareVersions from 'compare-versions'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { module, version } = params as any
   const metadata = await getModuleMetadata(module)
+  const { versions } = metadata;
+  versions.sort(compareVersions)
 
   const versionInfos: VersionInfo[] = await Promise.all(
-    metadata.versions.map(async (version) => ({
+    versions.map(async (version) => ({
       version,
       submission: await getSubmissionCommitOfVersion(module, version),
       moduleInfo: await extractModuleInfo(module, version),
