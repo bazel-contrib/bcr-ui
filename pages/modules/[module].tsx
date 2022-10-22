@@ -72,7 +72,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 <h2 className="text-2xl font-bold mt-4">Version history</h2>
                 <div>
                   <ul className="mt-4">
-                    {versionInfos.reverse().map((version) => (
+                    {versionInfos.slice().reverse().map((version) => (
                       <li
                         key={version.version}
                         className="border rounded p-2 mt-2 flex items-stretch gap-4"
