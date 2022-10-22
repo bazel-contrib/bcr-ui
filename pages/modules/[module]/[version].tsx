@@ -1,4 +1,4 @@
-import ModulePage, { VersionInfo } from '../[module]'
+import ModulePage from '../[module]'
 import { GetStaticProps } from 'next'
 import {
   extractModuleInfo,
@@ -8,7 +8,7 @@ import {
   listModuleVersions,
 } from '../../../data/utils'
 import compareVersions from 'compare-versions'
-import { getStaticPropsModulePage } from '../moduleStaticProps'
+import { getStaticPropsModulePage } from '../../../data/moduleStaticProps'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { module, version } = params as any

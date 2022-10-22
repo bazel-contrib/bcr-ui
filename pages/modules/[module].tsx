@@ -18,7 +18,10 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
 import React, { useState } from 'react'
-import { getStaticPropsModulePage } from './moduleStaticProps'
+import {
+  getStaticPropsModulePage,
+  VersionInfo,
+} from '../../data/moduleStaticProps'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -88,43 +91,58 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 <div>
                   <ul className="mt-4">
                     {shownVersions.map((version) => (
-                      <li
-                        key={version.version}
-                        className="border rounded p-2 mt-2 flex items-stretch gap-4"
-                      >
-                        <Link href={`/modules/${module}/${version.version}`}>
-                          <a>
-                            <div className="rounded-full border h-14 w-14 grid place-items-center hover:border-gray-800">
-                              {version.version}
+                      <>
+                        <li
+                          key={version.version}
+                          className="border rounded mt-2"
+                        >
+                          {version.isYanked && (
+                            <div
+                              key={`${version.version}-yanked`}
+                              className="p-2 mb-2 bg-amber-300"
+                            >
+                              Version yanked with comment:{' '}
+                              <p>{version.yankReason}</p>
                             </div>
-                          </a>
-                        </Link>
-                        <div className="flex flex-1 justify-between">
-                          <div className="flex flex-col justify-between">
-                            <div />
-                            <div className="self-end text-gray-500">
-                              compatibility level{' '}
-                              {version.moduleInfo.compatibilityLevel}
+                          )}
+                          <div className="p-2 flex items-stretch gap-4">
+                            <Link
+                              href={`/modules/${module}/${version.version}`}
+                            >
+                              <a>
+                                <div className="rounded-full border h-14 w-14 grid place-items-center hover:border-gray-800">
+                                  {version.version}
+                                </div>
+                              </a>
+                            </Link>
+                            <div className="flex flex-1 justify-between">
+                              <div className="flex flex-col justify-between">
+                                <div />
+                                <div className="self-end text-gray-500">
+                                  compatibility level{' '}
+                                  {version.moduleInfo.compatibilityLevel}
+                                </div>
+                              </div>
+                              <div className="flex justify-end">
+                                <div className="flex flex-col justify-between items-end">
+                                  <a
+                                    href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
+                                    className="text-link-color hover:text-link-color-hover"
+                                  >
+                                    view in repository
+                                  </a>
+                                  <a
+                                    href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
+                                    className="text-link-color hover:text-link-color-hover"
+                                  >
+                                    published {version.submission.authorDateRel}
+                                  </a>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                          <div className="flex justify-end">
-                            <div className="flex flex-col justify-between items-end">
-                              <a
-                                href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
-                                className="text-link-color hover:text-link-color-hover"
-                              >
-                                view in repository
-                              </a>
-                              <a
-                                href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
-                                className="text-link-color hover:text-link-color-hover"
-                              >
-                                published {version.submission.authorDateRel}
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
+                        </li>
+                      </>
                     ))}
                   </ul>
                   {displayShowAllButton && (
@@ -217,16 +235,6 @@ const ModulePage: NextPage<ModulePageProps> = ({
       <Footer />
     </div>
   )
-}
-
-export interface VersionInfo {
-  version: string
-  submission: {
-    hash: string
-    authorDate: string
-    authorDateRel: string
-  }
-  moduleInfo: ModuleInfo
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {

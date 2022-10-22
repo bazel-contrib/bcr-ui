@@ -3,8 +3,20 @@ import {
   extractModuleInfo,
   getModuleMetadata,
   getSubmissionCommitOfVersion,
-} from '../../data/utils'
-import { VersionInfo } from './[module]'
+  ModuleInfo,
+} from './utils'
+
+export interface VersionInfo {
+  version: string
+  submission: {
+    hash: string
+    authorDate: string
+    authorDateRel: string
+  }
+  moduleInfo: ModuleInfo
+  isYanked: boolean
+  yankReason: string | null
+}
 
 // [module]/[version] needs to reuse the same logic
 export const getStaticPropsModulePage = async (
@@ -20,6 +32,8 @@ export const getStaticPropsModulePage = async (
       version,
       submission: await getSubmissionCommitOfVersion(module, version),
       moduleInfo: await extractModuleInfo(module, version),
+      isYanked: Object.keys(metadata.yanked_versions).includes(version),
+      yankReason: metadata.yanked_versions[version] || null,
     }))
   )
 
