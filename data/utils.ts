@@ -22,6 +22,9 @@ export interface Metadata {
     name?: string
   }>
   versions: Array<string>
+  yanked_versions: {
+    [key: string]: string
+  }
 }
 
 export const listModuleNames = async (): Promise<string[]> => {

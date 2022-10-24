@@ -1,4 +1,4 @@
-import ModulePage, { VersionInfo } from '../[module]'
+import ModulePage from '../[module]'
 import { GetStaticProps } from 'next'
 import {
   extractModuleInfo,
@@ -8,30 +8,12 @@ import {
   listModuleVersions,
 } from '../../../data/utils'
 import compareVersions from 'compare-versions'
+import { getStaticPropsModulePage } from '../../../data/moduleStaticProps'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { module, version } = params as any
-  const metadata = await getModuleMetadata(module)
-  const { versions } = metadata;
-  versions.sort(compareVersions)
 
-  const versionInfos: VersionInfo[] = await Promise.all(
-    versions.map(async (version) => ({
-      version,
-      submission: await getSubmissionCommitOfVersion(module, version),
-      moduleInfo: await extractModuleInfo(module, version),
-    }))
-  )
-
-  const selectedVersion = version
-
-  return {
-    props: {
-      metadata,
-      versionInfos,
-      selectedVersion,
-    },
-  }
+  return await getStaticPropsModulePage(module, version)
 }
 
 export async function getStaticPaths() {

@@ -1,5 +1,5 @@
 import type { GetStaticProps, NextPage } from 'next'
-import compareVersions from 'compare-versions';
+import compareVersions from 'compare-versions'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -18,6 +18,10 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
 import React, { useState } from 'react'
+import {
+  getStaticPropsModulePage,
+  VersionInfo,
+} from '../../data/moduleStaticProps'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -26,7 +30,7 @@ interface ModulePageProps {
 }
 
 // The number of versions that should be displayed on initial page-load (before clicking "show all").
-const NUM_VERSIONS_ON_PAGE_LOAD = 5;
+const NUM_VERSIONS_ON_PAGE_LOAD = 5
 
 const ModulePage: NextPage<ModulePageProps> = ({
   metadata,
@@ -35,17 +39,19 @@ const ModulePage: NextPage<ModulePageProps> = ({
 }) => {
   const router = useRouter()
   const { module } = router.query
-  
-  const [triggeredShowAll, setTriggeredShowAll] = useState(false);
 
-  const isQualifiedForShowAll = versionInfos.length > NUM_VERSIONS_ON_PAGE_LOAD;
-  const displayShowAllButton = isQualifiedForShowAll && !triggeredShowAll;
+  const [triggeredShowAll, setTriggeredShowAll] = useState(false)
+
+  const isQualifiedForShowAll = versionInfos.length > NUM_VERSIONS_ON_PAGE_LOAD
+  const displayShowAllButton = isQualifiedForShowAll && !triggeredShowAll
 
   const versionInfo = versionInfos.find((n) => n.version === selectedVersion)
-  const versionsInOrder = versionInfos.slice().reverse();
-  
-  const shownVersions = triggeredShowAll ? versionsInOrder : versionsInOrder.slice(0, NUM_VERSIONS_ON_PAGE_LOAD);
-  
+  const versionsInOrder = versionInfos.slice().reverse()
+
+  const shownVersions = triggeredShowAll
+    ? versionsInOrder
+    : versionsInOrder.slice(0, NUM_VERSIONS_ON_PAGE_LOAD)
+
   if (!versionInfo) {
     throw Error(
       `Version information for version \`${selectedVersion}\` of module \`${module}\` could not be retrieved`
@@ -85,47 +91,67 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 <div>
                   <ul className="mt-4">
                     {shownVersions.map((version) => (
-                      <li
-                        key={version.version}
-                        className="border rounded p-2 mt-2 flex items-stretch gap-4"
-                      >
-                        <Link href={`/modules/${module}/${version.version}`}>
-                          <a>
-                            <div className="rounded-full border h-14 w-14 grid place-items-center hover:border-gray-800">
-                              {version.version}
+                      <>
+                        <li
+                          key={version.version}
+                          className="border rounded mt-2"
+                        >
+                          {version.isYanked && (
+                            <div
+                              key={`${version.version}-yanked`}
+                              className="p-2 mb-2 bg-amber-300"
+                            >
+                              Version yanked with comment:{' '}
+                              <p>{version.yankReason}</p>
                             </div>
-                          </a>
-                        </Link>
-                        <div className="flex flex-1 justify-between">
-                          <div className="flex flex-col justify-between">
-                            <div />
-                            <div className="self-end text-gray-500">
-                              compatibility level{' '}
-                              {version.moduleInfo.compatibilityLevel}
+                          )}
+                          <div className="p-2 flex items-stretch gap-4">
+                            <Link
+                              href={`/modules/${module}/${version.version}`}
+                            >
+                              <a>
+                                <div className="rounded-full border h-14 w-14 grid place-items-center hover:border-gray-800">
+                                  {version.version}
+                                </div>
+                              </a>
+                            </Link>
+                            <div className="flex flex-1 justify-between">
+                              <div className="flex flex-col justify-between">
+                                <div />
+                                <div className="self-end text-gray-500">
+                                  compatibility level{' '}
+                                  {version.moduleInfo.compatibilityLevel}
+                                </div>
+                              </div>
+                              <div className="flex justify-end">
+                                <div className="flex flex-col justify-between items-end">
+                                  <a
+                                    href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
+                                    className="text-link-color hover:text-link-color-hover"
+                                  >
+                                    view in repository
+                                  </a>
+                                  <a
+                                    href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
+                                    className="text-link-color hover:text-link-color-hover"
+                                  >
+                                    published {version.submission.authorDateRel}
+                                  </a>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                          <div className="flex justify-end">
-                            <div className="flex flex-col justify-between items-end">
-                              <a
-                                href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
-                                className="text-link-color hover:text-link-color-hover"
-                              >
-                                view in repository
-                              </a>
-                              <a
-                                href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
-                                className="text-link-color hover:text-link-color-hover"
-                              >
-                                published {version.submission.authorDateRel}
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
+                        </li>
+                      </>
                     ))}
                   </ul>
-                  { displayShowAllButton && (
-                      <button className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg" onClick={() => setTriggeredShowAll(true)}>Show all {versionInfos.length} versions</button>
+                  {displayShowAllButton && (
+                    <button
+                      className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg"
+                      onClick={() => setTriggeredShowAll(true)}
+                    >
+                      Show all {versionInfos.length} versions
+                    </button>
                   )}
                 </div>
                 <h2 className="text-2xl font-bold mt-4">
@@ -211,40 +237,10 @@ const ModulePage: NextPage<ModulePageProps> = ({
   )
 }
 
-export interface VersionInfo {
-  version: string
-  submission: {
-    hash: string
-    authorDate: string
-    authorDateRel: string
-  }
-  moduleInfo: ModuleInfo
-}
-
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { module } = params as any
-  const metadata = await getModuleMetadata(module)
-  const { versions } = metadata;
-  versions.sort(compareVersions)
 
-  const versionInfos: VersionInfo[] = await Promise.all(
-    versions.map(async (version) => ({
-      version,
-      submission: await getSubmissionCommitOfVersion(module, version),
-      moduleInfo: await extractModuleInfo(module, version),
-    }))
-  )
-
-  const latestVersion = versions[metadata.versions.length - 1]
-  const selectedVersion = latestVersion
-
-  return {
-    props: {
-      metadata,
-      versionInfos,
-      selectedVersion,
-    },
-  }
+  return await getStaticPropsModulePage(module, null)
 }
 
 export async function getStaticPaths() {
