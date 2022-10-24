@@ -17,13 +17,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
-import React from 'react'
+import React, { useState } from 'react'
 
 interface ModulePageProps {
   metadata: Metadata
   versionInfos: VersionInfo[]
   selectedVersion: string
 }
+
+// The number of versions that should be displayed on initial page-load (before clicking "show all").
+const NUM_VERSIONS_ON_PAGE_LOAD = 5;
 
 const ModulePage: NextPage<ModulePageProps> = ({
   metadata,
@@ -32,8 +35,17 @@ const ModulePage: NextPage<ModulePageProps> = ({
 }) => {
   const router = useRouter()
   const { module } = router.query
+  
+  const [triggeredShowAll, setTriggeredShowAll] = useState(false);
+
+  const isQualifiedForShowAll = versionInfos.length > NUM_VERSIONS_ON_PAGE_LOAD;
+  const displayShowAllButton = isQualifiedForShowAll && !triggeredShowAll;
 
   const versionInfo = versionInfos.find((n) => n.version === selectedVersion)
+  const versionsInOrder = versionInfos.slice().reverse();
+  
+  const shownVersions = triggeredShowAll ? versionsInOrder : versionsInOrder.slice(0, NUM_VERSIONS_ON_PAGE_LOAD);
+  
   if (!versionInfo) {
     throw Error(
       `Version information for version \`${selectedVersion}\` of module \`${module}\` could not be retrieved`
@@ -72,7 +84,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 <h2 className="text-2xl font-bold mt-4">Version history</h2>
                 <div>
                   <ul className="mt-4">
-                    {versionInfos.reverse().map((version) => (
+                    {shownVersions.map((version) => (
                       <li
                         key={version.version}
                         className="border rounded p-2 mt-2 flex items-stretch gap-4"
@@ -112,6 +124,9 @@ const ModulePage: NextPage<ModulePageProps> = ({
                       </li>
                     ))}
                   </ul>
+                  { displayShowAllButton && (
+                      <button className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg" onClick={() => setTriggeredShowAll(true)}>Show all {versionInfos.length} versions</button>
+                  )}
                 </div>
                 <h2 className="text-2xl font-bold mt-4">
                   Dependencies{' '}
