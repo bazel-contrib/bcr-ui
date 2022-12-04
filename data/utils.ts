@@ -21,6 +21,7 @@ export interface Metadata {
     github?: string
     name?: string
   }>
+  repository?: string[]
   versions: Array<string>
   yanked_versions: {
     [key: string]: string
@@ -133,7 +134,7 @@ interface Dependency {
 }
 
 /**
- * Extract infromation from `MODULE.bazel` file via buildozer
+ * Extract information from `MODULE.bazel` file via buildozer
  */
 export const extractModuleInfo = async (
   module: string,
