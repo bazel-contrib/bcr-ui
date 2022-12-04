@@ -22,6 +22,12 @@ We use git submodules to include the data from bazelbuild/bazel-central-registry
 git submodule update --init
 ```
 
+To get a buildozer binary, you also need to run this before launching the app:
+
+```bash
+./build_bins.sh
+```
+
 Packages are managed via [pnpm](https://pnpm.io/), so they can be installed via `npx pnpm install`
 
 Then, run the development server:
