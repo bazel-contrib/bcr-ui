@@ -129,7 +129,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                                     href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
                                     className="text-link-color hover:text-link-color-hover"
                                   >
-                                    view in repository
+                                    view registry source
                                   </a>
                                   <a
                                     href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
