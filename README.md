@@ -16,7 +16,19 @@ conditions.
 
 ### Getting Started
 
-Packages are managed via [pnpm](https://pnpm.io/), so they can be installed via `pnpm install`
+We use git submodules to include the data from bazelbuild/bazel-central-registry, so after cloning this repo you need to run:
+
+```bash
+git submodule update --init
+```
+
+To get a buildozer binary, you also need to run this before launching the app:
+
+```bash
+./build_bins.sh
+```
+
+Packages are managed via [pnpm](https://pnpm.io/), so they can be installed via `npx pnpm install`
 
 Then, run the development server:
 
