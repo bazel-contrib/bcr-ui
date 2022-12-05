@@ -48,6 +48,9 @@ const ModulePage: NextPage<ModulePageProps> = ({
   const versionInfo = versionInfos.find((n) => n.version === selectedVersion)
   const versionsInOrder = versionInfos.slice().reverse()
 
+  const githubLink = metadata.repository?.find(repo => repo.startsWith('github:'))?.replace('github:', 'https://github.com/')
+  const releaseNotesLink = githubLink ? `${githubLink}/releases/tag/v${selectedVersion}` : undefined
+
   const shownVersions = triggeredShowAll
     ? versionsInOrder
     : versionsInOrder.slice(0, NUM_VERSIONS_ON_PAGE_LOAD)
@@ -86,6 +89,15 @@ const ModulePage: NextPage<ModulePageProps> = ({
                   <CopyCode
                     code={`bazel_dep(name = "${module}", version = "${selectedVersion}")`}
                   />
+                  {!!releaseNotesLink && (
+                    <p>Read the <a
+                    href={releaseNotesLink}
+                    className="text-link-color hover:text-link-color-hover"
+                  >
+                     Release Notes
+                  </a>
+                  </p>
+                  )}
                 </div>
                 <h2 className="text-2xl font-bold mt-4">Version history</h2>
                 <div>

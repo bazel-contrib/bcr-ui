@@ -26,7 +26,7 @@ export const CopyCode: React.FC<CopyCodeProps> = ({ code }) => {
     <>
       <button
         ref={reference}
-        className="w-full flex justify-between items-center p-2 mt-4 rounded bg-gray-200 group hover:bg-gray-100 border hover:border-gray-800 cursor-pointer"
+        className="w-full flex justify-between items-center p-2 my-4 rounded bg-gray-200 group hover:bg-gray-100 border hover:border-gray-800 cursor-pointer"
         title="Copy MODULE.bazel snippet to clipboard"
         onClick={handleClickCopy}
       >
