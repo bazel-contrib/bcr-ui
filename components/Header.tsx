@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = () => {
         <div className="flex flex-1 items-center">
           <Link href="/" className="flex items-center cursor-pointer">
             <a>
-              <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white cursor-pointer">
+              <span className="self-center text-xl font-semibold whitespace-nowrap text-white cursor-pointer">
                 Bazel Central Registry
               </span>
             </a>
