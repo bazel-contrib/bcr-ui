@@ -70,11 +70,8 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
       <main className="m-4 l:m-0">
         <div className="max-w-4xl w-4xl mx-auto mt-8 flex flex-col items-center">
           <h1 className="text-bzl-green font-bold text-6xl">
-            Bazel Module Registry
+            Bazel Central Registry
           </h1>
-          <div className="text-bzl-green text-4xl">
-            UI for the Bazel Central Registry
-          </div>
           <input
             type="text"
             autoFocus
