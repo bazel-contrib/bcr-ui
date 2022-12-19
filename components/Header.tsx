@@ -38,7 +38,6 @@ export const Header: React.FC<HeaderProps> = () => {
               </span>
             </a>
           </Link>
-          <div className="ml-2 px-2 rounded bg-amber-300">EXPERIMENTAL</div>
         </div>
         <div className="flex flex-1 gap-4 items-center md:order-1 transform md:translate-x-1/4">
           <button
