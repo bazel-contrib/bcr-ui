@@ -7,7 +7,9 @@
     "build": "next build",
     "export": "next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier-check": "prettier --check .",
+    "prettier-fix": "prettier --write ."
   },
   "dependencies": {
     "@floating-ui/react-dom": "^0.7.2",
