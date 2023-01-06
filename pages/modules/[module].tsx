@@ -49,7 +49,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
   const versionsInOrder = versionInfos.slice().reverse()
 
   const githubLink = metadata.repository?.find(repo => repo.startsWith('github:'))?.replace('github:', 'https://github.com/')
-  const releaseNotesLink = githubLink ? `${githubLink}/releases/tag/v${selectedVersion}` : undefined
+  const releaseNotesLink = githubLink ? `${githubLink}/releases/tag/${selectedVersion}` : undefined
 
   const shownVersions = triggeredShowAll
     ? versionsInOrder
