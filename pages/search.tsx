@@ -13,6 +13,9 @@ interface SearchPageProps {
   searchIndex: SearchIndexEntry[]
 }
 
+const GITHUB_ISSUE_LINK =
+  'https://github.com/bazelbuild/bazel-central-registry/issues/new?assignees=&labels=module+wanted&template=module_wanted.yaml&title=wanted%3A+%5Bgithub+path+of+the+module%2C+e.g.+bazelbuild%2Frules_foo%5D'
+
 const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
   const [searchResults, setSearchResults] = useState<SearchIndexEntry[]>([])
 
@@ -91,10 +94,22 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
                   <ModuleCard key={module} {...{ module, version }} />
                 ))
               ) : (
-                <p className="text-gray-600">
-                  No results for "
-                  <span className="text-black">{router.query.q}</span>"
-                </p>
+                <div className="text-gray-600">
+                  <p>
+                    No results for "
+                    <span className="text-black">{router.query.q}</span>".
+                  </p>
+                  <p>
+                    You can{' '}
+                    <a
+                      href={GITHUB_ISSUE_LINK}
+                      className="text-link-color hover:text-link-color-hover"
+                    >
+                      open an issue on GitHub
+                    </a>{' '}
+                    to request the module.
+                  </p>
+                </div>
               )}
             </div>
           </div>
