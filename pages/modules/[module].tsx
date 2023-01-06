@@ -213,7 +213,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                   <div>
                     <ul>
                       {metadata.maintainers.map(({ name, email, github }) => (
-                        <li key="name">
+                        <li key={name}>
                           <span>
                             {email && (
                               <a
