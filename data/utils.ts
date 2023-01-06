@@ -161,7 +161,7 @@ export const extractModuleInfo = async (
     ['print compatibility_level', ':%module'],
     { cwd: directory }
   )
-  const compatibilityLevel = parseInt(compatibilityLevelOut, 10)
+  const compatibilityLevel = parseInt(compatibilityLevelOut, 10) || 0
 
   const { stdout: listDepNamesOut } = await execa(
     BUILDOZER_BIN,
