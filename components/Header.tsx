@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faBook } from '@fortawesome/free-solid-svg-icons'
 
 interface HeaderProps {}
 
@@ -159,7 +162,8 @@ export const Header: React.FC<HeaderProps> = () => {
                 href={USER_GUIDE_LINK}
                 className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-gray-300 md:p-0"
               >
-                Bzlmod User Guide
+                <FontAwesomeIcon icon={faBook} />
+                <span className="ml-2">Bzlmod User Guide</span>
               </a>
             </li>
             <li>
@@ -167,7 +171,8 @@ export const Header: React.FC<HeaderProps> = () => {
                 href={CONTRIBUTE_CTA_LINK}
                 className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-gray-300 md:p-0"
               >
-                Contribute to the BCR
+                <FontAwesomeIcon icon={faGithub} />
+                <span className="ml-2">Contribute to the BCR</span>
               </a>
             </li>
           </ul>
