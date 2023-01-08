@@ -96,8 +96,8 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
               ) : (
                 <div className="text-gray-600">
                   <p>
-                    No results for "
-                    <span className="text-black">{router.query.q}</span>".
+                    No results for &quot;
+                    <span className="text-black">{router.query.q}</span>&quot;.
                   </p>
                   <p>
                     You can{' '}
