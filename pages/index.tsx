@@ -72,13 +72,6 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
           <h1 className="text-bzl-green font-bold text-6xl">
             Bazel Central Registry
           </h1>
-          <div className="text-bzl-green text-4xl">
-            Home of all your bazel modules!
-          </div>
-          <div className="mt-4 ml-2 px-2 rounded bg-amber-300">
-            As of Bazel 5.X, bzlmod and the Bazel Central Registry are in an
-            experimental status.
-          </div>
           <input
             type="text"
             autoFocus
