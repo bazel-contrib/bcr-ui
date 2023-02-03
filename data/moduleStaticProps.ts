@@ -1,4 +1,4 @@
-import compareVersions from 'compare-versions'
+import { compareVersions, validate as validateVersion } from 'compare-versions'
 import {
   extractModuleInfo,
   getModuleMetadata,
@@ -24,8 +24,8 @@ export const getStaticPropsModulePage = async (
   version: string | null
 ) => {
   const metadata = await getModuleMetadata(module)
-  const { versions } = metadata
-  versions.sort(compareVersions)
+  let { versions } = metadata
+  versions = sortVersions(versions)
 
   const versionInfos: VersionInfo[] = await Promise.all(
     versions.map(async (version) => ({
@@ -47,4 +47,22 @@ export const getStaticPropsModulePage = async (
       selectedVersion,
     },
   }
+}
+
+/**
+ * Sort versions, by splitting them into sortable and unsortable ones.
+ *
+ * The sortable versions will form the start of the list and are sorted, while the unsortable ones will
+ * form the end of it.
+ *
+ * This is mostly a placeholder until we have proper version parsing and comparison
+ * (see discussion in https://github.com/bazel-contrib/bcr-ui/issues/54).
+ */
+const sortVersions = (versions: string[]): string[] => {
+  const sortableVersions = versions.filter((version) => validateVersion(version))
+  const unsortableVersions = versions.filter((version) => !validateVersion(version))
+  sortableVersions.sort(compareVersions)
+  sortableVersions.reverse()
+
+  return [...sortableVersions,...unsortableVersions];
 }
