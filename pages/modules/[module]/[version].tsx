@@ -1,13 +1,9 @@
 import ModulePage from '../[module]'
 import { GetStaticProps } from 'next'
 import {
-  extractModuleInfo,
-  getModuleMetadata,
-  getSubmissionCommitOfVersion,
   listModuleNames,
   listModuleVersions,
 } from '../../../data/utils'
-import compareVersions from 'compare-versions'
 import { getStaticPropsModulePage } from '../../../data/moduleStaticProps'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {

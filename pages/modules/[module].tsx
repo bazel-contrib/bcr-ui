@@ -1,17 +1,12 @@
 import type { GetStaticProps, NextPage } from 'next'
-import compareVersions from 'compare-versions'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Header, USER_GUIDE_LINK } from '../../components/Header'
 import { Footer } from '../../components/Footer'
 import {
-  extractModuleInfo,
-  getModuleMetadata,
-  getSubmissionCommitOfVersion,
   listModuleNames,
   Metadata,
-  ModuleInfo,
 } from '../../data/utils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
@@ -46,7 +41,6 @@ const ModulePage: NextPage<ModulePageProps> = ({
   const displayShowAllButton = isQualifiedForShowAll && !triggeredShowAll
 
   const versionInfo = versionInfos.find((n) => n.version === selectedVersion)
-  const versionsInOrder = versionInfos.slice().reverse()
 
   const githubLink = metadata.repository
     ?.find((repo) => repo.startsWith('github:'))
@@ -56,8 +50,8 @@ const ModulePage: NextPage<ModulePageProps> = ({
     : undefined
 
   const shownVersions = triggeredShowAll
-    ? versionsInOrder
-    : versionsInOrder.slice(0, NUM_VERSIONS_ON_PAGE_LOAD)
+    ? versionInfos
+    : versionInfos.slice(0, NUM_VERSIONS_ON_PAGE_LOAD)
 
   if (!versionInfo) {
     throw Error(
