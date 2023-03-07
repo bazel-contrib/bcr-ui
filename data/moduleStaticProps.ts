@@ -37,7 +37,7 @@ export const getStaticPropsModulePage = async (
     }))
   )
 
-  const latestVersion = versions[metadata.versions.length - 1]
+  const latestVersion = versions[0]
   const selectedVersion = version || latestVersion
 
   return {
