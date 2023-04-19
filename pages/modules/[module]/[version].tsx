@@ -1,9 +1,6 @@
 import ModulePage from '../[module]'
 import { GetStaticProps } from 'next'
-import {
-  listModuleNames,
-  listModuleVersions,
-} from '../../../data/utils'
+import { listModuleNames, listModuleVersions } from '../../../data/utils'
 import { getStaticPropsModulePage } from '../../../data/moduleStaticProps'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {

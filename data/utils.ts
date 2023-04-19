@@ -60,13 +60,8 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
       const metadata = await getModuleMetadata(module)
       const latestVersion = metadata.versions[metadata.versions.length - 1]
 
-      const { authorDate, authorDateRel } = await getSubmissionCommitOfVersion(
-        module,
-        latestVersion
-      )
-      const authorDateIso = formatISO(
-        parse(authorDate, 'yyyy-MM-dd HH:mm:ss xxxx', new Date())
-      )
+      const { authorDate, authorDateRel, authorDateIso } =
+        await getSubmissionCommitOfVersion(module, latestVersion)
 
       return {
         module,
@@ -82,6 +77,7 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
 export interface Commit {
   hash: string
   authorDate: string
+  authorDateIso: string
   authorDateRel: string
 }
 
@@ -98,7 +94,14 @@ export const getSubmissionCommitOfVersion = async (
 
   const commits = await gitlogPromise(options)
 
-  return commits[commits.length - 1] as any
+  const commitInfo = commits[commits.length - 1] as any
+  const authorDateIso = formatISO(
+    parse(commitInfo.authorDate, 'yyyy-MM-dd HH:mm:ss xxxx', new Date())
+  )
+  return {
+    ...commitInfo,
+    authorDateIso,
+  }
 }
 
 // TODO: find a more robust way to do this

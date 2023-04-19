@@ -33,12 +33,14 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
           <div>
             <h2 className="font-bold text-lg">All modules</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
-              {searchIndex.map(({ module, version, authorDateRel }) => (
-                <ModuleCard
-                  key={module}
-                  {...{ module, version, authorDateRel }}
-                />
-              ))}
+              {searchIndex.map(
+                ({ module, version, authorDateIso: authorDate }) => (
+                  <ModuleCard
+                    key={module}
+                    {...{ module, version, authorDate }}
+                  />
+                )
+              )}
             </div>
           </div>
         </div>
