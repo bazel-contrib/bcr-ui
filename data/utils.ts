@@ -48,9 +48,7 @@ export const getModuleMetadata = async (module: string): Promise<Metadata> => {
 export interface SearchIndexEntry {
   module: string
   version: string
-  authorDate: string
   authorDateIso: string
-  authorDateRel: string
 }
 
 export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
@@ -60,14 +58,14 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
       const metadata = await getModuleMetadata(module)
       const latestVersion = metadata.versions[metadata.versions.length - 1]
 
-      const { authorDate, authorDateRel, authorDateIso } =
-        await getSubmissionCommitOfVersion(module, latestVersion)
+      const { authorDateIso } = await getSubmissionCommitOfVersion(
+        module,
+        latestVersion
+      )
 
       return {
         module,
         version: latestVersion,
-        authorDate,
-        authorDateRel,
         authorDateIso,
       }
     })

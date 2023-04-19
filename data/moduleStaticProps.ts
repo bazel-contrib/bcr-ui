@@ -10,9 +10,7 @@ export interface VersionInfo {
   version: string
   submission: {
     hash: string
-    authorDate: string
     authorDateIso: string
-    authorDateRel: string
   }
   moduleInfo: ModuleInfo
   isYanked: boolean
