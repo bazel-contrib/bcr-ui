@@ -10,8 +10,7 @@ export interface VersionInfo {
   version: string
   submission: {
     hash: string
-    authorDate: string
-    authorDateRel: string
+    authorDateIso: string
   }
   moduleInfo: ModuleInfo
   isYanked: boolean
@@ -59,10 +58,14 @@ export const getStaticPropsModulePage = async (
  * (see discussion in https://github.com/bazel-contrib/bcr-ui/issues/54).
  */
 const sortVersions = (versions: string[]): string[] => {
-  const sortableVersions = versions.filter((version) => validateVersion(version))
-  const unsortableVersions = versions.filter((version) => !validateVersion(version))
+  const sortableVersions = versions.filter((version) =>
+    validateVersion(version)
+  )
+  const unsortableVersions = versions.filter(
+    (version) => !validateVersion(version)
+  )
   sortableVersions.sort(compareVersions)
   sortableVersions.reverse()
 
-  return [...sortableVersions,...unsortableVersions];
+  return [...sortableVersions, ...unsortableVersions]
 }

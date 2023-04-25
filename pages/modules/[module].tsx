@@ -4,10 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Header, USER_GUIDE_LINK } from '../../components/Header'
 import { Footer } from '../../components/Footer'
-import {
-  listModuleNames,
-  Metadata,
-} from '../../data/utils'
+import { listModuleNames, Metadata } from '../../data/utils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
@@ -17,6 +14,7 @@ import {
   getStaticPropsModulePage,
   VersionInfo,
 } from '../../data/moduleStaticProps'
+import { formatDistance, parseISO } from 'date-fns'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -146,8 +144,16 @@ const ModulePage: NextPage<ModulePageProps> = ({
                                   <a
                                     href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
                                     className="text-link-color hover:text-link-color-hover"
+                                    suppressHydrationWarning
                                   >
-                                    published {version.submission.authorDateRel}
+                                    published{' '}
+                                    {formatDistance(
+                                      parseISO(
+                                        version.submission.authorDateIso
+                                      ),
+                                      new Date(),
+                                      { addSuffix: true }
+                                    )}
                                   </a>
                                 </div>
                               </div>

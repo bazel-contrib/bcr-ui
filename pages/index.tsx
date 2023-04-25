@@ -95,10 +95,10 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
               <h2 className="font-bold text-lg">Recently updated</h2>
               <div className="grid grid-cols-1 gap-8 mt-4">
                 {recentlyUpdatedModules.map(
-                  ({ module, version, authorDateRel }) => (
+                  ({ module, version, authorDateIso: authorDate }) => (
                     <ModuleCard
                       key={module}
-                      {...{ module, version, authorDateRel }}
+                      {...{ module, version, authorDate }}
                     />
                   )
                 )}
