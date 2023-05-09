@@ -104,7 +104,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                       <>
                         <li
                           key={version.version}
-                          className="border rounded mt-2"
+                          className="border rounded mt-2 "
                         >
                           {version.isYanked && (
                             <div
@@ -120,19 +120,18 @@ const ModulePage: NextPage<ModulePageProps> = ({
                               with comment: <p>{version.yankReason}</p>
                             </div>
                           )}
-                          <div className="p-2 flex items-stretch gap-4">
-                            <Link
-                              href={`/modules/${module}/${version.version}`}
-                            >
-                              <a>
-                                <div className="rounded-full border h-14 w-14 grid place-items-center hover:border-gray-800">
-                                  {version.version}
-                                </div>
-                              </a>
-                            </Link>
+                          <div className="flex items-stretch gap-4">
                             <div className="flex flex-1 justify-between">
-                              <div className="flex flex-col justify-between">
-                                <div />
+                              <div className="flex p-2 flex-col gap-2 justify-between border-r hover:border-link-color hover:border-r-4">
+                                <Link
+                                  href={`/modules/${module}/${version.version}`}
+                                >
+                                  <a>
+                                    <div className="place-items-center hover:border-gray-800">
+                                      {version.version}
+                                    </div>
+                                  </a>
+                                </Link>
                                 <div className="self-end text-gray-500">
                                   <a
                                     href="https://bazel.build/external/module#compatibility_level"
@@ -143,7 +142,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                                   {version.moduleInfo.compatibilityLevel}
                                 </div>
                               </div>
-                              <div className="flex justify-end">
+                              <div className="flex p-2 justify-end">
                                 <div className="flex flex-col justify-between items-end">
                                   <a
                                     href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
