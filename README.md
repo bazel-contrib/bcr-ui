@@ -25,7 +25,7 @@ git submodule update --init
 To get a buildozer binary, you also need to run this before launching the app:
 
 ```bash
-./build_bins.sh
+./install_bins.sh
 ```
 
 Packages are managed via [pnpm](https://pnpm.io/), so they can be installed via `npx pnpm install`
