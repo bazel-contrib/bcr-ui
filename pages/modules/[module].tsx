@@ -134,7 +134,12 @@ const ModulePage: NextPage<ModulePageProps> = ({
                               <div className="flex flex-col justify-between">
                                 <div />
                                 <div className="self-end text-gray-500">
-                                  compatibility level{' '}
+                                  <a
+                                    href="https://bazel.build/external/module#compatibility_level"
+                                    className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
+                                  >
+                                    compatibility level
+                                  </a>{' '}
                                   {version.moduleInfo.compatibilityLevel}
                                 </div>
                               </div>
