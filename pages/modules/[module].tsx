@@ -111,8 +111,13 @@ const ModulePage: NextPage<ModulePageProps> = ({
                               key={`${version.version}-yanked`}
                               className="p-2 mb-2 bg-amber-300"
                             >
-                              Version yanked with comment:{' '}
-                              <p>{version.yankReason}</p>
+                              <a
+                                href="https://bazel.build/external/module#yanked_versions"
+                                className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
+                              >
+                                Version yanked
+                              </a>{' '}
+                              with comment: <p>{version.yankReason}</p>
                             </div>
                           )}
                           <div className="p-2 flex items-stretch gap-4">
