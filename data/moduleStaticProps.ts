@@ -5,6 +5,7 @@ import {
   getSubmissionCommitOfVersion,
   moduleInfo,
   ModuleInfo,
+  reverseDependencies,
 } from './utils'
 
 export interface VersionInfo {
@@ -45,6 +46,7 @@ export const getStaticPropsModulePage = async (
       metadata,
       versionInfos,
       selectedVersion,
+      reverseDependencies: await reverseDependencies(module),
     },
   }
 }

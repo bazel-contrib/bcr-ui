@@ -20,6 +20,7 @@ interface ModulePageProps {
   metadata: Metadata
   versionInfos: VersionInfo[]
   selectedVersion: string
+  reverseDependencies: string[]
 }
 
 // The number of versions that should be displayed on initial page-load (before clicking "show all").
@@ -29,6 +30,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
   metadata,
   versionInfos,
   selectedVersion,
+  reverseDependencies,
 }) => {
   const router = useRouter()
   const { module } = router.query
@@ -206,6 +208,29 @@ const ModulePage: NextPage<ModulePageProps> = ({
                     ))}
                     {versionInfo.moduleInfo.dependencies.length === 0 && (
                       <span>No dependencies</span>
+                    )}
+                  </ul>
+                </div>
+                <h2 className="text-2xl font-bold mt-4">Dependents</h2>
+                <div>
+                  <ul className="mt-4">
+                    {reverseDependencies.map((revDependency) => (
+                      <Link
+                        key={revDependency}
+                        href={`/modules/${revDependency}`}
+                      >
+                        <a>
+                          <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                            <div className="rounded-full border h-14 w-14 grid place-items-center">
+                              {/*{dependency.version}*/}
+                            </div>
+                            <div>{revDependency}</div>
+                          </li>
+                        </a>
+                      </Link>
+                    ))}
+                    {reverseDependencies.length === 0 && (
+                      <span>No dependent modules</span>
                     )}
                   </ul>
                 </div>
