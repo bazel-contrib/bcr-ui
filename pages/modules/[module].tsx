@@ -25,6 +25,8 @@ interface ModulePageProps {
 
 // The number of versions that should be displayed on initial page-load (before clicking "show all").
 const NUM_VERSIONS_ON_PAGE_LOAD = 5
+// The number of reverse dependencies that should be displayed on initial page-load (before clicking "show all").
+const NUM_REVERSE_DEPENDENCIES_ON_PAGE_LOAD = 5
 
 const ModulePage: NextPage<ModulePageProps> = ({
   metadata,
@@ -35,10 +37,29 @@ const ModulePage: NextPage<ModulePageProps> = ({
   const router = useRouter()
   const { module } = router.query
 
-  const [triggeredShowAll, setTriggeredShowAll] = useState(false)
+  const [triggeredShowAllVersions, setTriggeredShowAllVersions] =
+    useState(false)
+  const [
+    triggeredShowAllReverseDependencies,
+    setTriggeredShowAllReverseDependencies,
+  ] = useState(false)
 
-  const isQualifiedForShowAll = versionInfos.length > NUM_VERSIONS_ON_PAGE_LOAD
-  const displayShowAllButton = isQualifiedForShowAll && !triggeredShowAll
+  const isQualifiedForShowAllVersions =
+    versionInfos.length > NUM_VERSIONS_ON_PAGE_LOAD
+  const displayShowAllVersionsButton =
+    isQualifiedForShowAllVersions && !triggeredShowAllVersions
+  const shownVersions = triggeredShowAllVersions
+    ? versionInfos
+    : versionInfos.slice(0, NUM_VERSIONS_ON_PAGE_LOAD)
+
+  const isQualifiedForShowAllReverseDependencies =
+    reverseDependencies.length > NUM_REVERSE_DEPENDENCIES_ON_PAGE_LOAD
+  const displayShowAllReverseDependenciesButton =
+    isQualifiedForShowAllReverseDependencies &&
+    !triggeredShowAllReverseDependencies
+  const shownReverseDependencies = triggeredShowAllReverseDependencies
+    ? reverseDependencies
+    : reverseDependencies.slice(0, NUM_REVERSE_DEPENDENCIES_ON_PAGE_LOAD)
 
   const versionInfo = versionInfos.find((n) => n.version === selectedVersion)
 
@@ -48,10 +69,6 @@ const ModulePage: NextPage<ModulePageProps> = ({
   const releaseNotesLink = githubLink
     ? `${githubLink}/releases/tag/v${selectedVersion}`
     : undefined
-
-  const shownVersions = triggeredShowAll
-    ? versionInfos
-    : versionInfos.slice(0, NUM_VERSIONS_ON_PAGE_LOAD)
 
   if (!versionInfo) {
     throw Error(
@@ -174,10 +191,10 @@ const ModulePage: NextPage<ModulePageProps> = ({
                       </>
                     ))}
                   </ul>
-                  {displayShowAllButton && (
+                  {displayShowAllVersionsButton && (
                     <button
                       className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg"
-                      onClick={() => setTriggeredShowAll(true)}
+                      onClick={() => setTriggeredShowAllVersions(true)}
                     >
                       Show all {versionInfos.length} versions
                     </button>
@@ -214,16 +231,13 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 <h2 className="text-2xl font-bold mt-4">Dependents</h2>
                 <div>
                   <ul className="mt-4">
-                    {reverseDependencies.map((revDependency) => (
+                    {shownReverseDependencies.map((revDependency) => (
                       <Link
                         key={revDependency}
                         href={`/modules/${revDependency}`}
                       >
                         <a>
                           <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                            <div className="rounded-full border h-14 w-14 grid place-items-center">
-                              {/*{dependency.version}*/}
-                            </div>
                             <div>{revDependency}</div>
                           </li>
                         </a>
@@ -233,6 +247,16 @@ const ModulePage: NextPage<ModulePageProps> = ({
                       <span>No dependent modules</span>
                     )}
                   </ul>
+                  {displayShowAllReverseDependenciesButton && (
+                    <button
+                      className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg"
+                      onClick={() =>
+                        setTriggeredShowAllReverseDependencies(true)
+                      }
+                    >
+                      Show all {reverseDependencies.length} dependent modules
+                    </button>
+                  )}
                 </div>
               </div>
               <div id="metadata" className="mt-4 pl-2">
