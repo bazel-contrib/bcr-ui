@@ -20,7 +20,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "compare-versions": "^6.0.0-rc.1",
     "date-fns": "^2.28.0",
-    "execa": "^6.1.0",
+    "execa": "^7.0.0",
     "fuse.js": "^6.6.2",
     "gitlog": "^4.0.4",
     "next": "12.1.6",
