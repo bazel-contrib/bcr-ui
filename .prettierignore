@@ -5,4 +5,4 @@ bazel-*
 node_modules
 out/
 pnpm-lock.yaml
-globals/*.css
+styles/*.css
