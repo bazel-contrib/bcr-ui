@@ -27,7 +27,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.2
         with:
-          version: 6.0.2
+          version: 8.6.12
 
       - name: Install required binaries
         run: |
