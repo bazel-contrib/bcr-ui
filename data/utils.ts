@@ -4,6 +4,8 @@ import { execa } from 'execa'
 import { promises as fs } from 'fs'
 import { gitlogPromise } from 'gitlog'
 import * as os from 'os'
+import pMemoize from 'p-memoize'
+import allModules from '../pages/all-modules'
 
 export const MODULES_ROOT_DIR = path.join(
   process.cwd(),
@@ -193,4 +195,71 @@ export const extractModuleInfo = async (
     compatibilityLevel,
     dependencies,
   }
+}
+
+type AllModuleInfo = {
+  allModules: {
+    // key = module name
+    [key: string]: {
+      // key = module version
+      [key: string]: ModuleInfo
+    }
+  }
+  // Map of module names to their dependents (currently doesn't track version information)
+  reverseDependencies: {
+    // key = module name of module that is the dependency
+    // value = all modules that depend on the dependency
+    [key: string]: Set<string>
+  }
+}
+
+/**
+ * Builds a list of all module info.
+ *
+ * This is done because we will need all module info anyways to build the site, and this acts as a cache for
+ * all the slower filesystem dependant actions.
+ *
+ * @see allModuleInfo
+ */
+const buildAllModuleInfoInner = async (): Promise<AllModuleInfo> => {
+  const allModuleInfo: AllModuleInfo = {
+    allModules: {},
+    reverseDependencies: {},
+  }
+
+  const modulesNames = await listModuleNames()
+  for (const moduleName of modulesNames) {
+    const versions = await listModuleVersions(moduleName)
+    for (const moduleVersion of versions) {
+      const moduleInfo = await extractModuleInfo(moduleName, moduleVersion)
+      allModuleInfo.allModules[moduleName] ||= {}
+      allModuleInfo.allModules[moduleName][moduleVersion] = moduleInfo
+
+      for (const dependency of moduleInfo.dependencies) {
+        allModuleInfo.reverseDependencies[dependency.module] ||= new Set()
+        allModuleInfo.reverseDependencies[dependency.module].add(moduleName)
+      }
+    }
+  }
+
+  return allModuleInfo
+}
+
+export const allModuleInfo = pMemoize(buildAllModuleInfoInner)
+
+export const moduleInfo = async (
+  module: string,
+  version: string
+): Promise<ModuleInfo> => {
+  const all = await allModuleInfo()
+  return all.allModules[module][version]
+}
+
+export const reverseDependencies = async (
+  module: string
+): Promise<string[]> => {
+  const all = await allModuleInfo()
+  const reverseDeps = Array.from(all.reverseDependencies[module] || [])
+  reverseDeps.sort()
+  return reverseDeps
 }

@@ -3,7 +3,9 @@ import {
   extractModuleInfo,
   getModuleMetadata,
   getSubmissionCommitOfVersion,
+  moduleInfo,
   ModuleInfo,
+  reverseDependencies,
 } from './utils'
 
 export interface VersionInfo {
@@ -30,7 +32,7 @@ export const getStaticPropsModulePage = async (
     versions.map(async (version) => ({
       version,
       submission: await getSubmissionCommitOfVersion(module, version),
-      moduleInfo: await extractModuleInfo(module, version),
+      moduleInfo: await moduleInfo(module, version),
       isYanked: Object.keys(metadata.yanked_versions).includes(version),
       yankReason: metadata.yanked_versions[version] || null,
     }))
@@ -44,6 +46,7 @@ export const getStaticPropsModulePage = async (
       metadata,
       versionInfos,
       selectedVersion,
+      reverseDependencies: await reverseDependencies(module),
     },
   }
 }
