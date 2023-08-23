@@ -10,7 +10,7 @@ export interface CopyCodeProps {
 export const CopyCode: React.FC<CopyCodeProps> = ({ code }) => {
   const [showCopied, setShowCopied] = useState<boolean>(false)
 
-  const { x, y, reference, floating, strategy } = useFloating({
+  const { x, y, refs, strategy } = useFloating({
     placement: 'top-end',
   })
 
@@ -25,7 +25,7 @@ export const CopyCode: React.FC<CopyCodeProps> = ({ code }) => {
   return (
     <>
       <button
-        ref={reference}
+        ref={refs.setReference}
         className="w-full flex justify-between items-center p-2 my-4 rounded bg-gray-200 group hover:bg-gray-100 border hover:border-gray-800 cursor-pointer"
         title="Copy MODULE.bazel snippet to clipboard"
         onClick={handleClickCopy}
@@ -37,7 +37,7 @@ export const CopyCode: React.FC<CopyCodeProps> = ({ code }) => {
       </button>
       {
         <div
-          ref={floating}
+          ref={refs.setFloating}
           style={{
             position: strategy,
             top: y ?? 0,
