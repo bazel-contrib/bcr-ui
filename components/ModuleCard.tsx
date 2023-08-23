@@ -19,26 +19,21 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
 
   return (
     <Link href={`/modules/${module}`}>
-      <a>
-        <div className="w-full h-24 border rounded flex flex-col items-center justify-center shadow-sm hover:shadow-lg">
-          <div className="w-full p-4 flex justify-between">
-            <div>
-              <div className="font-bold">{module}</div>
-              <div>{version}</div>
-            </div>
-            <div className="flex">
-              {authorDateRel && (
-                <div
-                  className="text-gray-500 self-end"
-                  suppressHydrationWarning
-                >
-                  updated {authorDateRel}
-                </div>
-              )}
-            </div>
+      <div className="w-full h-24 border rounded flex flex-col items-center justify-center shadow-sm hover:shadow-lg">
+        <div className="w-full p-4 flex justify-between">
+          <div>
+            <div className="font-bold">{module}</div>
+            <div>{version}</div>
+          </div>
+          <div className="flex">
+            {authorDateRel && (
+              <div className="text-gray-500 self-end" suppressHydrationWarning>
+                updated {authorDateRel}
+              </div>
+            )}
           </div>
         </div>
-      </a>
+      </div>
     </Link>
   )
 }

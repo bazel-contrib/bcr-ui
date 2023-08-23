@@ -145,11 +145,9 @@ const ModulePage: NextPage<ModulePageProps> = ({
                                 <Link
                                   href={`/modules/${module}/${version.version}`}
                                 >
-                                  <a>
-                                    <div className="place-items-center hover:border-gray-800">
-                                      {version.version}
-                                    </div>
-                                  </a>
+                                  <div className="place-items-center hover:border-gray-800">
+                                    {version.version}
+                                  </div>
                                 </Link>
                                 <div className="self-end text-gray-500">
                                   <a
@@ -213,14 +211,12 @@ const ModulePage: NextPage<ModulePageProps> = ({
                         key={dependency.module}
                         href={`/modules/${dependency.module}/${dependency.version}`}
                       >
-                        <a>
-                          <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                            <div className="rounded-full border h-14 w-14 grid place-items-center">
-                              {dependency.version}
-                            </div>
-                            <div>{dependency.module}</div>
-                          </li>
-                        </a>
+                        <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                          <div className="rounded-full border h-14 w-14 grid place-items-center">
+                            {dependency.version}
+                          </div>
+                          <div>{dependency.module}</div>
+                        </li>
                       </Link>
                     ))}
                     {versionInfo.moduleInfo.dependencies.length === 0 && (
@@ -236,11 +232,9 @@ const ModulePage: NextPage<ModulePageProps> = ({
                         key={revDependency}
                         href={`/modules/${revDependency}`}
                       >
-                        <a>
-                          <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                            <div>{revDependency}</div>
-                          </li>
-                        </a>
+                        <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                          <div>{revDependency}</div>
+                        </li>
                       </Link>
                     ))}
                     {reverseDependencies.length === 0 && (
