@@ -132,6 +132,7 @@ export interface ModuleInfo {
 }
 
 interface Dependency {
+  dev: boolean
   module: string
   version: string
 }
@@ -176,16 +177,25 @@ export const extractModuleInfo = async (
     ['print version', ':%bazel_dep'],
     { cwd: directory }
   )
+  const { stdout: listDepDevOut } = await execa(
+    BUILDOZER_BIN,
+    ['print dev_dependency', ':%bazel_dep'],
+    { cwd: directory }
+  )
   const depNames = listDepNamesOut.split(/\r?\n/)
   const depVersions = listDepVersionsOut.split(/\r?\n/)
+  const depDevStatuses = listDepDevOut.split(/\r?\n/)
 
   const dependencies: Dependency[] = []
 
   if (listDepVersionsOut !== '') {
     depNames.forEach((name, i) => {
       const version = depVersions[i]
+      const dev = depDevStatuses[i] === 'True'
+
       dependencies.push({
         module: name,
+        dev,
         version,
       } as Dependency)
     })
