@@ -9,7 +9,7 @@ http_archive(
     sha256 = "29a50ea545810dc077c408d520eb83e9de3eecfe6395e89cb07149d903fc31e5",
     strip_prefix = "buildifier-prebuilt-6.1.2",
     urls = [
-        "http://github.com/keith/buildifier-prebuilt/archive/6.1.2.tar.gz",
+        "https://github.com/keith/buildifier-prebuilt/archive/6.1.2.tar.gz",
     ],
 )
 
