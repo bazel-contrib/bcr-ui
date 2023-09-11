@@ -1,0 +1,10 @@
+
+/** Page: modules/[module].tsx */
+
+.selectable {
+    user-select: all;
+}
+
+.decorative {
+    user-select: none;
+}

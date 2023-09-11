@@ -1,36 +1,86 @@
+import Prism from "prismjs";
+import "prismjs/components/prism-python";
+
 import { faCopy } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useFloating } from '@floating-ui/react-dom'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 export interface CopyCodeProps {
-  code: string
+  module: string
+  version: string
 }
 
-export const CopyCode: React.FC<CopyCodeProps> = ({ code }) => {
+const runtimeDependencyTemplate = (name: string, version: string) => `bazel_dep(
+  name = "${name}",
+  version = "${version}",
+)`
+
+const devDependencyTemplate = (name: string, version: string) => `bazel_dep(
+  name = "${name}",
+  version = "${version}",
+  dev_dependency = True,
+)`
+
+const codeTemplate = (name: string, version: string, dev: boolean = false) => {
+  return (dev ? devDependencyTemplate : runtimeDependencyTemplate)(name, version);
+}
+
+export const CopyCode: React.FC<CopyCodeProps> = ({ module, version }) => {
+  const devCheckbox = useRef();
   const [showCopied, setShowCopied] = useState<boolean>(false)
+  const [isDevDependency, setIsDevDependency] = useState<boolean>(false)
+  const [codeSample, setCodeSample] = useState<string>(
+    codeTemplate(module, version, isDevDependency)
+  )
+
+  useEffect(() => {
+    setCodeSample(codeTemplate(module, version, isDevDependency));
+  }, [isDevDependency]);
+
+  useEffect(() => {
+    const highlight = async () => {
+      await Prism.highlightAll()
+    };
+    highlight()
+  }, [codeSample])
 
   const { x, y, refs, strategy } = useFloating({
     placement: 'top-end',
   })
 
   const handleClickCopy = async () => {
-    await navigator.clipboard.writeText(code)
+    await navigator.clipboard.writeText(codeSample)
     setShowCopied(true)
     setTimeout(() => {
       setShowCopied(false)
     }, 2000)
   }
 
+  const handleDevStateChange = async () => {
+    setIsDevDependency(!isDevDependency);
+  }
+
   return (
     <>
+      <div className="pt-2">
+        <details className="codesample-controls my-4 control">
+          <summary className="control decorative">Customize this sample</summary>
+          <pre className="my-2">
+            <input className="mx-2" type="checkbox" onChange={handleDevStateChange} name="devDependency" />
+            <label htmlFor="devDependency">Dev dependency</label>
+          </pre>
+        </details>
+      </div>
       <button
         ref={refs.setReference}
-        className="w-full flex justify-between items-center p-2 my-4 rounded bg-gray-200 group hover:bg-gray-100 border hover:border-gray-800 cursor-pointer"
+        className="w-full flex justify-between items-center px-2 my-4 rounded bg-gray-200 group hover:bg-gray-100 border hover:border-gray-800 cursor-pointer"
         title="Copy MODULE.bazel snippet to clipboard"
         onClick={handleClickCopy}
       >
-        <code>{code}</code>
+        <pre className="codesample language-python">
+          <code>{codeSample}</code>
+        </pre>
         <div className="text-gray-500 group-hover:text-black">
           <FontAwesomeIcon icon={faCopy} />
         </div>

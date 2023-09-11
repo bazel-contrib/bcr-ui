@@ -25,11 +25,14 @@
     "gitlog": "^4.0.4",
     "next": "13.4.19",
     "p-memoize": "^7.1.1",
+    "prism-themes": "1.9.0",
+    "prismjs": "1.29.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@types/node": "18.17.9",
+    "@types/prismjs": "^1.26.0",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "^10.4.7",

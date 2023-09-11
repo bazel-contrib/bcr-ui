@@ -1,0 +1,15 @@
+
+/** Code snippet on module pages */
+
+.control {
+    cursor: pointer;
+}
+
+pre.codesample {
+    text-align: left;
+    background: transparent;
+}
+
+button pre.codesample, button pre code[class*="language-"] {
+    color: #6E6E6E;
+}

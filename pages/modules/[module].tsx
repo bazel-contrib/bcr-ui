@@ -101,9 +101,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                     and add the following to your <code>MODULE.bazel</code>{' '}
                     file:
                   </p>
-                  <CopyCode
-                    code={`bazel_dep(name = "${module}", version = "${selectedVersion}")`}
-                  />
+                  <CopyCode module={module as string} version={selectedVersion} />
                   {!!releaseNotesLink && (
                     <p>
                       Read the{' '}
