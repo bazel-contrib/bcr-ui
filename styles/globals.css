@@ -18,3 +18,5 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@import "./page-module.css";

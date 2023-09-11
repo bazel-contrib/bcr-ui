@@ -88,14 +88,15 @@ const ModulePage: NextPage<ModulePageProps> = ({
         <div className="max-w-4xl w-4xl mx-auto mt-8">
           <div className="border rounded p-4 divide-y">
             <div>
-              <span className="text-3xl">{module}</span>
-              <span className="text-lg ml-2">{selectedVersion}</span>
+              <span className="selectable text-3xl">{module}</span>
+              <span>&nbsp;</span>{/* helps with dbl-click selection */}
+              <span className="selectable text-lg ml-2">{selectedVersion}</span>
             </div>
             <div className="mt-4 flex flex-wrap sm:divide-x gap-2">
               <div className="basis-0 grow-[999]">
                 <h2 className="text-2xl font-bold mt-4">Install</h2>
                 <div className="mt-2">
-                  <p>
+                  <p className="decorative">
                     To start using this module, make sure you have set up Bzlmod
                     according to the <a href={USER_GUIDE_LINK}>user guide</a>,
                     and add the following to your <code>MODULE.bazel</code>{' '}
@@ -116,7 +117,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                     </p>
                   )}
                 </div>
-                <h2 className="text-2xl font-bold mt-4">Version history</h2>
+                <h2 className="text-2xl font-bold mt-6 decorative">Version history</h2>
                 <div>
                   <ul className="mt-4">
                     {shownVersions.map((version) => (
