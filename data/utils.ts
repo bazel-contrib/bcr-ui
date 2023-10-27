@@ -5,7 +5,6 @@ import { promises as fs } from 'fs'
 import { gitlogPromise } from 'gitlog'
 import * as os from 'os'
 import pMemoize from 'p-memoize'
-import allModules from '../pages/all-modules'
 
 export const MODULES_ROOT_DIR = path.join(
   process.cwd(),
@@ -39,13 +38,17 @@ export const listModuleVersions = async (module: string): Promise<string[]> => {
   return metadata.versions
 }
 
-export const getModuleMetadata = async (module: string): Promise<Metadata> => {
+export const getModuleMetadataInner = async (
+  module: string
+): Promise<Metadata> => {
   const metadataJsonPath = path.join(MODULES_ROOT_DIR, module, 'metadata.json')
   const metadataContents = await fs.readFile(metadataJsonPath)
   const metadata: Metadata = JSON.parse(metadataContents.toString())
 
   return metadata
 }
+
+export const getModuleMetadata = pMemoize(getModuleMetadataInner)
 
 export interface SearchIndexEntry {
   module: string
@@ -81,7 +84,7 @@ export interface Commit {
   authorDateRel: string
 }
 
-export const getSubmissionCommitOfVersion = async (
+const getSubmissionCommitOfVersionInternal = async (
   module: string,
   version: string
 ): Promise<Commit> => {
@@ -103,6 +106,10 @@ export const getSubmissionCommitOfVersion = async (
     authorDateIso,
   }
 }
+
+export const getSubmissionCommitOfVersion = pMemoize(
+  getSubmissionCommitOfVersionInternal
+)
 
 // TODO: find a more robust way to do this
 export const getCompatibilityLevelOfVersion = async (
