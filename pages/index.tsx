@@ -44,15 +44,8 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
   )
   recentlyUpdatedModules = recentlyUpdatedModules.slice(0, 10)
 
-  const handleSearchKeydown = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (event.code === 'Enter') {
-      handleSubmitSearch()
-    }
-  }
-
-  const handleSubmitSearch = () => {
+  const handleSubmitSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     router.push({
       pathname: '/search',
       query: { ...router.query, q: searchQueryInput },
@@ -72,16 +65,16 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
           <h1 className="text-bzl-green font-bold text-6xl">
             Bazel Central Registry
           </h1>
-          <input
-            type="text"
-            autoFocus
-            id="search-navbar"
-            className="my-6 h-12 block p-2 pl-10 w-full max-w-xl text-gray-900 bg-white rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search for module..."
-            onChange={(e) => setSearchQueryInput(e.target.value)}
-            onKeyDown={handleSearchKeydown}
-            onSubmit={handleSubmitSearch}
-          />
+          <form onSubmit={handleSubmitSearch} className="contents">
+            <input
+              type="text"
+              autoFocus
+              id="search-navbar"
+              className="my-6 h-12 block p-2 pl-10 w-full max-w-xl text-gray-900 bg-white rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Search for module..."
+              onChange={(e) => setSearchQueryInput(e.target.value)}
+            />
+          </form>
           <div className="w-full max-w-4xl flex flex-col gap-8 md:grid md:grid-cols-2 md:flex-row">
             <div>
               <h2 className="font-bold text-lg">Highlighted modules</h2>

@@ -50,17 +50,10 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
     setSearchQueryInput(getSearchQuery() || '')
   }, [searchQuery])
 
-  const handleSearchKeydown = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (event.code === 'Enter') {
-      handleSubmitSearch()
-    }
-  }
-
-  const handleSubmitSearch = () => {
+  const handleSubmitSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     router.push({
-      pathname: router.pathname,
+      pathname: '/search',
       query: { ...router.query, q: searchQueryInput },
     })
   }
@@ -75,17 +68,17 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
       <Header />
       <main className="m-4 l:m-0">
         <div className="max-w-4xl w-4xl mx-auto mt-8 flex flex-col items-center">
-          <input
-            type="text"
-            id="search-navbar"
-            autoFocus
-            className="my-6 h-12 block p-2 pl-10 w-full max-w-xl text-gray-900 bg-white rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search for module..."
-            value={searchQueryInput}
-            onChange={(e) => setSearchQueryInput(e.target.value)}
-            onKeyDown={handleSearchKeydown}
-            onSubmit={handleSubmitSearch}
-          />
+          <form onSubmit={handleSubmitSearch} className="contents">
+            <input
+              type="text"
+              id="search-navbar"
+              autoFocus
+              className="my-6 h-12 block p-2 pl-10 w-full max-w-xl text-gray-900 bg-white rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Search for module..."
+              value={searchQueryInput}
+              onChange={(e) => setSearchQueryInput(e.target.value)}
+            />
+          </form>
           <div className="w-full max-w-4xl">
             <h2 className="font-bold text-lg">Search results</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
