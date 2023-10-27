@@ -11,7 +11,7 @@ export const CONTRIBUTE_CTA_LINK =
 export const Header: React.FC<HeaderProps> = () => {
   const router = useRouter()
   const [searchQueryInput, setSearchQueryInput] = useState<string>('')
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<bool>(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
 
   const handleSubmitSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
