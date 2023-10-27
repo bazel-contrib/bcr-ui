@@ -204,56 +204,73 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 <div className="mt-4">
                   <details open>
                     <summary>
-                      <span role="heading" aria-level={2} className="text-1xl mt-4">
-                        <span className="font-bold">Direct</span> ({versionInfo.moduleInfo.dependencies.filter((d) => !d.dev).length || 'None'}){' '}
+                      <span
+                        role="heading"
+                        aria-level={2}
+                        className="text-1xl mt-4"
+                      >
+                        <span className="font-bold">Direct</span> (
+                        {versionInfo.moduleInfo.dependencies.filter(
+                          (d) => !d.dev
+                        ).length || 'None'}
+                        ){' '}
                         <small className="text-sm font-normal text-gray-500">
                           at version {selectedVersion}
                         </small>
                       </span>
                     </summary>
                     <ul className="mt-4">
-                      {versionInfo.moduleInfo.dependencies.filter((d) => !d.dev).map((dependency) => (
-                        <Link
-                          key={dependency.module}
-                          href={`/modules/${dependency.module}/${dependency.version}`}
-                        >
-                          <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                            <div className="rounded-full border h-14 w-14 grid place-items-center">
-                              {dependency.version}
-                            </div>
-                            <div>{dependency.module}</div>
-                          </li>
-                        </Link>
-                      ))}
-                      {versionInfo.moduleInfo.dependencies.filter((d) => !d.dev).length === 0 && (
-                        <span>No dependencies</span>
-                      )}
+                      {versionInfo.moduleInfo.dependencies
+                        .filter((d) => !d.dev)
+                        .map((dependency) => (
+                          <Link
+                            key={dependency.module}
+                            href={`/modules/${dependency.module}/${dependency.version}`}
+                          >
+                            <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                              <div className="rounded-full border h-14 w-14 grid place-items-center">
+                                {dependency.version}
+                              </div>
+                              <div>{dependency.module}</div>
+                            </li>
+                          </Link>
+                        ))}
+                      {versionInfo.moduleInfo.dependencies.filter((d) => !d.dev)
+                        .length === 0 && <span>No dependencies</span>}
                     </ul>
                   </details>
                 </div>
                 <div className="mt-4">
                   <details>
                     <summary>
-                      <span role="heading" aria-level={2} className="text-1xl mt-4">
-                        <span className="font-bold">
-                          Dev Dependencies
-                        </span> ({versionInfo.moduleInfo.dependencies.filter((d) => d.dev).length || 'None'}){' '}
+                      <span
+                        role="heading"
+                        aria-level={2}
+                        className="text-1xl mt-4"
+                      >
+                        <span className="font-bold">Dev Dependencies</span> (
+                        {versionInfo.moduleInfo.dependencies.filter(
+                          (d) => d.dev
+                        ).length || 'None'}
+                        ){' '}
                       </span>
                     </summary>
                     <ul className="mt-4">
-                      {versionInfo.moduleInfo.dependencies.filter((d) => d.dev).map((dependency) => (
-                        <Link
-                          key={dependency.module}
-                          href={`/modules/${dependency.module}/${dependency.version}`}
-                        >
-                          <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                            <div className="rounded-full border h-14 w-14 grid place-items-center">
-                              {dependency.version}
-                            </div>
-                            <div>{dependency.module}</div>
-                          </li>
-                        </Link>
-                      ))}
+                      {versionInfo.moduleInfo.dependencies
+                        .filter((d) => d.dev)
+                        .map((dependency) => (
+                          <Link
+                            key={dependency.module}
+                            href={`/modules/${dependency.module}/${dependency.version}`}
+                          >
+                            <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                              <div className="rounded-full border h-14 w-14 grid place-items-center">
+                                {dependency.version}
+                              </div>
+                              <div>{dependency.module}</div>
+                            </li>
+                          </Link>
+                        ))}
                       {versionInfo.moduleInfo.dependencies.length === 0 && (
                         <span>No dependencies</span>
                       )}
@@ -263,8 +280,15 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 <div className="mt-4">
                   <details>
                     <summary>
-                      <span role="heading" aria-level={2} className="text-1xl mt-4">
-                        <span className="font-bold">Dependents</span> {shownReverseDependencies.length > 0 ? `(${shownReverseDependencies.length})` : ''}
+                      <span
+                        role="heading"
+                        aria-level={2}
+                        className="text-1xl mt-4"
+                      >
+                        <span className="font-bold">Dependents</span>{' '}
+                        {shownReverseDependencies.length > 0
+                          ? `(${shownReverseDependencies.length})`
+                          : ''}
                       </span>
                     </summary>
                     <ul className="mt-4">
