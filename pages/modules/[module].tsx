@@ -286,8 +286,8 @@ const ModulePage: NextPage<ModulePageProps> = ({
                         className="text-1xl mt-4"
                       >
                         <span className="font-bold">Dependents</span>{' '}
-                        {shownReverseDependencies.length > 0
-                          ? `(${shownReverseDependencies.length})`
+                        {reverseDependencies.length > 0
+                          ? `(${reverseDependencies.length})`
                           : ''}
                       </span>
                     </summary>
