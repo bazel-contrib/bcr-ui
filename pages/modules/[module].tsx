@@ -15,6 +15,7 @@ import {
   VersionInfo,
 } from '../../data/moduleStaticProps'
 import { formatDistance, parseISO } from 'date-fns'
+import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -36,6 +37,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
 }) => {
   const router = useRouter()
   const { module } = router.query
+  // There may be multiple GitHub repositories specified for a module, but for now
+  // the UI will only display information about the first one in the list.
+  const firstGithubRepository = metadata.repository?.find((repo) =>
+    repo.startsWith('github:')
+  )
 
   const [triggeredShowAllVersions, setTriggeredShowAllVersions] =
     useState(false)
@@ -63,9 +69,10 @@ const ModulePage: NextPage<ModulePageProps> = ({
 
   const versionInfo = versionInfos.find((n) => n.version === selectedVersion)
 
-  const githubLink = metadata.repository
-    ?.find((repo) => repo.startsWith('github:'))
-    ?.replace('github:', 'https://github.com/')
+  const githubLink = firstGithubRepository?.replace(
+    'github:',
+    'https://github.com/'
+  )
   const releaseNotesLink = githubLink
     ? `${githubLink}/releases/tag/v${selectedVersion}`
     : undefined
@@ -91,8 +98,8 @@ const ModulePage: NextPage<ModulePageProps> = ({
               <span className="text-3xl">{module}</span>
               <span className="text-lg ml-2">{selectedVersion}</span>
             </div>
-            <div className="mt-4 flex flex-wrap sm:divide-x gap-2">
-              <div className="basis-0 grow-[999]">
+            <div className="mt-4 flex flex-col md:flex-row flex-wrap sm:divide-x gap-2">
+              <div id="install_history_dependencies" className="basis-0 grow">
                 <h2 className="text-2xl font-bold mt-4">Install</h2>
                 <div className="mt-2">
                   <p>
@@ -319,18 +326,29 @@ const ModulePage: NextPage<ModulePageProps> = ({
                   </details>
                 </div>
               </div>
-              <div id="metadata" className="mt-4 sm:pl-2 basis-8 grow">
-                <h2 className="text-2xl font-bold mt-4">Metadata</h2>
+              <div id="metadata" className="sm:pl-2 basis-8 md:basis-[12rem]">
+                <h2 className="text-2xl font-bold mt-4 mb-2">Metadata</h2>
                 <div>
-                  <h3 className="font-bold text-xl mt-2">Homepage</h3>
-                  <div>
+                  {metadata.homepage !== githubLink ? (
                     <a
                       href={metadata.homepage}
                       className="text-link-color hover:text-link-color-hover"
+                      title={metadata.homepage}
                     >
-                      {metadata.homepage}
+                      <FontAwesomeIcon icon={faGlobe} className="mr-1" />
+                      Homepage
                     </a>
-                  </div>
+                  ) : null}
+                </div>
+                <div>
+                  <a
+                    href={metadata.homepage}
+                    className="text-link-color hover:text-link-color-hover"
+                    title={metadata.homepage}
+                  >
+                    <FontAwesomeIcon icon={faGithub} className="mr-1" />
+                    GitHub repository
+                  </a>
                 </div>
                 <div>
                   <h3 className="font-bold text-xl mt-2">Maintainers</h3>
@@ -338,7 +356,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                     <ul>
                       {metadata.maintainers.map(({ name, email, github }) => (
                         <li key={name}>
-                          <span>
+                          <span className="flex">
                             {email && (
                               <a
                                 className="text-link-color hover:text-link-color-hover cursor-pointer mr-1"
