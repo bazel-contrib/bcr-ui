@@ -21,7 +21,7 @@
     "compare-versions": "^6.0.0-rc.1",
     "date-fns": "^2.28.0",
     "execa": "^8.0.0",
-    "fuse.js": "^6.6.2",
+    "fuse.js": "^7.0.0",
     "gitlog": "^4.0.4",
     "next": "13.5.6",
     "p-memoize": "^7.1.1",
