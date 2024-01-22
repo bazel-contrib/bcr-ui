@@ -27,14 +27,15 @@ export const getStaticPropsModulePage = async (
   const metadata = await getModuleMetadata(module)
   let { versions } = metadata
   versions = sortVersions(versions)
+  let yankedVersions = metadata.yanked_versions || {}
 
   const versionInfos: VersionInfo[] = await Promise.all(
     versions.map(async (version) => ({
       version,
       submission: await getSubmissionCommitOfVersion(module, version),
       moduleInfo: await moduleInfo(module, version),
-      isYanked: Object.keys(metadata.yanked_versions).includes(version),
-      yankReason: metadata.yanked_versions[version] || null,
+      isYanked: Object.keys(yankedVersions).includes(version),
+      yankReason: yankedVersions[version] || null,
     }))
   )
 
