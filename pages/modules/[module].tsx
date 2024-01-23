@@ -336,7 +336,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                   <h3 className="font-bold text-xl mt-2">Maintainers</h3>
                   <div>
                     <ul>
-                      {metadata.maintainers.map(({ name, email, github }) => (
+                      {metadata.maintainers?.map(({ name, email, github }) => (
                         <li key={name}>
                           <span>
                             {email && (
