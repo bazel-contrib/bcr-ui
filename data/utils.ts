@@ -108,7 +108,10 @@ const getSubmissionCommitOfVersionInternal = async (
 }
 
 export const getSubmissionCommitOfVersion = pMemoize(
-  getSubmissionCommitOfVersionInternal
+  getSubmissionCommitOfVersionInternal,
+  {
+    cacheKey: (arguments_) => JSON.stringify(arguments_),
+  }
 )
 
 // TODO: find a more robust way to do this
