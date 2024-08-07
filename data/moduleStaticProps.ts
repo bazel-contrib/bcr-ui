@@ -109,13 +109,13 @@ function composeCmps<T>(...cmps: Cmp<T>[]): Cmp<T> {
 const compareIdentifiers: Cmp<string> = composeCmps(
   comparing((id) => !/^\d+$/.test(id)),  // pure numbers compare less than non-numbers
   comparing((id) => (/^\d+$/.test(id) ? parseInt(id) : 0)),
-  natural,
+  natural
 )
 
 const compareVersions: Cmp<Version> = composeCmps(
   comparing((v) => v.release, lexicographically(compareIdentifiers)),
   comparing((v) => v.prerelease.length === 0),  // nonempty prerelease compares less than empty prerelease
-  comparing((v) => v.prerelease, lexicographically(compareIdentifiers)),
+  comparing((v) => v.prerelease, lexicographically(compareIdentifiers))
 )
   
 const sortVersions = (versions: string[]): string[] => {
