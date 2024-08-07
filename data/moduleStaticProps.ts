@@ -59,9 +59,9 @@ export const getStaticPropsModulePage = async (
  */
 
 type Version = {
-  release: string[],
-  prerelease: string[],
-  original: string,
+  release: string[]
+  prerelease: string[]
+  original: string
 }
 
 const parseVersion = (v: string): Version => {
@@ -108,7 +108,7 @@ function composeCmps<T>(...cmps: Cmp<T>[]): Cmp<T> {
 
 const compareIdentifiers: Cmp<string> = composeCmps(
   comparing((id) => !/^\d+$/.test(id)),  // pure numbers compare less than non-numbers
-  comparing((id) => /^\d+$/.test(id) ? parseInt(id) : 0),
+  comparing((id) => (/^\d+$/.test(id) ? parseInt(id) : 0)),
   natural,
 )
 
