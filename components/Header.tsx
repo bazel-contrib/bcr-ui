@@ -6,7 +6,7 @@ interface HeaderProps {}
 
 export const USER_GUIDE_LINK = 'https://bazel.build/docs/bzlmod'
 export const CONTRIBUTE_CTA_LINK =
-  'https://github.com/bazelbuild/bazel-central-registry#roles'
+  'https://github.com/bazelbuild/bazel-central-registry/blob/main/docs/README.md'
 
 export const Header: React.FC<HeaderProps> = () => {
   const router = useRouter()
