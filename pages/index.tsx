@@ -17,10 +17,14 @@ import { parseISO } from 'date-fns'
 //   { module: 'apple_support', version: '0.0.0' },
 // ]
 const HIGHLIGHTED_MODULES = [
-  'rules_nodejs',
-  'stardoc',
+  'bazel-gazelle',
+  'rules_go',
+  'rules_oci',
   'rules_python',
-  'apple_support',
+  'toolchains_llvm',
+  'rules_foreign_cc',
+  'rules_jvm_external',
+  'rules_nodejs',
 ]
 
 interface HomePageProps {
