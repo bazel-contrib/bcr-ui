@@ -17,14 +17,14 @@ export const BUILDOZER_BIN = path.join(process.cwd(), 'bin', 'buildozer')
 
 export interface Metadata {
   homepage?: string
-  maintainers: Array<{
+  maintainers?: Array<{
     email?: string
     github?: string
     name?: string
   }>
   repository?: string[]
   versions: Array<string>
-  yanked_versions: {
+  yanked_versions?: {
     [key: string]: string
   }
 }
@@ -108,7 +108,10 @@ const getSubmissionCommitOfVersionInternal = async (
 }
 
 export const getSubmissionCommitOfVersion = pMemoize(
-  getSubmissionCommitOfVersionInternal
+  getSubmissionCommitOfVersionInternal,
+  {
+    cacheKey: (arguments_) => JSON.stringify(arguments_),
+  }
 )
 
 // TODO: find a more robust way to do this

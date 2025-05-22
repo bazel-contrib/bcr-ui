@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   getStaticPropsModulePage,
   VersionInfo,
@@ -50,6 +50,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
     setTriggeredShowAllReverseDependencies,
   ] = useState(false)
 
+  const releaseTagFormat = useDetectReleaseFormatViaGithubApi(
+    firstGithubRepository,
+    selectedVersion
+  )
+
   const isQualifiedForShowAllVersions =
     versionInfos.length > NUM_VERSIONS_ON_PAGE_LOAD
   const displayShowAllVersionsButton =
@@ -73,9 +78,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
     'github:',
     'https://github.com/'
   )
-  const releaseNotesLink = githubLink
-    ? `${githubLink}/releases/tag/v${selectedVersion}`
-    : undefined
+  const releaseNotesLink = buildReleaseNotesLink(
+    githubLink,
+    selectedVersion,
+    releaseTagFormat
+  )
 
   if (!versionInfo) {
     throw Error(
@@ -293,8 +300,8 @@ const ModulePage: NextPage<ModulePageProps> = ({
                         className="text-1xl mt-4"
                       >
                         <span className="font-bold">Dependents</span>{' '}
-                        {shownReverseDependencies.length > 0
-                          ? `(${shownReverseDependencies.length})`
+                        {reverseDependencies.length > 0
+                          ? `(${reverseDependencies.length})`
                           : ''}
                       </span>
                     </summary>
@@ -354,7 +361,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                   <h3 className="font-bold text-xl mt-2">Maintainers</h3>
                   <div>
                     <ul>
-                      {metadata.maintainers.map(({ name, email, github }) => (
+                      {metadata.maintainers?.map(({ name, email, github }) => (
                         <li key={name}>
                           <span className="flex">
                             {email && (
@@ -409,6 +416,111 @@ export async function getStaticPaths() {
     // TODO: fallback true?
     fallback: false,
   }
+}
+
+/**
+ * Encodes the format that release tags on the GitHub repository have.
+ *
+ * Allows us to build correct links to the release notes.
+ */
+enum ReleaseTagFormat {
+  /**
+   * Tag `1.2.3` for the version number `1.2.3`.
+   */
+  NO_PREFIX,
+  /**
+   * Tag `v1.2.3` for the version number `1.2.3`.
+   */
+  V_PREFIX,
+  /**
+   * Other tag format. Can occur if our heuristics can't detect a concrete format.
+   */
+  UNKNOWN,
+}
+
+const buildReleaseNotesLink = (
+  githubLink: string | undefined,
+  moduleVersion: string,
+  releaseTagFormat: ReleaseTagFormat
+): string | undefined => {
+  if (!githubLink) {
+    return undefined
+  }
+
+  switch (releaseTagFormat) {
+    case ReleaseTagFormat.NO_PREFIX:
+      return `${githubLink}/releases/tag/${moduleVersion}`
+    case ReleaseTagFormat.V_PREFIX:
+      return `${githubLink}/releases/tag/v${moduleVersion}`
+    case ReleaseTagFormat.UNKNOWN:
+      // If we don't know to format, we'll link to the release search for that module version.
+      // For many cases (typo in repo, multiple modules per repo), this is still more desirable than a 404.
+      return `${githubLink}/releases?q=${moduleVersion}`
+  }
+  // @ts-ignore: Unreachable code error
+  throw new Error(
+    'Unable to generate release notes link due to unknown release tag format. Should be unreachable.'
+  )
+}
+
+type UseDetectReleaseFormatViaGithubApiReturns = ReleaseTagFormat
+
+/**
+ * Hook that detects the applicable `ReleaseTagFormat` for a module by sending 1-2 requests to the Github API from the browser.
+ */
+const useDetectReleaseFormatViaGithubApi = (
+  metadataRepository: string | undefined,
+  moduleVersion: string
+): UseDetectReleaseFormatViaGithubApiReturns => {
+  const githubOwnerAndRepo = metadataRepository?.replace('github:', '')
+  // We default to `UNKNOWN`, so that we still have a reasonable default in case that e.g. the API request fails.
+  const [releaseTagFormat, setReleaseTagFormat] = useState(
+    ReleaseTagFormat.UNKNOWN
+  )
+  useEffect(() => {
+    const detectReleaseFormat = async () => {
+      // Don't send any requests if we don't have a repo.
+      if (!githubOwnerAndRepo) {
+        return
+      }
+      // First try is with v-prefix, as that is the most common.
+      const vPrefixResponse = await fetch(
+        `https://api.github.com/repos/${githubOwnerAndRepo}/releases/tags/v${moduleVersion}`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/vnd.github+json',
+            'User-Agent': 'Bazel Central Registry UI',
+            'X-GitHub-Api-Version': '2022-11-28',
+          },
+        }
+      )
+      if (vPrefixResponse.ok) {
+        setReleaseTagFormat(ReleaseTagFormat.V_PREFIX)
+        return
+      }
+      // Second try without prefix
+      const noPrefixResponse = await fetch(
+        `https://api.github.com/repos/${githubOwnerAndRepo}/releases/tags/${moduleVersion}`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/vnd.github+json',
+            'User-Agent': 'Bazel Central Registry UI',
+            'X-GitHub-Api-Version': '2022-11-28',
+          },
+        }
+      )
+      if (noPrefixResponse.ok) {
+        setReleaseTagFormat(ReleaseTagFormat.NO_PREFIX)
+        return
+      }
+      // Neither matches -> Leave format as default value.
+    }
+    detectReleaseFormat()
+  }, [githubOwnerAndRepo, moduleVersion])
+
+  return releaseTagFormat
 }
 
 export default ModulePage
