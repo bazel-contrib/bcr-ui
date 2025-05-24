@@ -58,7 +58,6 @@ const ModulePage: NextPage<ModulePageProps> = ({
     selectedVersion
   )
 
-
   const repoDescription = useGithubRepoDescription(firstGithubRepository)
 
   const isQualifiedForShowAllVersions =
@@ -108,7 +107,9 @@ const ModulePage: NextPage<ModulePageProps> = ({
         <div className="max-w-4xl w-4xl mx-auto mt-8">
           <div className="border rounded p-4 divide-y">
             <div>
-              <span role="heading" aria-level={1} className="text-3xl">{module}</span>
+              <span role="heading" aria-level={1} className="text-3xl">
+                {module}
+              </span>
               <span className="text-lg ml-2">{selectedVersion}</span>
             </div>
             <div className="mt-4 flex flex-col md:flex-row flex-wrap sm:divide-x gap-2">
@@ -344,9 +345,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 <div>
                   {repoDescription && (
                     <div className="mb-3">
-                      <p className="text-sm">
-                        {repoDescription}
-                      </p>
+                      <p className="text-sm">{repoDescription}</p>
                     </div>
                   )}
                   {metadata.homepage !== githubLink ? (
