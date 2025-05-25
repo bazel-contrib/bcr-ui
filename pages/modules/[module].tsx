@@ -24,6 +24,9 @@ interface ModulePageProps {
   reverseDependencies: string[]
 }
 
+const GITHUB_API_USER_AGENT = 'Bazel Central Registry UI'
+const GITHUB_API_VERSION = '2022-11-28'
+
 // The number of versions that should be displayed on initial page-load (before clicking "show all").
 const NUM_VERSIONS_ON_PAGE_LOAD = 5
 // The number of reverse dependencies that should be displayed on initial page-load (before clicking "show all").
@@ -54,6 +57,8 @@ const ModulePage: NextPage<ModulePageProps> = ({
     firstGithubRepository,
     selectedVersion
   )
+
+  const repoDescription = useGithubRepoDescription(firstGithubRepository)
 
   const isQualifiedForShowAllVersions =
     versionInfos.length > NUM_VERSIONS_ON_PAGE_LOAD
@@ -102,7 +107,9 @@ const ModulePage: NextPage<ModulePageProps> = ({
         <div className="max-w-4xl w-4xl mx-auto mt-8">
           <div className="border rounded p-4 divide-y">
             <div>
-              <span className="text-3xl">{module}</span>
+              <span role="heading" aria-level={1} className="text-3xl">
+                {module}
+              </span>
               <span className="text-lg ml-2">{selectedVersion}</span>
             </div>
             <div className="mt-4 flex flex-col md:flex-row flex-wrap sm:divide-x gap-2">
@@ -336,6 +343,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
               <div id="metadata" className="sm:pl-2 basis-8 md:basis-[12rem]">
                 <h2 className="text-2xl font-bold mt-4 mb-2">Metadata</h2>
                 <div>
+                  {repoDescription && (
+                    <div className="mb-3">
+                      <p className="text-sm">{repoDescription}</p>
+                    </div>
+                  )}
                   {metadata.homepage !== githubLink ? (
                     <a
                       href={metadata.homepage}
@@ -506,8 +518,8 @@ const useDetectReleaseFormatViaGithubApi = (
           method: 'GET',
           headers: {
             Accept: 'application/vnd.github+json',
-            'User-Agent': 'Bazel Central Registry UI',
-            'X-GitHub-Api-Version': '2022-11-28',
+            'User-Agent': GITHUB_API_USER_AGENT,
+            'X-GitHub-Api-Version': GITHUB_API_VERSION,
           },
         }
       )
@@ -521,6 +533,46 @@ const useDetectReleaseFormatViaGithubApi = (
   }, [githubOwnerAndRepo, moduleVersion])
 
   return releaseTagFormat
+}
+
+const useGithubRepoDescription = (
+  metadataRepository: string | undefined
+): string | undefined => {
+  const githubOwnerAndRepo = metadataRepository?.replace('github:', '')
+  const [description, setDescription] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    const fetchRepoDescription = async () => {
+      if (!githubOwnerAndRepo) {
+        return
+      }
+
+      try {
+        const response = await fetch(
+          `https://api.github.com/repos/${githubOwnerAndRepo}`,
+          {
+            method: 'GET',
+            headers: {
+              Accept: 'application/vnd.github+json',
+              'User-Agent': GITHUB_API_USER_AGENT,
+              'X-GitHub-Api-Version': GITHUB_API_VERSION,
+            },
+          }
+        )
+
+        if (response.ok) {
+          const repoData = await response.json()
+          setDescription(repoData.description)
+        }
+      } catch (error) {
+        console.error('Failed to fetch repository description:', error)
+      }
+    }
+
+    fetchRepoDescription()
+  }, [githubOwnerAndRepo])
+
+  return description
 }
 
 export default ModulePage
