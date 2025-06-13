@@ -1,6 +1,6 @@
 # Bazel Central Registry Web UI
 
-This repository provides a web UI for the [Bazel Central Registry (BCR)](https://github.com/bazelbuild/bazel-central-registry).
+This repository provides a web UI for the [Bazel Central Registry (BCR)](https://github.com/eclipse-score/bazel_registry).
 It entirely consists of statically rendered pages, which are updated as soon as a new commit is pushed to the BCR.
 
 ## Contributing
