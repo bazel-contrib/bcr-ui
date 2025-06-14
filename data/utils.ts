@@ -285,7 +285,7 @@ export const hasAttestationFile = async (
     version,
     'attestations.json'
   )
-  
+
   try {
     await fs.access(attestationsFilePath)
     return true
