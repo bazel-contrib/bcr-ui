@@ -275,6 +275,25 @@ export const moduleInfo = async (
   return all.allModules[module][version]
 }
 
+export const hasAttestationFile = async (
+  module: string,
+  version: string
+): Promise<boolean> => {
+  const attestationsFilePath = path.join(
+    MODULES_ROOT_DIR,
+    module,
+    version,
+    'attestations.json'
+  )
+  
+  try {
+    await fs.access(attestationsFilePath)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export const reverseDependencies = async (
   module: string
 ): Promise<string[]> => {

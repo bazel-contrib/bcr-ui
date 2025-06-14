@@ -166,8 +166,18 @@ const ModulePage: NextPage<ModulePageProps> = ({
                                 <Link
                                   href={`/modules/${module}/${version.version}`}
                                 >
-                                  <div className="place-items-center hover:border-gray-800">
+                                  <div className="place-items-center hover:border-gray-800 flex items-center gap-2">
                                     {version.version}
+                                    {version.hasAttestationFile && (
+                                      <span 
+                                        className="text-blue-600 font-bold text-lg cursor-help" 
+                                        title="Cryptographically attested release - This release includes verifiable proof that it was built from the exact source code using secure, trusted build infrastructure. The attestations.json file provides transparent evidence of the build process for enhanced supply chain security."
+                                        aria-label="Cryptographically attested release"
+                                        role="img"
+                                      >
+                                        ✓
+                                      </span>
+                                    )}
                                   </div>
                                 </Link>
                                 <div className="self-end text-gray-500">

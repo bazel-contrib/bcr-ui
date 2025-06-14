@@ -2,6 +2,7 @@ import {
   extractModuleInfo,
   getModuleMetadata,
   getSubmissionCommitOfVersion,
+  hasAttestationFile,
   moduleInfo,
   ModuleInfo,
   reverseDependencies,
@@ -16,6 +17,7 @@ export interface VersionInfo {
   moduleInfo: ModuleInfo
   isYanked: boolean
   yankReason: string | null
+  hasAttestationFile: boolean
 }
 
 // [module]/[version] needs to reuse the same logic
@@ -35,6 +37,7 @@ export const getStaticPropsModulePage = async (
       moduleInfo: await moduleInfo(module, version),
       isYanked: Object.keys(yankedVersions).includes(version),
       yankReason: yankedVersions[version] || null,
+      hasAttestationFile: await hasAttestationFile(module, version),
     }))
   )
 
