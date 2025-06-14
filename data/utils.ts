@@ -54,6 +54,7 @@ export interface SearchIndexEntry {
   module: string
   version: string
   authorDateIso: string
+  hasAttestationFile: boolean
 }
 
 export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
@@ -72,6 +73,7 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
         module,
         version: latestVersion,
         authorDateIso,
+        hasAttestationFile: await hasAttestationFile(module, latestVersion),
       }
     })
   )
@@ -273,6 +275,25 @@ export const moduleInfo = async (
 ): Promise<ModuleInfo> => {
   const all = await allModuleInfo()
   return all.allModules[module][version]
+}
+
+export const hasAttestationFile = async (
+  module: string,
+  version: string
+): Promise<boolean> => {
+  const attestationsFilePath = path.join(
+    MODULES_ROOT_DIR,
+    module,
+    version,
+    'attestations.json'
+  )
+
+  try {
+    await fs.access(attestationsFilePath)
+    return true
+  } catch {
+    return false
+  }
 }
 
 export const reverseDependencies = async (

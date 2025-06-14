@@ -34,10 +34,15 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
             <h2 className="font-bold text-lg">All modules</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
               {searchIndex.map(
-                ({ module, version, authorDateIso: authorDate }) => (
+                ({
+                  module,
+                  version,
+                  authorDateIso: authorDate,
+                  hasAttestationFile,
+                }) => (
                   <ModuleCard
                     key={module}
-                    {...{ module, version, authorDate }}
+                    {...{ module, version, authorDate, hasAttestationFile }}
                   />
                 )
               )}

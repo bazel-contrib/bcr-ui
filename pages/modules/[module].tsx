@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
+import { AttestationBadge } from '../../components/AttestationBadge'
 import React, { useEffect, useState } from 'react'
 import {
   getStaticPropsModulePage,
@@ -166,8 +167,13 @@ const ModulePage: NextPage<ModulePageProps> = ({
                                 <Link
                                   href={`/modules/${module}/${version.version}`}
                                 >
-                                  <div className="place-items-center hover:border-gray-800">
+                                  <div className="place-items-center hover:border-gray-800 flex items-center gap-2">
                                     {version.version}
+                                    <AttestationBadge
+                                      hasAttestationFile={
+                                        version.hasAttestationFile
+                                      }
+                                    />
                                   </div>
                                 </Link>
                                 <div className="self-end text-gray-500">
