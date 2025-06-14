@@ -54,6 +54,7 @@ export interface SearchIndexEntry {
   module: string
   version: string
   authorDateIso: string
+  hasAttestationFile: boolean
 }
 
 export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
@@ -72,6 +73,7 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
         module,
         version: latestVersion,
         authorDateIso,
+        hasAttestationFile: await hasAttestationFile(module, latestVersion),
       }
     })
   )

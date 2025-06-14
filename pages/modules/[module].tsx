@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
+import { AttestationBadge } from '../../components/AttestationBadge'
 import React, { useEffect, useState } from 'react'
 import {
   getStaticPropsModulePage,
@@ -168,16 +169,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
                                 >
                                   <div className="place-items-center hover:border-gray-800 flex items-center gap-2">
                                     {version.version}
-                                    {version.hasAttestationFile && (
-                                      <span
-                                        className="text-blue-600 font-bold text-lg cursor-help"
-                                        title="Cryptographically attested release - This release includes verifiable proof that it was built from the exact source code using secure, trusted build infrastructure. The attestations.json file provides transparent evidence of the build process for enhanced supply chain security."
-                                        aria-label="Cryptographically attested release"
-                                        role="img"
-                                      >
-                                        ✓
-                                      </span>
-                                    )}
+                                    <AttestationBadge
+                                      hasAttestationFile={
+                                        version.hasAttestationFile
+                                      }
+                                    />
                                   </div>
                                 </Link>
                                 <div className="self-end text-gray-500">

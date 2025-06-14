@@ -83,8 +83,11 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
             <h2 className="font-bold text-lg">Search results</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
               {searchResults && searchResults.length ? (
-                searchResults.map(({ module, version }) => (
-                  <ModuleCard key={module} {...{ module, version }} />
+                searchResults.map(({ module, version, hasAttestationFile }) => (
+                  <ModuleCard
+                    key={module}
+                    {...{ module, version, hasAttestationFile }}
+                  />
                 ))
               ) : (
                 <div className="text-gray-600">
