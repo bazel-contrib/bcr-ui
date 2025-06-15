@@ -365,16 +365,18 @@ const ModulePage: NextPage<ModulePageProps> = ({
                     </a>
                   ) : null}
                 </div>
-                <div>
-                  <a
-                    href={metadata.homepage}
-                    className="text-link-color hover:text-link-color-hover"
-                    title={metadata.homepage}
-                  >
-                    <FontAwesomeIcon icon={faGithub} className="mr-1" />
-                    GitHub repository
-                  </a>
-                </div>
+                {githubLink && (
+                  <div>
+                    <a
+                      href={githubLink}
+                      className="text-link-color hover:text-link-color-hover"
+                      title={githubLink}
+                    >
+                      <FontAwesomeIcon icon={faGithub} className="mr-1" />
+                      GitHub repository
+                    </a>
+                  </div>
+                )}
                 <div>
                   <h3 className="font-bold text-xl mt-2">Maintainers</h3>
                   <div>
