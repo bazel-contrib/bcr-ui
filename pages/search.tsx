@@ -1,13 +1,13 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import { Header } from '../components/Header'
-import { Footer } from '../components/Footer'
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { GetStaticProps } from 'next'
-import { buildSearchIndex, SearchIndexEntry } from '../data/utils'
 import Fuse from 'fuse.js'
+import type { NextPage } from 'next'
+import { GetStaticProps } from 'next'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+import { Footer } from '../components/Footer'
+import { Header } from '../components/Header'
 import { ModuleCard } from '../components/ModuleCard'
+import { buildSearchIndex, SearchIndexEntry } from '../data/utils'
 
 interface SearchPageProps {
   searchIndex: SearchIndexEntry[]
@@ -61,7 +61,7 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
   return (
     <div className="flex flex-col">
       <Head>
-        <title>Bazel Central Registry</title>
+        <title>Eclipse S‑CORE Bazel Modules Registry</title>
         <link rel="icon" href="/favicon.png" />
       </Head>
 

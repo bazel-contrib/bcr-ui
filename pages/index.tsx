@@ -1,13 +1,13 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import { Header } from '../components/Header'
-import { Footer } from '../components/Footer'
-import React, { useState } from 'react'
-import { useRouter } from 'next/router'
-import { buildSearchIndex, SearchIndexEntry } from '../data/utils'
-import { ModuleCard } from '../components/ModuleCard'
-import { GetStaticProps } from 'next'
 import { parseISO } from 'date-fns'
+import type { NextPage } from 'next'
+import { GetStaticProps } from 'next'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import React, { useState } from 'react'
+import { Footer } from '../components/Footer'
+import { Header } from '../components/Header'
+import { ModuleCard } from '../components/ModuleCard'
+import { buildSearchIndex, SearchIndexEntry } from '../data/utils'
 
 // TODO: fetch correct version during build
 // const HIGHLIGHTED_MODULES = [
@@ -59,7 +59,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
   return (
     <div className="flex flex-col">
       <Head>
-        <title>Bazel Central Registry</title>
+        <title>Eclipse S‑CORE Bazel Modules Registry</title>
         <link rel="icon" href="/favicon.png" />
       </Head>
 
@@ -67,7 +67,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
       <main className="m-4 l:m-0">
         <div className="max-w-4xl w-4xl mx-auto mt-8 flex flex-col items-center">
           <h1 className="text-bzl-green font-bold text-6xl">
-            Bazel Central Registry
+            Eclipse S‑CORE Bazel Modules Registry
           </h1>
           <form onSubmit={handleSubmitSearch} className="contents">
             <input
