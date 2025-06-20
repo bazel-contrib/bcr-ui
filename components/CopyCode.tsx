@@ -2,6 +2,7 @@ import { faCopy } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useFloating } from '@floating-ui/react-dom'
 import React, { useState } from 'react'
+import { faClone } from '@fortawesome/free-solid-svg-icons'
 
 export interface CopyCodeProps {
   code: string
@@ -26,13 +27,13 @@ export const CopyCode: React.FC<CopyCodeProps> = ({ code }) => {
     <>
       <button
         ref={refs.setReference}
-        className="w-full flex justify-between items-center p-2 my-4 rounded bg-gray-200 group hover:bg-gray-100 border hover:border-gray-800 cursor-pointer"
+        className="w-full flex justify-between items-center pt-3 pb-3 pl-4 pr-4 my-4  border-2 border-green-800 rounded-full group bg-green-700 bg-opacity-5 hover:bg-opacity-20 hover:border-bzl-green cursor-pointer"
         title="Copy MODULE.bazel snippet to clipboard"
         onClick={handleClickCopy}
       >
         <code>{code}</code>
-        <div className="text-gray-500 group-hover:text-black">
-          <FontAwesomeIcon icon={faCopy} />
+        <div className="text-green-700 group-hover:text-bzl-green group-hover:scale-110">
+          <FontAwesomeIcon icon={faClone} />
         </div>
       </button>
       {
