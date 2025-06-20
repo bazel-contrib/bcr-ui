@@ -3,5 +3,5 @@
   "extends": ["config:base"],
   "enabledManagers": [
         "bazel", "bazel-module", "bazelisk", "github-actions"
-  ],
+  ]
 }
