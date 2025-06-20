@@ -112,9 +112,9 @@ const ModulePage: NextPage<ModulePageProps> = ({
       <main>
         <div className="max-w-4xl w-4xl mx-auto mt-8">
           <div className="border rounded p-4 divide-y">
-            <div>
+            <div className="flex items-center gap-1">
               {versionInfo.hasAttestationFile && (
-                <span className="w-7 h-7 inline-block align-middle mr-1">
+                <span className="w-7 h-7 inline-block">
                   <AttestationBadge
                     hasAttestationFile={true}
                     placement="bottom-start"
@@ -124,7 +124,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
               <span
                 role="heading"
                 aria-level={1}
-                className="text-3xl align-middle"
+                className="text-3xl translate-y-[-3px]"
               >
                 {module}
               </span>
@@ -373,11 +373,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
                   )}
                   <div className="space-y-1">
                     {repoTopics && (
-                      <div className="mb-4 mt-4">
+                      <div className="mb-4 mt-4 flex flex-row flex-wrap gap-1">
                         {repoTopics.map((topic) => {
                           return (
                             <span
-                              className="rounded-xl pl-3 pr-3 pt-1 pb-1 font-semibold mr-1 text-sm text-[#0b713b] bg-[#0b713b1a]"
+                              className="rounded-xl pl-3 pr-3 pt-0.5 pb-0.5 font-semibold mr-1 text-sm text-[#0b713b] bg-[#0b713b1a]"
                               key={topic}
                             >
                               {topic}
@@ -387,18 +387,34 @@ const ModulePage: NextPage<ModulePageProps> = ({
                       </div>
                     )}
 
-                    <div className="text-black">
-                      <FontAwesomeIcon
-                        className="mr-1 min-w-[30px]"
-                        icon={faStar}
-                      />
-                      {repoStargazers} Stars
-                    </div>
+                    {metadata.homepage !== githubLink ? (
+                      <a
+                        href={metadata.homepage}
+                        className="block text-link-color hover:text-link-color-hover"
+                        title={metadata.homepage}
+                      >
+                        <FontAwesomeIcon
+                          icon={faGlobe}
+                          className="mr-1 min-w-[30px]"
+                        />
+                        Homepage
+                      </a>
+                    ) : null}
+
+                    {repoStargazers && (
+                      <div className="text-black">
+                        <FontAwesomeIcon
+                          className="mr-1 min-w-[30px]"
+                          icon={faStar}
+                        />
+                        {repoStargazers} Stars
+                      </div>
+                    )}
 
                     {repoLicense && (
                       <a
                         href={repoLicense.url}
-                        className="block text-black hover:text-link-color-hover"
+                        className="block text-link-color hover:text-link-color-hover cursor-pointer"
                         title={repoLicense.spdx_id}
                       >
                         <FontAwesomeIcon
@@ -409,24 +425,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
                       </a>
                     )}
 
-                    {metadata.homepage !== githubLink ? (
-                      <a
-                        href={metadata.homepage}
-                        className="text-black hover:text-link-color-hover"
-                        title={metadata.homepage}
-                      >
-                        <FontAwesomeIcon
-                          icon={faGlobe}
-                          className="mr-1 min-w-[30px]"
-                        />
-                        Homepage
-                      </a>
-                    ) : null}
                     {githubLink && (
                       <div>
                         <a
                           href={githubLink}
-                          className="text-black hover:text-link-color-hover"
+                          className="text-link-color hover:text-link-color-hover"
                           title={githubLink}
                         >
                           <FontAwesomeIcon
@@ -611,7 +614,7 @@ const useGithubMetadata = (metadataRepository: string | undefined) => {
     { spdx_id: string; name: string; url: string } | undefined
   >()
   const [topics, setTopics] = useState<string[]>([])
-  const [stargazers, setStargazers] = useState<number>(0)
+  const [stargazers, setStargazers] = useState<number | undefined>(undefined)
 
   useEffect(() => {
     const fetchRepoDescription = async () => {
