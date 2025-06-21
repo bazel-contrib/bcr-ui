@@ -7,7 +7,7 @@ import { Footer } from '../../components/Footer'
 import { listModuleNames, Metadata } from '../../data/utils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
+import { faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
 import { AttestationBadge } from '../../components/AttestationBadge'
 import React, { useEffect, useState } from 'react'
@@ -16,7 +16,7 @@ import {
   VersionInfo,
 } from '../../data/moduleStaticProps'
 import { formatDistance, parseISO } from 'date-fns'
-import { faGlobe } from '@fortawesome/free-solid-svg-icons'
+import { faGlobe, faScaleBalanced } from '@fortawesome/free-solid-svg-icons'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -59,7 +59,12 @@ const ModulePage: NextPage<ModulePageProps> = ({
     selectedVersion
   )
 
-  const repoDescription = useGithubRepoDescription(firstGithubRepository)
+  const {
+    description: repoDescription,
+    license: repoLicense,
+    topics: repoTopics,
+    stargazers: repoStargazers,
+  } = useGithubMetadata(firstGithubRepository)
 
   const isQualifiedForShowAllVersions =
     versionInfos.length > NUM_VERSIONS_ON_PAGE_LOAD
@@ -107,8 +112,20 @@ const ModulePage: NextPage<ModulePageProps> = ({
       <main>
         <div className="max-w-4xl w-4xl mx-auto mt-8">
           <div className="border rounded p-4 divide-y">
-            <div>
-              <span role="heading" aria-level={1} className="text-3xl">
+            <div className="flex items-center gap-1">
+              {versionInfo.hasAttestationFile && (
+                <span className="w-7 h-7 inline-block">
+                  <AttestationBadge
+                    hasAttestationFile={true}
+                    placement="bottom-start"
+                  />
+                </span>
+              )}
+              <span
+                role="heading"
+                aria-level={1}
+                className="text-3xl translate-y-[-3px]"
+              >
                 {module}
               </span>
               <span className="text-lg ml-2">{selectedVersion}</span>
@@ -347,65 +364,112 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 </div>
               </div>
               <div id="metadata" className="sm:pl-2 basis-8 md:basis-[12rem]">
-                <h2 className="text-2xl font-bold mt-4 mb-2">Metadata</h2>
+                <h2 className="text-2xl font-bold mt-4 mb-2">About</h2>
                 <div>
                   {repoDescription && (
-                    <div className="mb-3">
-                      <p className="text-sm">{repoDescription}</p>
+                    <div className="mb-2">
+                      <p className="text-md">{repoDescription}</p>
                     </div>
                   )}
-                  {metadata.homepage !== githubLink ? (
-                    <a
-                      href={metadata.homepage}
-                      className="text-link-color hover:text-link-color-hover"
-                      title={metadata.homepage}
-                    >
-                      <FontAwesomeIcon icon={faGlobe} className="mr-1" />
-                      Homepage
-                    </a>
-                  ) : null}
+                  <div className="space-y-1">
+                    {repoTopics && (
+                      <div className="mb-4 mt-4 flex flex-row flex-wrap gap-1">
+                        {repoTopics.map((topic) => {
+                          return (
+                            <span
+                              className="rounded-xl pl-3 pr-3 pt-0.5 pb-0.5 font-semibold mr-1 text-sm text-[#0b713b] bg-[#0b713b1a]"
+                              key={topic}
+                            >
+                              {topic}
+                            </span>
+                          )
+                        })}
+                      </div>
+                    )}
+
+                    {metadata.homepage !== githubLink ? (
+                      <a
+                        href={metadata.homepage}
+                        className="block text-link-color hover:text-link-color-hover"
+                        title={metadata.homepage}
+                      >
+                        <FontAwesomeIcon
+                          icon={faGlobe}
+                          className="mr-1 min-w-[30px]"
+                        />
+                        Homepage
+                      </a>
+                    ) : null}
+
+                    {repoStargazers && (
+                      <div className="text-black">
+                        <FontAwesomeIcon
+                          className="mr-1 min-w-[30px]"
+                          icon={faStar}
+                        />
+                        {repoStargazers} Stars
+                      </div>
+                    )}
+
+                    {repoLicense && (
+                      <a
+                        href={repoLicense.url}
+                        className="block text-link-color hover:text-link-color-hover cursor-pointer"
+                        title={repoLicense.spdx_id}
+                      >
+                        <FontAwesomeIcon
+                          className="mr-1 min-w-[30px]"
+                          icon={faScaleBalanced}
+                        />
+                        {repoLicense.name}
+                      </a>
+                    )}
+
+                    {githubLink && (
+                      <div>
+                        <a
+                          href={githubLink}
+                          className="text-link-color hover:text-link-color-hover"
+                          title={githubLink}
+                        >
+                          <FontAwesomeIcon
+                            icon={faGithub}
+                            className="mr-1 min-w-[30px]"
+                          />
+                          GitHub repository
+                        </a>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                {githubLink && (
-                  <div>
-                    <a
-                      href={githubLink}
-                      className="text-link-color hover:text-link-color-hover"
-                      title={githubLink}
-                    >
-                      <FontAwesomeIcon icon={faGithub} className="mr-1" />
-                      GitHub repository
-                    </a>
-                  </div>
-                )}
+
+                <h2 className="text-2xl font-bold mt-4 mb-2">Maintainers</h2>
                 <div>
-                  <h3 className="font-bold text-xl mt-2">Maintainers</h3>
-                  <div>
-                    <ul>
-                      {metadata.maintainers?.map(({ name, email, github }) => (
-                        <li key={name}>
-                          <span className="flex">
-                            {email && (
-                              <a
-                                className="text-link-color hover:text-link-color-hover cursor-pointer mr-1"
-                                href={`mailto:${email}`}
-                              >
-                                <FontAwesomeIcon icon={faEnvelope} />
-                              </a>
-                            )}
-                            {github && (
-                              <a
-                                className="text-link-color hover:text-link-color-hover cursor-pointer mr-1"
-                                href={`https://github.com/${github}`}
-                              >
-                                <FontAwesomeIcon icon={faGithub} />
-                              </a>
-                            )}
-                            {name}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <ul>
+                    {metadata.maintainers?.map(({ name, email, github }) => (
+                      <li key={name} className="ml-1.5">
+                        <span className="flex">
+                          {email && (
+                            <a
+                              className="text-black hover:text-green-800 hover:scale-125 cursor-pointer mr-1"
+                              href={`mailto:${email}`}
+                            >
+                              <FontAwesomeIcon icon={faEnvelope} />
+                            </a>
+                          )}
+                          {github && (
+                            <a
+                              className="text-black hover:text-green-600 hover:scale-125 cursor-pointer mr-1"
+                              href={`https://github.com/${github}`}
+                            >
+                              <FontAwesomeIcon icon={faGithub} />
+                            </a>
+                          )}
+                          {name}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </div>
@@ -543,11 +607,14 @@ const useDetectReleaseFormatViaGithubApi = (
   return releaseTagFormat
 }
 
-const useGithubRepoDescription = (
-  metadataRepository: string | undefined
-): string | undefined => {
+const useGithubMetadata = (metadataRepository: string | undefined) => {
   const githubOwnerAndRepo = metadataRepository?.replace('github:', '')
   const [description, setDescription] = useState<string | undefined>(undefined)
+  const [license, setLicense] = useState<
+    { spdx_id: string; name: string; url: string } | undefined
+  >()
+  const [topics, setTopics] = useState<string[]>([])
+  const [stargazers, setStargazers] = useState<number | undefined>(undefined)
 
   useEffect(() => {
     const fetchRepoDescription = async () => {
@@ -570,7 +637,15 @@ const useGithubRepoDescription = (
 
         if (response.ok) {
           const repoData = await response.json()
+          setStargazers(repoData.stargazers_count)
           setDescription(repoData.description)
+          if (repoData.license) {
+            setLicense(repoData.license)
+          }
+
+          if (Array.isArray(repoData.topics)) {
+            setTopics(repoData.topics)
+          }
         }
       } catch (error) {
         console.error('Failed to fetch repository description:', error)
@@ -580,7 +655,12 @@ const useGithubRepoDescription = (
     fetchRepoDescription()
   }, [githubOwnerAndRepo])
 
-  return description
+  return {
+    description,
+    license,
+    topics,
+    stargazers,
+  }
 }
 
 export default ModulePage
