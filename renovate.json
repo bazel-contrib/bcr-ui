@@ -1,4 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"]
+  "extends": ["config:base"],
+  "enabledManagers": [
+        "bazel", "bazel-module", "bazelisk", "github-actions"
+  ]
 }
