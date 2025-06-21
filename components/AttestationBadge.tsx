@@ -53,16 +53,17 @@ export const AttestationBadge: React.FC<AttestationBadgeProps> = ({
             left: x ?? 0,
             zIndex: 1000,
           }}
-          className="bg-gray-900 text-white text-sm rounded p-3 max-w-sm shadow-lg"
+          className="text-black font-medium text-sm rounded-md p-3 max-w-sm shadow-lg backdrop-blur-lg bg-[#eaf1ed] border-2 border-[#166533]"
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >
           This release includes a provenance attestation, which is verifiable
           proof that it was built using secure, trusted build infrastructure.
-          See{' '}
+          <br />
+          See:{' '}
           <a
             href="https://github.com/bazelbuild/bazel-central-registry/discussions/2721"
-            className="text-blue-300 underline hover:text-blue-200"
+            className="text-link-color underline hover:text-link-color-hover"
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
