@@ -1,4 +1,4 @@
-import { hasWindowsSupport, detectPlatformInfo } from '../data/platformMapping'
+import { detectPlatformInfo } from '../data/platformMapping'
 
 interface PlatformSupportProps {
   platforms: string[]
@@ -13,11 +13,9 @@ export const PlatformSupport = ({ platforms }: PlatformSupportProps) => {
     )
   }
 
-  const hasWindows = hasWindowsSupport(platforms)
-
   return (
     <div className="space-y-2">
-      <h2 className="text-2xl font-bold mt-4 mb-2">Platforms</h2>
+      <h2 className="text-2xl font-bold mt-4 mb-2">Tested on</h2>
 
       <div className="space-y-1">
         {platforms.map((platformId) => {
@@ -35,13 +33,6 @@ export const PlatformSupport = ({ platforms }: PlatformSupportProps) => {
           )
         })}
       </div>
-
-      {!hasWindows && (
-        <div className="flex items-center text-sm text-orange-600 bg-orange-50 px-2 py-1 rounded mt-2">
-          <span className="mr-1">⚠️</span>
-          Windows support not available
-        </div>
-      )}
     </div>
   )
 }

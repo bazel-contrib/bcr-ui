@@ -330,15 +330,31 @@ export const getPresubmitPlatforms = async (
   module: string,
   version: string
 ): Promise<string[]> => {
-  const presubmitPath = path.join(
+  const presubmitYmlPath = path.join(
     MODULES_ROOT_DIR,
     module,
     version,
     'presubmit.yml'
   )
+  const presubmitYamlPath = path.join(
+    MODULES_ROOT_DIR,
+    module,
+    version,
+    'presubmit.yaml'
+  )
+
+  let presubmitContents: string
+  try {
+    presubmitContents = await fs.readFile(presubmitYmlPath, 'utf8')
+  } catch {
+    try {
+      presubmitContents = await fs.readFile(presubmitYamlPath, 'utf8')
+    } catch {
+      return []
+    }
+  }
 
   try {
-    const presubmitContents = await fs.readFile(presubmitPath, 'utf8')
     const config = yaml.load(presubmitContents) as PresubmitConfig
 
     const allPlatforms: string[] = []
