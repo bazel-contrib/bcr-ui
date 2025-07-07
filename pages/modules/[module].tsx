@@ -10,6 +10,7 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
 import { AttestationBadge } from '../../components/AttestationBadge'
+import { PlatformSupport } from '../../components/PlatformSupport'
 import React, { useEffect, useState } from 'react'
 import {
   getStaticPropsModulePage,
@@ -441,6 +442,12 @@ const ModulePage: NextPage<ModulePageProps> = ({
                       </div>
                     )}
                   </div>
+                </div>
+
+                <div className="mt-4">
+                  <PlatformSupport
+                    platforms={versionInfo.moduleInfo.supportedPlatforms || []}
+                  />
                 </div>
 
                 <h2 className="text-2xl font-bold mt-4 mb-2">Maintainers</h2>

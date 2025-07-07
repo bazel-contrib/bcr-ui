@@ -23,12 +23,14 @@
     "execa": "^8.0.0",
     "fuse.js": "^7.0.0",
     "gitlog": "^4.0.4",
+    "js-yaml": "^4.1.0",
     "next": "14.0.1",
     "p-memoize": "^7.1.1",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "18.17.9",
     "@types/react": "18.3.19",
     "@types/react-dom": "18.3.5",

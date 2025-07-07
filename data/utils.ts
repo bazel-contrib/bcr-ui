@@ -5,6 +5,7 @@ import { promises as fs } from 'fs'
 import { gitlogPromise } from 'gitlog'
 import * as os from 'os'
 import pMemoize from 'p-memoize'
+import yaml from 'js-yaml'
 
 export const MODULES_ROOT_DIR = path.join(
   process.cwd(),
@@ -141,6 +142,7 @@ export const getCompatibilityLevelOfVersion = async (
 export interface ModuleInfo {
   compatibilityLevel: number
   dependencies: Dependency[]
+  supportedPlatforms?: string[]
 }
 
 interface Dependency {
@@ -213,9 +215,12 @@ export const extractModuleInfo = async (
     })
   }
 
+  const supportedPlatforms = await getPresubmitPlatforms(module, version)
+
   return {
     compatibilityLevel,
     dependencies,
+    supportedPlatforms,
   }
 }
 
@@ -303,4 +308,84 @@ export const reverseDependencies = async (
   const reverseDeps = Array.from(all.reverseDependencies[module] || [])
   reverseDeps.sort()
   return reverseDeps
+}
+
+interface PresubmitConfig {
+  bcr_test_module?: {
+    matrix?: {
+      platform?: string[]
+    }
+  }
+  matrix?: {
+    platform?: string[]
+  }
+  tasks?: {
+    [taskName: string]: {
+      platform?: string
+    }
+  }
+}
+
+export const getPresubmitPlatforms = async (
+  module: string,
+  version: string
+): Promise<string[]> => {
+  const presubmitYmlPath = path.join(
+    MODULES_ROOT_DIR,
+    module,
+    version,
+    'presubmit.yml'
+  )
+  const presubmitYamlPath = path.join(
+    MODULES_ROOT_DIR,
+    module,
+    version,
+    'presubmit.yaml'
+  )
+
+  let presubmitContents: string
+  try {
+    presubmitContents = await fs.readFile(presubmitYmlPath, 'utf8')
+  } catch {
+    try {
+      presubmitContents = await fs.readFile(presubmitYamlPath, 'utf8')
+    } catch {
+      return []
+    }
+  }
+
+  try {
+    const config = yaml.load(presubmitContents) as PresubmitConfig
+
+    const allPlatforms: string[] = []
+
+    // Collect from bcr_test_module.matrix.platform (newer format)
+    const bcrPlatforms = config?.bcr_test_module?.matrix?.platform
+    if (bcrPlatforms && bcrPlatforms.length > 0) {
+      allPlatforms.push(...bcrPlatforms)
+    }
+
+    // Collect from root matrix.platform (older format)
+    const matrixPlatforms = config?.matrix?.platform
+    if (matrixPlatforms && matrixPlatforms.length > 0) {
+      allPlatforms.push(...matrixPlatforms)
+    }
+
+    // Collect from individual task platforms (rules_apple/rules_swift format)
+    if (config?.tasks) {
+      for (const taskConfig of Object.values(config.tasks)) {
+        if (taskConfig.platform) {
+          allPlatforms.push(taskConfig.platform)
+        }
+      }
+    }
+
+    // Filter out template variables and return unique platforms
+    const filteredPlatforms = allPlatforms.filter(
+      (platform) => !platform.includes('${{') && !platform.includes('}}')
+    )
+    return Array.from(new Set(filteredPlatforms))
+  } catch (error) {
+    return []
+  }
 }
