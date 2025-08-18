@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import docsearch from '@docsearch/js';
+import '@docsearch/css';
 
 interface HeaderProps {}
 
@@ -12,7 +14,13 @@ export const Header: React.FC<HeaderProps> = () => {
   const router = useRouter()
   const [searchQueryInput, setSearchQueryInput] = useState<string>('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
-
+  useEffect(() => {
+    docsearch({
+      container: "#docsearch",
+      appId: "1OP3OUPBDN",
+      indexName: "BCR UI",
+      apiKey: "ed9f83b7351067fb2930531d49b3331d",
+  });
   const handleSubmitSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     router.push({
@@ -47,7 +55,8 @@ export const Header: React.FC<HeaderProps> = () => {
                 ></path>
               </svg>
             </div>
-            <form onSubmit={handleSubmitSearch} className="contents">
+            <div id="docsearch" />
+            <!--form onSubmit={handleSubmitSearch} className="contents">
               <input
                 type="text"
                 id="search-navbar"
@@ -55,7 +64,7 @@ export const Header: React.FC<HeaderProps> = () => {
                 placeholder="Search for module..."
                 onChange={(e) => setSearchQueryInput(e.target.value)}
               />
-            </form>
+            </form-->
           </div>
           <Link
             href={'/all-modules'}
