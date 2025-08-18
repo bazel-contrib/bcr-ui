@@ -56,15 +56,6 @@ export const Header: React.FC<HeaderProps> = () => {
               </svg>
             </div>
             <div id="docsearch" />
-            <!--form onSubmit={handleSubmitSearch} className="contents">
-              <input
-                type="text"
-                id="search-navbar"
-                className="block p-2 pl-10 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Search for module..."
-                onChange={(e) => setSearchQueryInput(e.target.value)}
-              />
-            </form-->
           </div>
           <Link
             href={'/all-modules'}
