@@ -5,7 +5,7 @@ on:
       - '*'         # matches every branch that doesn't contain a '/'
       - '*/*'       # matches every branch containing a single '/'
       - '**'        # matches every branch
-      - '!main'     # excludes `main` (where we have the `deploy` workflow
+      - '!main'     # excludes `main` (where we have the `deploy` workflow)
   pull_request:
 
 jobs:
@@ -24,6 +24,9 @@ jobs:
       - name: Install required binaries
         run: |
           ./install_bins.sh
+
+      - name: Check prettier formatting
+        run: pnpm prettier-check
 
       - name: Checkout BCR submodule
         run: |
@@ -46,5 +49,7 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm run build
 
-      - name: Check prettier formatting
-        run: pnpm prettier-check
+      - name: Deploy preview
+        uses: rossjrw/pr-preview-action@9f77b1d057b494e662c50b8ca40ecc63f21e0887 # v1.6.2
+        with:
+          source-dir: ./build/
