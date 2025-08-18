@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import docsearch from '@docsearch/js';
-import '@docsearch/css';
+import docsearch from '@docsearch/js'
+import '@docsearch/css'
 
 interface HeaderProps {}
 
@@ -16,12 +16,12 @@ export const Header: React.FC<HeaderProps> = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
   useEffect(() => {
     docsearch({
-      container: "#docsearch",
-      appId: "1OP3OUPBDN",
-      indexName: "BCR UI",
-      apiKey: "ed9f83b7351067fb2930531d49b3331d",
-    });
-  });
+      container: '#docsearch',
+      appId: '1OP3OUPBDN',
+      indexName: 'BCR UI',
+      apiKey: 'ed9f83b7351067fb2930531d49b3331d',
+    })
+  })
   const handleSubmitSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     router.push({
