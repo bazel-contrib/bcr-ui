@@ -53,3 +53,5 @@ jobs:
         uses: rossjrw/pr-preview-action@9f77b1d057b494e662c50b8ca40ecc63f21e0887 # v1.6.2
         with:
           source-dir: ./out/
+          token: BCR_UI_PREVIEW_PUBLISH
+          deploy-repository: bazel-contrib/bcr-ui-preview
