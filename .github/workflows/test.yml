@@ -1,7 +1,12 @@
 name: Test
 on:
   pull_request:
-
+    # NB: by default, GH doesn't send the 'closed' event, which is used to clean up previews
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
 jobs:
   build-and-deploy:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
