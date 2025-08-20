@@ -1,13 +1,12 @@
 name: Test
 on:
-  push:
-    branches:
-      - '*'         # matches every branch that doesn't contain a '/'
-      - '*/*'       # matches every branch containing a single '/'
-      - '**'        # matches every branch
-      - '!main'     # excludes `main` (where we have the `deploy` workflow
   pull_request:
-
+    # NB: by default, GH doesn't send the 'closed' event, which is used to clean up previews
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
 jobs:
   build-and-deploy:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
@@ -20,10 +19,15 @@ jobs:
         uses: pnpm/action-setup@v2.4.1
         with:
           version: 8.6.12
+      - name: Install node_modules
+        run: pnpm install --frozen-lockfile
 
       - name: Install required binaries
         run: |
           ./install_bins.sh
+
+      - name: Check prettier formatting
+        run: pnpm prettier-check
 
       - name: Checkout BCR submodule
         run: |
@@ -41,10 +45,14 @@ jobs:
         run: |
           git checkout ${{ inputs.bcrCommitHash }}
 
-      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm run build
+      - name: Build 🔧 # Outputs the result to the 'build' folder.
+        run: pnpm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: /bcr-ui-preview/pr-preview/pr-${{ github.event.number }}
 
-      - name: Check prettier formatting
-        run: pnpm prettier-check
+      - name: Deploy preview
+        uses: rossjrw/pr-preview-action@9f77b1d057b494e662c50b8ca40ecc63f21e0887 # v1.6.2
+        with:
+          source-dir: ./out/
+          token: ${{ secrets.BCR_UI_PREVIEW_PUBLISH }}
+          deploy-repository: bazel-contrib/bcr-ui-preview
