@@ -51,6 +51,10 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: /bcr-ui-preview/pr-preview/pr-${{ github.event.number }}
 
       - name: Deploy preview
+        env:
+          HAS_SECRET: ${{ secrets.BCR_UI_PREVIEW_PUBLISH }}
+        # Pull requests from forks won't have a token to publish
+        if: ${{ env.HAS_SECRET != '' }}
         uses: rossjrw/pr-preview-action@9f77b1d057b494e662c50b8ca40ecc63f21e0887 # v1.6.2
         with:
           source-dir: ./out/
