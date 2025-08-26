@@ -15,7 +15,7 @@ export const PlatformSupport = ({ platforms }: PlatformSupportProps) => {
 
   return (
     <div className="space-y-2">
-      <h2 className="text-2xl font-bold mt-4 mb-2">Tested on</h2>
+      <h3 className="text-xl font-bold mt-4 mb-2">Platforms</h3>
 
       <div className="space-y-1">
         {platforms.map((platformId) => {
