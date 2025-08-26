@@ -11,6 +11,7 @@ import { faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
 import { AttestationBadge } from '../../components/AttestationBadge'
 import { PlatformSupport } from '../../components/PlatformSupport'
+import { BazelVersionSupport } from '../../components/BazelVersionSupport'
 import React, { useEffect, useState } from 'react'
 import {
   getStaticPropsModulePage,
@@ -447,6 +448,14 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 <div className="mt-4">
                   <PlatformSupport
                     platforms={versionInfo.moduleInfo.supportedPlatforms || []}
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <BazelVersionSupport
+                    versions={
+                      versionInfo.moduleInfo.supportedBazelVersions || []
+                    }
                   />
                 </div>
 

@@ -143,6 +143,7 @@ export interface ModuleInfo {
   compatibilityLevel: number
   dependencies: Dependency[]
   supportedPlatforms?: string[]
+  supportedBazelVersions?: string[]
 }
 
 interface Dependency {
@@ -216,11 +217,16 @@ export const extractModuleInfo = async (
   }
 
   const supportedPlatforms = await getPresubmitPlatforms(module, version)
+  const supportedBazelVersions = await getPresubmitBazelVersions(
+    module,
+    version
+  )
 
   return {
     compatibilityLevel,
     dependencies,
     supportedPlatforms,
+    supportedBazelVersions,
   }
 }
 
@@ -314,14 +320,17 @@ interface PresubmitConfig {
   bcr_test_module?: {
     matrix?: {
       platform?: string[]
+      bazel?: string[]
     }
   }
   matrix?: {
     platform?: string[]
+    bazel?: string[]
   }
   tasks?: {
     [taskName: string]: {
       platform?: string
+      bazel?: string
     }
   }
 }
@@ -385,6 +394,66 @@ export const getPresubmitPlatforms = async (
       (platform) => !platform.includes('${{') && !platform.includes('}}')
     )
     return Array.from(new Set(filteredPlatforms))
+  } catch (error) {
+    return []
+  }
+}
+
+export const getPresubmitBazelVersions = async (
+  module: string,
+  version: string
+): Promise<string[]> => {
+  const presubmitYmlPath = path.join(
+    MODULES_ROOT_DIR,
+    module,
+    version,
+    'presubmit.yml'
+  )
+  const presubmitYamlPath = path.join(
+    MODULES_ROOT_DIR,
+    module,
+    version,
+    'presubmit.yaml'
+  )
+
+  let presubmitContents: string
+  try {
+    presubmitContents = await fs.readFile(presubmitYmlPath, 'utf8')
+  } catch {
+    try {
+      presubmitContents = await fs.readFile(presubmitYamlPath, 'utf8')
+    } catch {
+      return []
+    }
+  }
+
+  try {
+    const config = yaml.load(presubmitContents) as PresubmitConfig
+
+    const allBazelVersions: string[] = []
+
+    const bcrBazelVersions = config?.bcr_test_module?.matrix?.bazel
+    if (bcrBazelVersions && bcrBazelVersions.length > 0) {
+      allBazelVersions.push(...bcrBazelVersions)
+    }
+
+    const matrixBazelVersions = config?.matrix?.bazel
+    if (matrixBazelVersions && matrixBazelVersions.length > 0) {
+      allBazelVersions.push(...matrixBazelVersions)
+    }
+
+    if (config?.tasks) {
+      for (const taskConfig of Object.values(config.tasks)) {
+        if (taskConfig.bazel) {
+          allBazelVersions.push(taskConfig.bazel)
+        }
+      }
+    }
+
+    const filteredVersions = allBazelVersions.filter(
+      (version) => !version.includes('${{') && !version.includes('}}')
+    )
+    return Array.from(new Set(filteredVersions))
   } catch (error) {
     return []
   }
