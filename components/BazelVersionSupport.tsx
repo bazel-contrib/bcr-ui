@@ -21,7 +21,7 @@ export const BazelVersionSupport = ({ versions }: BazelVersionSupportProps) => {
 
   return (
     <div className="space-y-2">
-      <h2 className="text-2xl font-bold mt-4 mb-2">Bazel versions</h2>
+      <h3 className="text-xl font-bold mt-4 mb-2">Bazel versions</h3>
 
       <div className="space-y-1">
         {sortedVersions.map((versionInfo) => {
