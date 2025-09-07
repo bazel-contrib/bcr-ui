@@ -42,9 +42,4 @@ SCRIPT_DIR=$(dirname "$0")
     done
 )
 
-ARCHIVE=github_metadata.tar.gz
-tar --create --auto-compress \
-    --directory "$OUT" \
-    --file "$ARCHIVE" .
-
-echo metadata=$PWD/$ARCHIVE > ${GITHUB_OUTPUT:-/dev/stdout}
+echo metadata=$OUT >> ${GITHUB_OUTPUT:-/dev/stdout}
