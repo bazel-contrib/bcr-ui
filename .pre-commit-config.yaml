@@ -1,0 +1,8 @@
+# https://pre-commit.com/
+# Runs prettier on changed files as part of git commit
+
+repos:
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.0
+    hooks:
+      - id: prettier
