@@ -45,6 +45,23 @@ jobs:
         run: |
           git checkout ${{ inputs.bcrCommitHash }}
 
+      - name: Find latest successful run of another workflow
+        id: find-run
+        # TODO(alex): switch static-ghmeta to main after testing
+        run: |
+          run_id=$(gh run list \
+            --workflow "fetch_repo_metadata.yml" \
+            --branch static-ghmeta \
+            --json databaseId,status,conclusion \
+            --jq 'map(select(.status=="completed" and .conclusion=="success")) | first | .databaseId')
+          echo "run_id=$run_id" >> $GITHUB_OUTPUT
+
+      - name: Download artifact from that run
+        run: |
+          gh run download ${{ steps.find-run.outputs.run_id }} \
+            --name my-artifact \
+            --dir ./data/github_metadata
+
       - name: Build 🔧 # Outputs the result to the 'build' folder.
         run: pnpm run build
         env:
