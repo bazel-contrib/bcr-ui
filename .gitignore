@@ -40,3 +40,4 @@ yarn-error.log*
 .netlify
 
 /bazel-*
+/data/github_metadata/*.json
