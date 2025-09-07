@@ -1,0 +1,26 @@
+# triggers on a cron, every day at 12:00 AM UTC
+
+on:
+    schedule:
+      - cron: '0 12 * * *'
+    # also triggered from the github UI
+    workflow_dispatch:
+  
+  jobs:
+    fetch_repo_metadata:  
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v5
+          with:
+            submodules: true
+        - name: Fetch repo metadata
+          id: fetch_repo_metadata
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            ./.github/workflows/fetch_repo_metadata.sh
+        - name: Upload metadata
+          uses: actions/upload-artifact@v4
+          with:
+            name: github_metadata
+            path: ${{ steps.fetch_repo_metadata.outputs.metadata }}
