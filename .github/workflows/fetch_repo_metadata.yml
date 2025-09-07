@@ -6,10 +6,10 @@ on:
     # also triggered from the github UI
     workflow_dispatch:
   
-  jobs:
-    fetch_repo_metadata:  
-      runs-on: ubuntu-latest
-      steps:
+jobs:
+  fetch_repo_metadata:  
+    runs-on: ubuntu-latest
+    steps:
         - uses: actions/checkout@v5
           with:
             submodules: true
