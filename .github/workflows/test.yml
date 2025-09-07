@@ -47,6 +47,8 @@ jobs:
 
       - name: Find latest successful run of another workflow
         id: find-run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           run_id=$(gh run list \
             --workflow "fetch_repo_metadata.yml" \
@@ -56,11 +58,12 @@ jobs:
           echo "run_id=$run_id" >> $GITHUB_OUTPUT
 
       - name: Download and extract artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh run download ${{ steps.find-run.outputs.run_id }} \
             --name github_metadata \
-            --dir data
-          tar -xzf ./data/github_metadata.tar.gz -C ./data/github_metadata
+            --dir data/github_metadata
 
       - name: Build 🔧 # Outputs the result to the 'build' folder.
         run: pnpm run build
