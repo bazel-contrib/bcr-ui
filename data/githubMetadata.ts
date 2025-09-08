@@ -37,12 +37,15 @@ export async function getGithubRepositoryMetadata(
         ? {
             spdx_id: rawData.licenseInfo.key || '',
             name: rawData.licenseInfo.name || '',
-            url: `https://opensource.org/licenses/${rawData.licenseInfo.key}`,
+            url: rawData.licenseInfo.key
+              ? `https://opensource.org/licenses/${rawData.licenseInfo.key}`
+              : '',
           }
         : null,
       topics:
-        rawData.repositoryTopics?.nodes?.map((topic: any) => topic.name) ||
-        null,
+        rawData.repositoryTopics?.nodes?.map(
+          (topic: { name: string }) => topic.name
+        ) || null,
       stargazers: rawData.stargazerCount || null,
     }
   } catch (error) {
