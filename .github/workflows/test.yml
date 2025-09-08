@@ -12,8 +12,9 @@ jobs:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.4.1
@@ -29,10 +30,6 @@ jobs:
       - name: Check prettier formatting
         run: pnpm prettier-check
 
-      - name: Checkout BCR submodule
-        run: |
-          git submodule update --init -- data/bazel-central-registry
-
       - name: Checkout latest commit of BCR submodule
         if:  ${{ !inputs.bcrCommitHash }}
         working-directory: data/bazel-central-registry
@@ -44,6 +41,26 @@ jobs:
         working-directory: data/bazel-central-registry
         run: |
           git checkout ${{ inputs.bcrCommitHash }}
+
+      - name: Find latest successful run of another workflow
+        id: find-run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          run_id=$(gh run list \
+            --workflow "fetch_repo_metadata.yml" \
+            --branch main \
+            --json databaseId,status,conclusion \
+            --jq 'map(select(.status=="completed" and .conclusion=="success")) | first | .databaseId')
+          echo "run_id=$run_id" >> $GITHUB_OUTPUT
+
+      - name: Download and extract artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download ${{ steps.find-run.outputs.run_id }} \
+            --name github_metadata \
+            --dir data/github_metadata
 
       - name: Build 🔧 # Outputs the result to the 'build' folder.
         run: pnpm run build

@@ -17,6 +17,7 @@ import {
   getStaticPropsModulePage,
   VersionInfo,
 } from '../../data/moduleStaticProps'
+import { GithubRepositoryMetadata } from '../../data/githubMetadata'
 import { formatDistance, parseISO } from 'date-fns'
 import { faGlobe, faScaleBalanced } from '@fortawesome/free-solid-svg-icons'
 
@@ -25,6 +26,7 @@ interface ModulePageProps {
   versionInfos: VersionInfo[]
   selectedVersion: string
   reverseDependencies: string[]
+  githubMetadata: GithubRepositoryMetadata | null
 }
 
 const GITHUB_API_USER_AGENT = 'Bazel Central Registry UI'
@@ -40,6 +42,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
   versionInfos,
   selectedVersion,
   reverseDependencies,
+  githubMetadata,
 }) => {
   const router = useRouter()
   const { module } = router.query
@@ -61,12 +64,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
     selectedVersion
   )
 
-  const {
-    description: repoDescription,
-    license: repoLicense,
-    topics: repoTopics,
-    stargazers: repoStargazers,
-  } = useGithubMetadata(firstGithubRepository)
+  // Use GitHub metadata from static build-time data instead of client-side hook
+  const repoDescription = githubMetadata?.description || undefined
+  const repoLicense = githubMetadata?.license || undefined
+  const repoTopics = githubMetadata?.topics || undefined
+  const repoStargazers = githubMetadata?.stargazers || undefined
 
   const isQualifiedForShowAllVersions =
     versionInfos.length > NUM_VERSIONS_ON_PAGE_LOAD
@@ -619,62 +621,6 @@ const useDetectReleaseFormatViaGithubApi = (
   }, [githubOwnerAndRepo, moduleVersion])
 
   return releaseTagFormat
-}
-
-const useGithubMetadata = (metadataRepository: string | undefined) => {
-  const githubOwnerAndRepo = metadataRepository?.replace('github:', '')
-  const [description, setDescription] = useState<string | undefined>(undefined)
-  const [license, setLicense] = useState<
-    { spdx_id: string; name: string; url: string } | undefined
-  >()
-  const [topics, setTopics] = useState<string[]>([])
-  const [stargazers, setStargazers] = useState<number | undefined>(undefined)
-
-  useEffect(() => {
-    const fetchRepoDescription = async () => {
-      if (!githubOwnerAndRepo) {
-        return
-      }
-
-      try {
-        const response = await fetch(
-          `https://api.github.com/repos/${githubOwnerAndRepo}`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/vnd.github+json',
-              'User-Agent': GITHUB_API_USER_AGENT,
-              'X-GitHub-Api-Version': GITHUB_API_VERSION,
-            },
-          }
-        )
-
-        if (response.ok) {
-          const repoData = await response.json()
-          setStargazers(repoData.stargazers_count)
-          setDescription(repoData.description)
-          if (repoData.license) {
-            setLicense(repoData.license)
-          }
-
-          if (Array.isArray(repoData.topics)) {
-            setTopics(repoData.topics)
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch repository description:', error)
-      }
-    }
-
-    fetchRepoDescription()
-  }, [githubOwnerAndRepo])
-
-  return {
-    description,
-    license,
-    topics,
-    stargazers,
-  }
 }
 
 export default ModulePage
