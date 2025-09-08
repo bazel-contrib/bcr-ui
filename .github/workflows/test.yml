@@ -45,6 +45,26 @@ jobs:
         run: |
           git checkout ${{ inputs.bcrCommitHash }}
 
+      - name: Find latest successful run of fetch_repo_metadata workflow
+        id: find-run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          run_id=$(gh run list \
+            --workflow "fetch_repo_metadata.yml" \
+            --branch main \
+            --json databaseId,status,conclusion \
+            --jq 'map(select(.status=="completed" and .conclusion=="success")) | first | .databaseId')
+          echo "run_id=$run_id" >> $GITHUB_OUTPUT
+
+      - name: Download and extract metadata artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download ${{ steps.find-run.outputs.run_id }} \
+            --name github_metadata \
+            --dir data/github_metadata
+
       - name: Build 🔧 # Outputs the result to the 'build' folder.
         run: pnpm run build
         env:
