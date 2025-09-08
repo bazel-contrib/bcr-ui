@@ -21,9 +21,8 @@ jobs:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-        with:
-          submodules: true
+      - name: Checkout 🛎️
+        uses: actions/checkout@v5
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.4.1
@@ -33,6 +32,10 @@ jobs:
       - name: Install required binaries
         run: |
           ./install_bins.sh
+
+      - name: Checkout BCR submodule
+        run: |
+          git submodule update --init -- data/bazel-central-registry
 
       - name: Checkout latest commit of BCR submodule
         if:  ${{ !inputs.bcrCommitHash }}
@@ -46,7 +49,7 @@ jobs:
         run: |
           git checkout ${{ inputs.bcrCommitHash }}
 
-      - name: Find latest successful run of another workflow
+      - name: Find latest successful run of fetch_repo_metadata workflow
         id: find-run
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,7 +61,7 @@ jobs:
             --jq 'map(select(.status=="completed" and .conclusion=="success")) | first | .databaseId')
           echo "run_id=$run_id" >> $GITHUB_OUTPUT
   
-      - name: Download and extract artifact
+      - name: Download and extract metadata artifact
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
