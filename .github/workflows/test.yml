@@ -21,11 +21,17 @@ jobs:
           version: 8.6.12
       - name: Install node_modules
         run: pnpm install --frozen-lockfile
-
+      - name: Install direnv
+        run: |
+          sudo apt-get install -y direnv
+          eval "$(direnv hook bash)"
       - name: Install required binaries
         run: |
-          ./install_bins.sh
-
+          direnv allow .
+          eval "$(direnv export bash)"
+          # GHA steps run as non-interactive shells so they don't source the .bashrc
+          echo "PATH=$PATH" >> $GITHUB_ENV
+          bazel run //bin:bazel_env
       - name: Check prettier formatting
         run: pnpm prettier-check
 

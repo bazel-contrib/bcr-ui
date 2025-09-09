@@ -14,8 +14,6 @@ export const MODULES_ROOT_DIR = path.join(
   'modules'
 )
 
-export const BUILDOZER_BIN = path.join(process.cwd(), 'bin', 'buildozer')
-
 export interface Metadata {
   homepage?: string
   maintainers?: Array<{
@@ -176,24 +174,24 @@ export const extractModuleInfo = async (
   await fs.cp(moduleFilePath, path.join(directory, 'BUILD.bazel'))
 
   const { stdout: compatibilityLevelOut } = await execa(
-    BUILDOZER_BIN,
+    'buildozer',
     ['print compatibility_level', ':%module'],
     { cwd: directory }
   )
   const compatibilityLevel = parseInt(compatibilityLevelOut, 10) || 0
 
   const { stdout: listDepNamesOut } = await execa(
-    BUILDOZER_BIN,
+    'buildozer',
     ['print name', ':%bazel_dep'],
     { cwd: directory }
   )
   const { stdout: listDepVersionsOut } = await execa(
-    BUILDOZER_BIN,
+    'buildozer',
     ['print version', ':%bazel_dep'],
     { cwd: directory }
   )
   const { stdout: listDepDevOut } = await execa(
-    BUILDOZER_BIN,
+    'buildozer',
     ['print dev_dependency', ':%bazel_dep'],
     { cwd: directory }
   )
