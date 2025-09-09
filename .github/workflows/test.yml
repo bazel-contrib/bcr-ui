@@ -8,8 +8,8 @@ on:
       - synchronize
       - closed
 jobs:
-  build:
-    uses: ./.github/workflows/build.yml
+  preview:
+    uses: ./.github/workflows/deploy.yml
     with:
       basePath: /bcr-ui-preview/pr-preview/pr-${{ github.event.number }}
     secrets: inherit
@@ -18,6 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v2.4.1
+        with:
+          run_install: true
       - name: Install direnv
         run: |
           sudo apt-get install -y direnv
@@ -31,17 +33,3 @@ jobs:
           bazel run //bin:bazel_env
       - name: Check prettier formatting
         run: pnpm prettier-check
-  deploy:
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy preview
-        env:
-          HAS_SECRET: ${{ secrets.BCR_UI_PREVIEW_PUBLISH }}
-        # Pull requests from forks won't have a token to publish
-        if: ${{ env.HAS_SECRET != '' }}
-        uses: rossjrw/pr-preview-action@9f77b1d057b494e662c50b8ca40ecc63f21e0887 # v1.6.2
-        with:
-          source-dir: ./out/
-          token: ${{ secrets.BCR_UI_PREVIEW_PUBLISH }}
-          deploy-repository: bazel-contrib/bcr-ui-preview
