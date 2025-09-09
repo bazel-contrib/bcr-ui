@@ -22,10 +22,10 @@ We use git submodules to include the data from bazelbuild/bazel-central-registry
 git submodule update --init
 ```
 
-To get a buildozer binary, you also need to run this before launching the app:
+To get a buildifier and buildozer on your PATH, you also need to run this before launching the app:
 
 ```bash
-./install_bins.sh
+bazel run //bin:bazel_env
 ```
 
 Packages are managed via [pnpm](https://pnpm.io/), so they can be installed via `npx pnpm install`
