@@ -1,0 +1,67 @@
+on:
+    workflow_call:
+        inputs:
+            basePath:
+                description: 'Base path for the build, see https://nextjs.org/docs/app/api-reference/config/next-config-js/basePath'
+                type: string
+            bcrCommitHash:
+                description: 'Commit hash of the BCR repository to use as the source for the build'
+                type: string
+
+jobs:
+  build:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v2.4.1
+        with:
+          run_install: |
+            - args: [--frozen-lockfile]
+
+      - name: Install required binaries
+        run: |
+          ./install_bins.sh
+
+      - name: Checkout BCR submodule
+        run: |
+          git submodule update --init -- data/bazel-central-registry
+
+      - name: Checkout latest commit of BCR submodule
+        if:  ${{ !inputs.bcrCommitHash }}
+        working-directory: data/bazel-central-registry
+        run: |
+          git checkout origin/main
+
+      - name: Checkout specific commit of BCR submodule
+        if:  ${{ inputs.bcrCommitHash }}
+        working-directory: data/bazel-central-registry
+        run: |
+          git checkout ${{ inputs.bcrCommitHash }}
+
+      - name: Find latest successful run of fetch_repo_metadata workflow
+        id: find-run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          run_id=$(gh run list \
+            --workflow "fetch_repo_metadata.yml" \
+            --branch main \
+            --json databaseId,status,conclusion \
+            --jq 'map(select(.status=="completed" and .conclusion=="success")) | first | .databaseId')
+          echo "run_id=$run_id" >> $GITHUB_OUTPUT
+
+      - name: Download and extract metadata artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download ${{ steps.find-run.outputs.run_id }} \
+            --name github_metadata \
+            --dir data/github_metadata
+
+      - name: Build 🔧 # Outputs the result to the 'build' folder.
+        run: pnpm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ inputs.basePath }}
