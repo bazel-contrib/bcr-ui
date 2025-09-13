@@ -7,5 +7,6 @@ bazel_env(
     tools = {
         "buildifier": "@buildifier_prebuilt//:buildifier",
         "buildozer": BUILDOZER_LABEL,
+        "pnpm": "@pnpm",
     },
 )
