@@ -27,7 +27,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2.4.1
         with:
-          version: 8.6.12
+          version: 10.16.1
 
       - name: Install direnv
         run: |
