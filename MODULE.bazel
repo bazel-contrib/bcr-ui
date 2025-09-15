@@ -1,3 +1,22 @@
 bazel_dep(name = "bazel_env.bzl", version = "0.5.0")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
 bazel_dep(name = "buildozer", version = "7.1.2")
+bazel_dep(name = "aspect_bazel_lib", version = "2.21.1")
+bazel_dep(name = "aspect_rules_js", version = "2.5.0")
+bazel_dep(name = "aspect_rules_ts", version = "3.7.0")
+
+pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
+pnpm.pnpm(pnpm_version = "8.6.12") # NB: matches  packageManager in package.json and also GHA yaml
+use_repo(pnpm, "pnpm")
+
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
+npm.npm_translate_lock(
+    name = "npm",
+    npmrc = "//:.npmrc",
+    pnpm_lock = "//:pnpm-lock.yaml",
+)
+use_repo(npm, "npm")
+
+rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext", dev_dependency = True)
+rules_ts_ext.deps(ts_version_from = "//:package.json")
+use_repo(rules_ts_ext, "npm_typescript")
