@@ -5,7 +5,7 @@ import { promises as fs } from 'fs'
 import { gitlogPromise } from 'gitlog'
 import * as os from 'os'
 import pMemoize from 'p-memoize'
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 
 export const MODULES_ROOT_DIR = path.join(
   process.cwd(),
