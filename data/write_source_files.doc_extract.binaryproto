@@ -1,0 +1,186 @@
+±
+WriteSourceFileInfo&Provider for write_source_file targets6
+
+executable(Executable that updates the source files":
+WriteSourceFileInfo#//lib/private:write_source_file.bzlä
+write_source_filesi
+name]Name of the runnable target that creates or updates the source tree files and/or directories. (”
+files„A dict where the keys are files or directories in the source tree to write to and the values are labels
+pointing to the desired content, typically file or directory outputs of other targets.
+
+Destination files and directories must be within the same containing Bazel package as this target if
+`check_that_out_file_exists` is True. See `check_that_out_file_exists` docstring for more info.{}(Ç
+
+executable¯Whether source tree files written should be made executable.
+
+This applies to all source tree files written by this target. This attribute is not propagated to `additional_update_targets`.
+
+To set different executable permissions on different source tree files use multiple `write_source_files` targets.False(}
+additional_update_targetsZList of other `write_source_files` or `write_source_file` targets to call in the same run.[](‘
+suggested_update_targetnLabel of the `write_source_files` or `write_source_file` target to suggest running when files are out of date.None(a
+	diff_testLTest that the source tree files and/or directories exist and are up to date.True(Ý
+diff_test_failure_message¦Text to print when the diff test fails, with templating options for
+relevant targets.
+
+Substitutions are performed on the failure message, with the following substitutions being available:
+
+`{{DEFAULT_MESSAGE}}`: Prints the default error message, listing the target(s) that
+  may be run to update the file(s).
+
+`{{TARGET}}`: The target to update the individual file that does not match in the
+  diff test.
+
+`{{SUGGESTED_UPDATE_TARGET}}`: The suggested_update_target if specified, or the
+  target which will update all of the files which do not match."{{DEFAULT_MESSAGE}}"(P
+	diff_args=Arguments to pass to the `diff` command. (Ignored on Windows)[](§
+file_missing_failure_messagenText to print when the output file is missing. Subject to the same
+substitutions as diff_test_failure_message."{{DEFAULT_MESSAGE}}"(¿
+check_that_out_file_exists˜Test that each output file exists and print a helpful error message if it doesn't.
+
+If `True`, destination files and directories must be in the same containing Bazel package as the target since the underlying
+mechanism for this check is limited to files in the same Bazel package.True(H
+kwargs<Other common named parameters such as `tags` or `visibility`(ïWrite one or more files and/or directories to the source tree.
+
+By default, `diff_test` targets are generated that ensure the source tree files and/or directories to be written to
+are up to date and the rule also checks that all source tree files and/or directories to be written to exist.
+To disable the exists check and up-to-date tests set `diff_test` to `False`.
+22
+write_source_files//lib:write_source_files.bzl¾
+write_source_fileb
+nameVName of the runnable target that creates or updates the source tree file or directory. (ã
+in_fileÏFile or directory to use as the desired content to write to `out_file`.
+
+This is typically a file or directory output of another target. If `in_file` is a directory then entire directory contents are copied.None(
+out_fileøThe file or directory to write to in the source tree.
+
+The output file or directory must be within the same containing Bazel package as this target if `check_that_out_file_exists` is `True`.
+See `check_that_out_file_exists` docstring for more info.None(|
+
+executableeWhether source tree file or files within the source tree directory written should be made executable.False(}
+additional_update_targetsZList of other `write_source_files` or `write_source_file` targets to call in the same run.[](‘
+suggested_update_targetnLabel of the `write_source_files` or `write_source_file` target to suggest running when files are out of date.None(Y
+	diff_testDTest that the source tree file or directory exist and is up to date.True(–
+diff_test_failure_messageßText to print when the diff test fails, with templating options for
+relevant targets.
+
+Substitutions are performed on the failure message, with the following substitutions being available:
+
+`{{DEFAULT_MESSAGE}}`: Prints the default error message, listing the target(s) that
+  may be run to update the file(s).
+
+`{{TARGET}}`: The target to update the individual file that does not match in the
+  diff test.
+
+`{{SUGGESTED_UPDATE_TARGET}}`: The suggested_update_target if specified."{{DEFAULT_MESSAGE}}"(§
+file_missing_failure_messagenText to print when the output file is missing. Subject to the same
+substitutions as diff_test_failure_message."{{DEFAULT_MESSAGE}}"(P
+	diff_args=Arguments to pass to the `diff` command. (Ignored on Windows)[](¹
+check_that_out_file_exists’Test that the output file exists and print a helpful error message if it doesn't.
+
+If `True`, the output file or directory must be in the same containing Bazel package as the target since the underlying mechanism
+for this check is limited to files in the same Bazel package.True(i
+	verbosityRVerbosity of message when the copy target is run. One of `full`, `short`, `quiet`."full"(H
+kwargs<Other common named parameters such as `tags` or `visibility`(ßWrite a file or directory to the source tree.
+
+By default, a `diff_test` target ("{name}_test") is generated that ensure the source tree file or directory to be written to
+is up to date and the rule also checks that the source tree file or directory to be written to exists.
+To disable the exists check and up-to-date test set `diff_test` to `False`.
+"A
+?Name of the generated test target if requested, otherwise None.28
+write_source_file#//lib/private:write_source_file.bzl*Âwrite_source_files provides a workaround for the restriction that `bazel build` cannot write to the source tree.
+
+Read more about the philosophy of writing to the source tree: <https://blog.aspect.build/bazel-can-write-to-the-source-folder>
+
+## Usage
+
+```starlark
+load("@bazel_lib//lib:write_source_files.bzl", "write_source_files")
+
+write_source_files(
+    name = "write_foobar",
+    files = {
+        "foobar.json": "//some/generated:file",
+    },
+)
+```
+
+To update the source file, run:
+
+```bash
+bazel run //:write_foobar
+```
+
+The generated `diff_test` will fail if the file is out of date and print out instructions on
+how to update it.
+
+If the file does not exist, Bazel will fail at analysis time and print out instructions on
+how to create it.
+
+You can declare a tree of generated source file targets:
+
+```starlark
+load("@bazel_lib//lib:write_source_files.bzl", "write_source_files")
+
+write_source_files(
+    name = "write_all",
+    additional_update_targets = [
+        # Other write_source_files targets to run when this target is run
+        "//a/b/c:write_foo",
+        "//a/b:write_bar",
+    ]
+)
+```
+
+And update them with a single run:
+
+```bash
+bazel run //:write_all
+```
+
+When a file is out of date, you can leave a suggestion to run a target further up in the tree by specifying `suggested_update_target`.
+For example,
+
+```starlark
+write_source_files(
+    name = "write_foo",
+    files = {
+        "foo.json": ":generated-foo",
+    },
+    suggested_update_target = "//:write_all"
+)
+```
+
+A test failure from `foo.json` being out of date will yield the following message:
+
+```
+//a/b:c:foo.json is out of date. To update this and other generated files, run:
+
+    bazel run //:write_all
+
+To update *only* this file, run:
+
+    bazel run //a/b/c:write_foo
+```
+
+You can also add a more customized error message using the `diff_test_failure_message` argument:
+
+```starlark
+write_source_file(
+    name = "write_foo",
+    out_file = "foo.json",
+    in_file = ":generated-foo",
+    diff_test_failure_message = "Failed to build Foo; please run {{TARGET}} to update."
+)
+```
+
+A test failure from `foo.json` being out of date will then yield:
+
+```
+Failed to build Foo; please run //a/b/c:write_foo to update.
+```
+
+If you have many `write_source_files` targets that you want to update as a group, we recommend wrapping
+`write_source_files` in a macro that defaults `suggested_update_target` to the umbrella update target.
+
+NOTE: If you run formatters or linters on your codebase, it is advised that you exclude/ignore the outputs of this
+    rule from those formatters/linters so as to avoid causing collisions and failing tests.2//lib:write_source_files.bzl

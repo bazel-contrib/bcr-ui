@@ -8,6 +8,7 @@ import {
   reverseDependencies,
 } from './utils'
 import { getGithubRepositoryMetadata } from './githubMetadata'
+import { getModuleApiDocs } from './moduleApiDocs'
 
 export interface VersionInfo {
   version: string
@@ -51,6 +52,9 @@ export const getStaticPropsModulePage = async (
     console.warn(`No GitHub metadata found for module ${module}`)
   }
 
+  // Get API docs for the selected version
+  const moduleApiDocs = await getModuleApiDocs(module, selectedVersion)
+
   return {
     props: {
       metadata,
@@ -58,6 +62,7 @@ export const getStaticPropsModulePage = async (
       selectedVersion,
       reverseDependencies: await reverseDependencies(module),
       githubMetadata,
+      moduleApiDocs,
     },
   }
 }

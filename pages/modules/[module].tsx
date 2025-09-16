@@ -12,6 +12,7 @@ import { CopyCode } from '../../components/CopyCode'
 import { AttestationBadge } from '../../components/AttestationBadge'
 import { PlatformSupport } from '../../components/PlatformSupport'
 import { BazelVersionSupport } from '../../components/BazelVersionSupport'
+import { ModuleApiDocs } from '../../components/ModuleApiDocs'
 import React, { useEffect, useState } from 'react'
 import {
   getStaticPropsModulePage,
@@ -20,6 +21,7 @@ import {
 import { GithubRepositoryMetadata } from '../../data/githubMetadata'
 import { formatDistance, parseISO } from 'date-fns'
 import { faGlobe, faScaleBalanced } from '@fortawesome/free-solid-svg-icons'
+import type { ModuleInfo } from '@buf/bazel_bazel.bufbuild_es/src/main/java/com/google/devtools/build/skydoc/rendering/proto/stardoc_output_pb'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -27,6 +29,7 @@ interface ModulePageProps {
   selectedVersion: string
   reverseDependencies: string[]
   githubMetadata: GithubRepositoryMetadata | null
+  moduleApiDocs: ModuleInfo | null
 }
 
 const GITHUB_API_USER_AGENT = 'Bazel Central Registry UI'
@@ -43,6 +46,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
   selectedVersion,
   reverseDependencies,
   githubMetadata,
+  moduleApiDocs,
 }) => {
   const router = useRouter()
   const { module } = router.query
@@ -491,6 +495,13 @@ const ModulePage: NextPage<ModulePageProps> = ({
             </div>
           </div>
         </div>
+
+        {/* API Documentation Section */}
+        {moduleApiDocs && (
+          <div className="mt-8">
+            <ModuleApiDocs moduleInfo={moduleApiDocs} />
+          </div>
+        )}
       </main>
       <div className="flex-grow" />
       <Footer />
