@@ -29,8 +29,8 @@ export const BazelVersionSupport = ({ versions }: BazelVersionSupportProps) => {
             versionInfo.category === 'rolling'
               ? '🔄'
               : versionInfo.category === 'lts'
-              ? '🛡️'
-              : '⚡'
+                ? '🛡️'
+                : '⚡'
 
           return (
             <div
