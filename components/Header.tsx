@@ -26,6 +26,31 @@ export const Header: React.FC<HeaderProps> = () => {
       <div className="container flex flex-wrap gap-4 flex-col sm:flex-row items-center mx-auto">
         <div className="flex flex-1 items-center">
           <Link href="/" className="flex items-center cursor-pointer">
+            <svg
+              className="w-8 h-8 overflow-visible"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill="#76D275"
+                d="M14.4 3.2 l11.2 11.2 -11.2 11.2 -11.2 -11.2z"
+              />
+              <path fill="#43A047" d="M3.2 14.4 v11.2 l11.2 11.2 v-11.2z" />
+              <path
+                fill="#76D275"
+                d="M36.8 3.2 l11.2 11.2 -11.2 11.2 -11.2 -11.2z"
+              />
+              <path fill="#43A047" d="M48 14.4 v11.2 l-11.2 11.2 v-11.2z" />
+              <path
+                fill="#43A047"
+                d="M25.6 14.4 l11.2 11.2 -11.2 11.2 -11.2 -11.2z"
+              />
+              <path fill="#00701A" d="M25.6 36.8 v11.2 l-11.2 -11.2 v-11.2z" />
+              <path
+                fill="#004300"
+                d="M25.6 36.8 l11.2 -11.2 v11.2 l-11.2 11.2z"
+              />
+            </svg>
             <span className="self-center text-xl font-semibold whitespace-nowrap text-white cursor-pointer">
               Bazel Central Registry
             </span>
