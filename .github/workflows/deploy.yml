@@ -98,7 +98,7 @@ jobs:
             deploy-repository: bazel-contrib/bcr-ui-preview
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
             folder: out
