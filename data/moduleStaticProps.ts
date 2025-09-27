@@ -6,6 +6,9 @@ import {
   moduleInfo,
   ModuleInfo,
   reverseDependencies,
+  getSourceJson,
+  fetchDocsArchiveFileList,
+  SourceJson,
 } from './utils'
 import { getGithubRepositoryMetadata } from './githubMetadata'
 
@@ -19,6 +22,8 @@ export interface VersionInfo {
   isYanked: boolean
   yankReason: string | null
   hasAttestationFile: boolean
+  sourceJson: SourceJson | null
+  binaryprotoFiles: string[]
 }
 
 // [module]/[version] needs to reuse the same logic
@@ -32,14 +37,23 @@ export const getStaticPropsModulePage = async (
   let yankedVersions = metadata.yanked_versions || {}
 
   const versionInfos: VersionInfo[] = await Promise.all(
-    versions.map(async (version) => ({
-      version,
-      submission: await getSubmissionCommitOfVersion(module, version),
-      moduleInfo: await moduleInfo(module, version),
-      isYanked: Object.keys(yankedVersions).includes(version),
-      yankReason: yankedVersions[version] || null,
-      hasAttestationFile: await hasAttestationFile(module, version),
-    }))
+    versions.map(async (version) => {
+      const sourceJson = await getSourceJson(module, version)
+      const binaryprotoFiles = sourceJson?.docs_url
+        ? await fetchDocsArchiveFileList(sourceJson.docs_url)
+        : []
+
+      return {
+        version,
+        submission: await getSubmissionCommitOfVersion(module, version),
+        moduleInfo: await moduleInfo(module, version),
+        isYanked: Object.keys(yankedVersions).includes(version),
+        yankReason: yankedVersions[version] || null,
+        hasAttestationFile: await hasAttestationFile(module, version),
+        sourceJson,
+        binaryprotoFiles,
+      }
+    })
   )
 
   const latestVersion = versions[0]

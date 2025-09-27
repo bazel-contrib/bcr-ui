@@ -456,3 +456,73 @@ export const getPresubmitBazelVersions = async (
     return []
   }
 }
+
+export interface SourceJson {
+  url: string
+  integrity: string
+  strip_prefix?: string
+  patches?: { [key: string]: string }
+  patch_strip?: number
+  archive_type?: string
+  docs_url?: string
+  overlay?: { [key: string]: string }
+}
+
+export const getSourceJson = async (
+  module: string,
+  version: string
+): Promise<SourceJson | null> => {
+  const sourceJsonPath = path.join(
+    MODULES_ROOT_DIR,
+    module,
+    version,
+    'source.json'
+  )
+
+  try {
+    const sourceContents = await fs.readFile(sourceJsonPath, 'utf8')
+    return JSON.parse(sourceContents) as SourceJson
+  } catch {
+    return null
+  }
+}
+
+export const fetchDocsArchiveFileList = async (
+  docsUrl: string
+): Promise<string[]> => {
+  if (typeof window !== 'undefined') {
+    throw new Error(
+      'fetchDocsArchiveFileList should only be called server-side'
+    )
+  }
+
+  try {
+    const response = await fetch(docsUrl)
+    if (!response.ok) {
+      return []
+    }
+
+    const arrayBuffer = await response.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    const tempFile = path.join(os.tmpdir(), `docs-${Date.now()}.tar.gz`)
+    await fs.writeFile(tempFile, buffer)
+
+    try {
+      const { stdout } = await execa('tar', ['-tzf', tempFile])
+      const files = stdout
+        .split('\n')
+        .filter((file) => file.trim() && file.endsWith('.binaryproto'))
+        .map((file) => file.replace(/^\.\//, '').trim())
+        .sort()
+
+      return files
+    } finally {
+      try {
+        await fs.unlink(tempFile)
+      } catch {}
+    }
+  } catch (error) {
+    return []
+  }
+}
