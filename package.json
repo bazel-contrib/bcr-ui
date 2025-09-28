@@ -39,6 +39,7 @@
     "@types/node": "18.17.9",
     "@types/react": "19.1.13",
     "@types/react-dom": "19.1.9",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "autoprefixer": "^10.4.7",
     "eslint": "8.53.0",
     "eslint-config-next": "15.5.3",

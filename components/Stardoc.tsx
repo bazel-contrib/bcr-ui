@@ -15,7 +15,16 @@ interface StardocRendererProps {
 
 // Helper function to generate anchor IDs
 const generateAnchorId = (type: string, name: string): string => {
-  return `${type}-${name.replace(/[^a-zA-Z0-9-_]/g, '-').toLowerCase()}`
+  // Strip leading slashes and clean the name
+  const cleanName = name
+    .replace(/^\/+/, '')
+    .replace(/[^a-zA-Z0-9-_]/g, '-')
+    .toLowerCase()
+
+  if (type === 'file') {
+    return cleanName
+  }
+  return `${type}-${cleanName}`
 }
 
 // Copy link component
@@ -159,11 +168,27 @@ export const StardocRenderer: React.FC<StardocRendererProps> = ({
       {/* Module-level documentation */}
       {stardoc.moduleDocstring && (
         <div className="mb-6">
-          <h4 className="text-lg font-medium font-mono text-gray-900 mb-3">
-            {stardoc.file}
-          </h4>
+          {(() => {
+            const fileAnchorId = generateAnchorId(
+              'file',
+              stardoc.file || 'module'
+            )
+            return (
+              <div id={fileAnchorId} className="scroll-mt-20">
+                <div className="flex items-center gap-2 mb-3">
+                  <h4 className="text-lg font-medium font-mono text-gray-900">
+                    {stardoc.file}
+                  </h4>
+                  <CopyLinkButton anchorId={fileAnchorId} />
+                </div>
+              </div>
+            )
+          })()}
           <div className="prose prose-sm max-w-none">
-            <ReactMarkdown components={markdownComponents}>
+            <ReactMarkdown
+              components={markdownComponents}
+              remarkPlugins={[remarkGfm, remarkBreaks]}
+            >
               {stardoc.moduleDocstring}
             </ReactMarkdown>
           </div>
