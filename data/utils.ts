@@ -12,6 +12,8 @@ import * as os from 'os'
 import pMemoize from 'p-memoize'
 import * as yaml from 'js-yaml'
 import * as tar from 'tar-stream'
+import * as zlib from 'zlib'
+import { Readable } from 'node:stream'
 
 export const MODULES_ROOT_DIR = path.join(
   process.cwd(),
@@ -276,6 +278,7 @@ const buildAllModuleInfoInner = async (): Promise<AllModuleInfo> => {
         allModuleInfo.reverseDependencies[dependency.module] ||= new Set()
         allModuleInfo.reverseDependencies[dependency.module].add(moduleName)
       }
+      break
     }
   }
 
@@ -501,39 +504,97 @@ export const fetchDocsList = async (docsUrl: string): Promise<string[]> => {
   try {
     const response = await fetch(docsUrl)
     if (!response.ok) {
+      console.warn('Failed to fetch docs from ', docsUrl, response)
       return []
     }
 
-    const docsArchive = new Uint8Array(await response.arrayBuffer())
-    const stardocs: StardocModuleInfo[] = []
+    const docsArchive = await response.arrayBuffer()
+    console.warn('222 docsArchive', docsArchive)
+    return new Promise((resolve, reject) => {
+      const extract = tar.extract()
+      const stardocs: string[] = []
+      console.warn('111 extract')
 
-    const extract = tar.extract()
+      extract.on('entry', (header, stream, next) => {
+        console.warn('333 stream - processing entry:', header.name, header.type)
+        const chunks: any[] = []
 
-    extract.on('entry', (header, stream, next) => {
-      if (header.name.endsWith('.binaryproto')) {
-        const chunks: Uint8Array[] = []
-        stream.on('data', (chunk) => chunks.push(chunk))
-        stream.on('end', () => {
-          const bytes = Buffer.concat(chunks)
-          stardocs.push(fromBinary(ModuleInfoSchema, new Uint8Array(bytes)))
-          next()
+        stream.on('data', (chunk) => {
+          console.warn(
+            '444 data chunk received for:',
+            header.name,
+            chunk.length
+          )
+          chunks.push(chunk)
         })
-      } else {
-        stream.resume()
-        next()
-      }
+
+        stream.on('end', () => {
+          try {
+            const content = Buffer.concat(chunks)
+            console.warn(
+              '555 end - processing file:',
+              header.name,
+              'size:',
+              content.length
+            )
+
+            if (
+              header.type === 'file' &&
+              header.name.endsWith('.binaryproto')
+            ) {
+              const stardoc = fromBinary(
+                ModuleInfoSchema,
+                new Uint8Array(content)
+              )
+              stardocs.push(stardoc.moduleDocstring)
+              console.warn(
+                '666 pushed stardoc:',
+                header.name,
+                stardoc.moduleDocstring
+              )
+            }
+            next()
+          } catch (err) {
+            console.warn('777 error processing file:', header.name, err)
+            next() // Continue processing other files even if one fails
+          }
+        })
+
+        stream.on('error', (err) => {
+          console.warn('888 stream error for:', header.name, err)
+          next() // Continue processing other files
+        })
+      })
+
+      extract.on('finish', () => {
+        console.warn(
+          '999 extraction finished, found',
+          stardocs.length,
+          'stardocs'
+        )
+        resolve(stardocs)
+      })
+
+      extract.on('error', (err) => {
+        console.warn('000 extract error:', err)
+        reject(err)
+      })
+
+      // Turn the Uint8Array into a Readable stream and pipe through gunzip + tar
+      console.warn(
+        '111 starting pipe from docsArchive, size:',
+        docsArchive.byteLength
+      )
+      Readable.from([Buffer.from(docsArchive)])
+        .pipe(zlib.createGunzip())
+        .pipe(extract)
+        .on('error', (err) => {
+          console.warn('222 pipe error:', err)
+          reject(err)
+        })
     })
-
-    extract.end(docsArchive)
-
-    // Wait for extraction to complete
-    await new Promise<void>((resolve, reject) => {
-      extract.on('finish', resolve)
-      extract.on('error', reject)
-    })
-
-    return stardocs.map((stardoc) => stardoc.moduleDocstring)
   } catch (error) {
+    console.warn('333 error', error)
     return []
   }
 }

@@ -23,7 +23,7 @@ export interface VersionInfo {
   yankReason: string | null
   hasAttestationFile: boolean
   sourceJson: SourceJson | null
-  binaryprotoFiles: string[]
+  stardocs: string[]
 }
 
 // [module]/[version] needs to reuse the same logic
@@ -39,7 +39,7 @@ export const getStaticPropsModulePage = async (
   const versionInfos: VersionInfo[] = await Promise.all(
     versions.map(async (version) => {
       const sourceJson = await getSourceJson(module, version)
-      const binaryprotoFiles = sourceJson?.docs_url
+      const stardocs = sourceJson?.docs_url
         ? await fetchDocsList(sourceJson.docs_url)
         : []
 
@@ -51,7 +51,7 @@ export const getStaticPropsModulePage = async (
         yankReason: yankedVersions[version] || null,
         hasAttestationFile: await hasAttestationFile(module, version),
         sourceJson,
-        binaryprotoFiles,
+        stardocs,
       }
     })
   )

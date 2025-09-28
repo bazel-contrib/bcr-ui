@@ -20,6 +20,7 @@ import {
 import { GithubRepositoryMetadata } from '../../data/githubMetadata'
 import { formatDistance, parseISO } from 'date-fns'
 import { faGlobe, faScaleBalanced } from '@fortawesome/free-solid-svg-icons'
+import { ModuleInfo as StardocModuleInfo } from '@buf/bazel_bazel.bufbuild_es/src/main/java/com/google/devtools/build/skydoc/rendering/proto/stardoc_output_pb.js'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -366,7 +367,8 @@ const ModulePage: NextPage<ModulePageProps> = ({
                     )}
                   </details>
                 </div>
-                {versionInfo.binaryprotoFiles.length > 0 && (
+
+                {versionInfo.stardocs.length > 0 && (
                   <div className="mt-4">
                     <details>
                       <summary>
@@ -376,17 +378,17 @@ const ModulePage: NextPage<ModulePageProps> = ({
                           className="text-1xl mt-4"
                         >
                           <span className="font-bold">Documentation Files</span>{' '}
-                          ({versionInfo.binaryprotoFiles.length})
+                          ({versionInfo.stardocs.length})
                         </span>
                       </summary>
                       <ul className="mt-4">
-                        {versionInfo.binaryprotoFiles.map((file) => (
+                        {versionInfo.stardocs.map((moduleInfo) => (
                           <li
-                            key={file}
+                            key={moduleInfo}
                             className="border rounded p-2 mt-2 flex items-center gap-4"
                           >
                             <div className="font-mono text-sm text-gray-700">
-                              {file}
+                              {moduleInfo}
                             </div>
                           </li>
                         ))}
