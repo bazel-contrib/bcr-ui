@@ -12,6 +12,7 @@ import { CopyCode } from '../../components/CopyCode'
 import { AttestationBadge } from '../../components/AttestationBadge'
 import { PlatformSupport } from '../../components/PlatformSupport'
 import { BazelVersionSupport } from '../../components/BazelVersionSupport'
+import { StardocRenderer } from '../../components/Stardoc'
 import React, { useEffect, useState } from 'react'
 import {
   getStaticPropsModulePage,
@@ -116,7 +117,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
 
       <Header />
       <main>
-        <div className="max-w-4xl w-4xl mx-auto mt-8">
+        <div className="w-4xl mx-auto mt-8">
           <div className="border rounded p-4 divide-y">
             <div className="flex items-center gap-1">
               {versionInfo.hasAttestationFile && (
@@ -370,39 +371,19 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 </div>
 
                 {versionInfo.stardocs.length > 0 && (
-                  <div className="mt-4">
-                    <h2 className="text-2xl font-bold mt-4">
+                  <div className="mt-6">
+                    <h2 className="text-2xl font-bold mb-4">
                       Starlark API Documentation
                     </h2>
-                    {versionInfo.stardocs.map(
-                      (moduleInfo: StardocModuleInfo) => (
-                        <li
-                          key={moduleInfo.file}
-                          className="border rounded p-2 mt-2 flex items-center gap-4"
-                        >
-                          <details>
-                            <summary>
-                              <span
-                                role="heading"
-                                aria-level={2}
-                                className="text-1xl mt-4"
-                              >
-                                <span className="font-bold font-mono">
-                                  {moduleInfo.file}
-                                </span>
-                              </span>
-                            </summary>
-                            <ul className="mt-4">
-                              <div className="text-sm text-gray-700">
-                                <ReactMarkdown>
-                                  {moduleInfo.moduleDocstring}
-                                </ReactMarkdown>
-                              </div>
-                            </ul>
-                          </details>
-                        </li>
-                      )
-                    )}
+                    <div className="space-y-4">
+                      {versionInfo.stardocs.map((stardoc, index) => (
+                        <StardocRenderer
+                          key={stardoc.file || index}
+                          stardoc={stardoc}
+                          fileName={stardoc.file}
+                        />
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>

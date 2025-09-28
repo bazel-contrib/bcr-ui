@@ -260,6 +260,9 @@ const buildAllModuleInfoInner = async (): Promise<AllModuleInfo> => {
 
   const modulesNames = await listModuleNames()
   for (const moduleName of modulesNames) {
+    if (moduleName !== 'bazel_lib') {
+      continue
+    }
     const versions = await listModuleVersions(moduleName)
     for (const moduleVersion of versions) {
       const moduleInfo = await extractModuleInfo(moduleName, moduleVersion)
@@ -270,6 +273,7 @@ const buildAllModuleInfoInner = async (): Promise<AllModuleInfo> => {
         allModuleInfo.reverseDependencies[dependency.module] ||= new Set()
         allModuleInfo.reverseDependencies[dependency.module].add(moduleName)
       }
+      break
     }
   }
 
