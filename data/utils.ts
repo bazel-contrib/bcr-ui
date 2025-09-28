@@ -1,5 +1,8 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { ModuleInfoSchema } from '@buf/bazel_bazel.bufbuild_es/src/main/java/com/google/devtools/build/skydoc/rendering/proto/stardoc_output_pb.js'
+import {
+  ModuleInfoSchema,
+  ModuleInfo as StardocModuleInfo,
+} from '@buf/bazel_bazel.bufbuild_es/src/main/java/com/google/devtools/build/skydoc/rendering/proto/stardoc_output_pb.js'
 import path from 'path'
 import { formatISO, parse } from 'date-fns'
 import { execa } from 'execa'
@@ -8,6 +11,7 @@ import { gitlogPromise } from 'gitlog'
 import * as os from 'os'
 import pMemoize from 'p-memoize'
 import * as yaml from 'js-yaml'
+import * as tar from 'tar-stream'
 
 export const MODULES_ROOT_DIR = path.join(
   process.cwd(),
@@ -500,35 +504,35 @@ export const fetchDocsList = async (docsUrl: string): Promise<string[]> => {
       return []
     }
 
-    const arrayBuffer = await response.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
+    const docsArchive = new Uint8Array(await response.arrayBuffer())
+    const stardocs: StardocModuleInfo[] = []
 
-    const tempFile = path.join(os.tmpdir(), `docs-${Date.now()}.tar.gz`)
-    await fs.writeFile(tempFile, buffer)
-    const moduleDocs = []
-    try {
-      const { stdout } = await execa('tar', ['-tzf', tempFile])
-      const files = stdout
-        .split('\n')
-        .filter((file) => file.trim() && file.endsWith('.binaryproto'))
-        .map((file) => file.replace(/^\.\//, '').trim())
-        .sort()
+    const extract = tar.extract()
 
-      for (const file of files) {
-        const protoInputPath = path.join(os.tmpdir(), file)
-        const bytes = await fs.readFile(protoInputPath)
-        const currentDoc = fromBinary(ModuleInfoSchema, bytes)
-        moduleDocs.push(
-          currentDoc.funcInfo.map((func) => func.functionName).join(', ')
-        )
+    extract.on('entry', (header, stream, next) => {
+      if (header.name.endsWith('.binaryproto')) {
+        const chunks: Uint8Array[] = []
+        stream.on('data', (chunk) => chunks.push(chunk))
+        stream.on('end', () => {
+          const bytes = Buffer.concat(chunks)
+          stardocs.push(fromBinary(ModuleInfoSchema, new Uint8Array(bytes)))
+          next()
+        })
+      } else {
+        stream.resume()
+        next()
       }
+    })
 
-      return moduleDocs
-    } finally {
-      try {
-        await fs.unlink(tempFile)
-      } catch {}
-    }
+    extract.end(docsArchive)
+
+    // Wait for extraction to complete
+    await new Promise<void>((resolve, reject) => {
+      extract.on('finish', resolve)
+      extract.on('error', reject)
+    })
+
+    return stardocs.map((stardoc) => stardoc.moduleDocstring)
   } catch (error) {
     return []
   }

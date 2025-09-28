@@ -36,6 +36,9 @@ importers:
       '@fortawesome/react-fontawesome':
         specifier: ^3.0.2
         version: 3.0.2(@fortawesome/fontawesome-svg-core@6.7.2)(react@19.1.1)
+      '@types/tar-stream':
+        specifier: ^3.1.4
+        version: 3.1.4
       compare-versions:
         specifier: 6.1.1
         version: 6.1.1
@@ -66,6 +69,9 @@ importers:
       react-dom:
         specifier: 19.1.1
         version: 19.1.1(react@19.1.1)
+      tar-stream:
+        specifier: ^3.1.7
+        version: 3.1.7
     devDependencies:
       '@types/js-yaml':
         specifier: ^4.0.9
@@ -117,6 +123,26 @@ packages:
     peerDependencies:
       '@bufbuild/protobuf': ^2.0.0
 
+  '@buf/cncf_xds.bufbuild_es@2.0.0-20230428204815-197fca8a74c5.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/cncf_xds.bufbuild_es/-/cncf_xds.bufbuild_es-2.0.0-20230428204815-197fca8a74c5.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@buf/envoyproxy_envoy.bufbuild_es@2.0.0-20230516211932-3afde44c0a3a.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/envoyproxy_envoy.bufbuild_es/-/envoyproxy_envoy.bufbuild_es-2.0.0-20230516211932-3afde44c0a3a.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@buf/envoyproxy_protoc-gen-validate.bufbuild_es@2.0.0-20221025150516-6607b10f00ed.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/envoyproxy_protoc-gen-validate.bufbuild_es/-/envoyproxy_protoc-gen-validate.bufbuild_es-2.0.0-20221025150516-6607b10f00ed.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20230329151039-5ae7f88519b0.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/googleapis_googleapis.bufbuild_es/-/googleapis_googleapis.bufbuild_es-2.0.0-20230329151039-5ae7f88519b0.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
   '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20230502210827-cc916c318597.1':
     resolution: {tarball: https://buf.build/gen/npm/v1/@buf/googleapis_googleapis.bufbuild_es/-/googleapis_googleapis.bufbuild_es-2.0.0-20230502210827-cc916c318597.1.tgz}
     peerDependencies:
@@ -124,6 +150,26 @@ packages:
 
   '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20240729201550-8bc2c51e08c4.1':
     resolution: {tarball: https://buf.build/gen/npm/v1/@buf/googleapis_googleapis.bufbuild_es/-/googleapis_googleapis.bufbuild_es-2.0.0-20240729201550-8bc2c51e08c4.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@buf/grpc_grpc.bufbuild_es@2.0.0-20230516211939-d8bc6b0fb32a.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/grpc_grpc.bufbuild_es/-/grpc_grpc.bufbuild_es-2.0.0-20230516211939-d8bc6b0fb32a.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@buf/opencensus_opencensus.bufbuild_es@2.0.0-20230503204408-7e4755513505.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/opencensus_opencensus.bufbuild_es/-/opencensus_opencensus.bufbuild_es-2.0.0-20230503204408-7e4755513505.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@buf/opentelemetry_opentelemetry.bufbuild_es@2.0.0-20230516211923-547fa0c6b925.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/opentelemetry_opentelemetry.bufbuild_es/-/opentelemetry_opentelemetry.bufbuild_es-2.0.0-20230516211923-547fa0c6b925.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@buf/prometheus_client-model.bufbuild_es@2.0.0-20230331140308-55bcfe88c9e5.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/prometheus_client-model.bufbuild_es/-/prometheus_client-model.bufbuild_es-2.0.0-20230331140308-55bcfe88c9e5.1.tgz}
     peerDependencies:
       '@bufbuild/protobuf': ^2.0.0
 
@@ -436,6 +482,9 @@ packages:
   '@types/react@19.1.13':
     resolution: {integrity: sha512-hHkbU/eoO3EG5/MZkuFSKmYqPbSVk5byPFa3e7y/8TybHiLMACgI8seVYlicwk7H5K/rI2px9xrQp/C+AUDTiQ==}
 
+  '@types/tar-stream@3.1.4':
+    resolution: {integrity: sha512-921gW0+g29mCJX0fRvqeHzBlE/XclDaAG0Ousy1LCghsOhvaKacDeRGEVzQP9IPfKn8Vysy7FEXAIxycpc/CMg==}
+
   '@typescript-eslint/eslint-plugin@8.44.0':
     resolution: {integrity: sha512-EGDAOGX+uwwekcS0iyxVDmRV9HX6FLSM5kzrAToLTsr9OWCIKG/y3lQheCq18yZ5Xh78rRKJiEpP0ZaCs4ryOQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -726,8 +775,19 @@ packages:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
     engines: {node: '>= 0.4'}
 
+  b4a@1.7.3:
+    resolution: {integrity: sha512-5Q2mfq2WfGuFp3uS//0s6baOJLMoVduPYVeNmDYxu5OUA1/cBfvr2RIS7vi62LdNj/urk1hfmj867I3qt6uZ7Q==}
+    peerDependencies:
+      react-native-b4a: '*'
+    peerDependenciesMeta:
+      react-native-b4a:
+        optional: true
+
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+
+  bare-events@2.7.0:
+    resolution: {integrity: sha512-b3N5eTW1g7vXkw+0CXh/HazGTcO5KYuu/RCNaJbDMPI6LHDi+7qe8EmxKUVe1sUbY2KZOVZFyj62x0OEz9qyAA==}
 
   baseline-browser-mapping@2.8.4:
     resolution: {integrity: sha512-L+YvJwGAgwJBV1p6ffpSTa2KRc69EeeYGYjRVWKs0GKrK+LON0GC0gV+rKSNtALEDvMDqkvCFq9r1r94/Gjwxw==}
@@ -1057,12 +1117,18 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
 
+  events-universal@1.0.1:
+    resolution: {integrity: sha512-LUd5euvbMLpwOF8m6ivPCbhQeSiYVNb8Vs0fQ8QjXo0JTkEHpz8pxdQf0gStltaPpw0Cca8b39KxvK9cfKRiAw==}
+
   execa@8.0.1:
     resolution: {integrity: sha512-VyhnebXciFV2DESc+p6B+y0LjSm0krU4OgJN44qFAhBY0TJ+1V61tYD2+wHusZ6F9n5K+vl8k0sTy7PEfV4qpg==}
     engines: {node: '>=16.17'}
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+
+  fast-fifo@1.3.2:
+    resolution: {integrity: sha512-/d9sfos4yxzpwkDkuN7k2SqFKtYNmCTzgfEpz82x34IM9/zc8KGxQoXg1liNC/izpRM/MBdt44Nmx41ZWqk+FQ==}
 
   fast-glob@3.3.1:
     resolution: {integrity: sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==}
@@ -1830,6 +1896,9 @@ packages:
     resolution: {integrity: sha512-eLoXW/DHyl62zxY4SCaIgnRhuMr6ri4juEYARS8E6sCEqzKpOiE521Ucofdx+KnDZl5xmvGYaaKCk5FEOxJCoQ==}
     engines: {node: '>= 0.4'}
 
+  streamx@2.23.0:
+    resolution: {integrity: sha512-kn+e44esVfn2Fa/O0CPFcex27fjIL6MkVae0Mm6q+E6f0hWv578YCERbv+4m02cjxvDsPKLnmxral/rR6lBMAg==}
+
   string.prototype.includes@2.0.1:
     resolution: {integrity: sha512-o7+c9bW6zpAdJHTtujeePODAhkuicdAryFsfVKwA+wGw89wJ4GTY484WTucM9hLtDEOpOvI+aHnzqnC5lHp4Rg==}
     engines: {node: '>= 0.4'}
@@ -1896,6 +1965,12 @@ packages:
     hasBin: true
     peerDependencies:
       postcss: ^8.0.9
+
+  tar-stream@3.1.7:
+    resolution: {integrity: sha512-qJj60CXt7IU1Ffyc3NJMjh6EkuCFej46zUqJ4J7pqYlThyd9bO0XBTmcOIhSzZJVWfsLks0+nle/j538YAW9RQ==}
+
+  text-decoder@1.2.3:
+    resolution: {integrity: sha512-3/o9z3X0X0fTupwsYvR03pJ/DjWuqqrfwBgTQzdWDiQSm9KitAyz/9WqsT2JQW7KV2m+bC2ol/zqpW37NHxLaA==}
 
   text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
@@ -2030,7 +2105,38 @@ snapshots:
 
   '@buf/bazel_remote-apis.bufbuild_es@2.0.0-20230602030542-b202931f28c0.1(@bufbuild/protobuf@2.9.0)':
     dependencies:
+      '@buf/cncf_xds.bufbuild_es': 2.0.0-20230428204815-197fca8a74c5.1(@bufbuild/protobuf@2.9.0)
+      '@buf/envoyproxy_envoy.bufbuild_es': 2.0.0-20230516211932-3afde44c0a3a.1(@bufbuild/protobuf@2.9.0)
+      '@buf/envoyproxy_protoc-gen-validate.bufbuild_es': 2.0.0-20221025150516-6607b10f00ed.1(@bufbuild/protobuf@2.9.0)
       '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20230502210827-cc916c318597.1(@bufbuild/protobuf@2.9.0)
+      '@buf/grpc_grpc.bufbuild_es': 2.0.0-20230516211939-d8bc6b0fb32a.1(@bufbuild/protobuf@2.9.0)
+      '@buf/opencensus_opencensus.bufbuild_es': 2.0.0-20230503204408-7e4755513505.1(@bufbuild/protobuf@2.9.0)
+      '@buf/opentelemetry_opentelemetry.bufbuild_es': 2.0.0-20230516211923-547fa0c6b925.1(@bufbuild/protobuf@2.9.0)
+      '@buf/prometheus_client-model.bufbuild_es': 2.0.0-20230331140308-55bcfe88c9e5.1(@bufbuild/protobuf@2.9.0)
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/cncf_xds.bufbuild_es@2.0.0-20230428204815-197fca8a74c5.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@buf/envoyproxy_protoc-gen-validate.bufbuild_es': 2.0.0-20221025150516-6607b10f00ed.1(@bufbuild/protobuf@2.9.0)
+      '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20230329151039-5ae7f88519b0.1(@bufbuild/protobuf@2.9.0)
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/envoyproxy_envoy.bufbuild_es@2.0.0-20230516211932-3afde44c0a3a.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@buf/cncf_xds.bufbuild_es': 2.0.0-20230428204815-197fca8a74c5.1(@bufbuild/protobuf@2.9.0)
+      '@buf/envoyproxy_protoc-gen-validate.bufbuild_es': 2.0.0-20221025150516-6607b10f00ed.1(@bufbuild/protobuf@2.9.0)
+      '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20230502210827-cc916c318597.1(@bufbuild/protobuf@2.9.0)
+      '@buf/opencensus_opencensus.bufbuild_es': 2.0.0-20230503204408-7e4755513505.1(@bufbuild/protobuf@2.9.0)
+      '@buf/opentelemetry_opentelemetry.bufbuild_es': 2.0.0-20230516211923-547fa0c6b925.1(@bufbuild/protobuf@2.9.0)
+      '@buf/prometheus_client-model.bufbuild_es': 2.0.0-20230331140308-55bcfe88c9e5.1(@bufbuild/protobuf@2.9.0)
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/envoyproxy_protoc-gen-validate.bufbuild_es@2.0.0-20221025150516-6607b10f00ed.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20230329151039-5ae7f88519b0.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
       '@bufbuild/protobuf': 2.9.0
 
   '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20230502210827-cc916c318597.1(@bufbuild/protobuf@2.9.0)':
@@ -2038,6 +2144,23 @@ snapshots:
       '@bufbuild/protobuf': 2.9.0
 
   '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20240729201550-8bc2c51e08c4.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/grpc_grpc.bufbuild_es@2.0.0-20230516211939-d8bc6b0fb32a.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20230502210827-cc916c318597.1(@bufbuild/protobuf@2.9.0)
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/opencensus_opencensus.bufbuild_es@2.0.0-20230503204408-7e4755513505.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/opentelemetry_opentelemetry.bufbuild_es@2.0.0-20230516211923-547fa0c6b925.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/prometheus_client-model.bufbuild_es@2.0.0-20230331140308-55bcfe88c9e5.1(@bufbuild/protobuf@2.9.0)':
     dependencies:
       '@bufbuild/protobuf': 2.9.0
 
@@ -2297,6 +2420,10 @@ snapshots:
   '@types/react@19.1.13':
     dependencies:
       csstype: 3.1.3
+
+  '@types/tar-stream@3.1.4':
+    dependencies:
+      '@types/node': 18.17.9
 
   '@typescript-eslint/eslint-plugin@8.44.0(@typescript-eslint/parser@6.21.0(eslint@8.53.0)(typescript@5.2.2))(eslint@8.53.0)(typescript@5.2.2)':
     dependencies:
@@ -2611,7 +2738,11 @@ snapshots:
 
   axobject-query@4.1.0: {}
 
+  b4a@1.7.3: {}
+
   balanced-match@1.0.2: {}
+
+  bare-events@2.7.0: {}
 
   baseline-browser-mapping@2.8.4: {}
 
@@ -3098,6 +3229,10 @@ snapshots:
 
   esutils@2.0.3: {}
 
+  events-universal@1.0.1:
+    dependencies:
+      bare-events: 2.7.0
+
   execa@8.0.1:
     dependencies:
       cross-spawn: 7.0.6
@@ -3111,6 +3246,8 @@ snapshots:
       strip-final-newline: 3.0.0
 
   fast-deep-equal@3.1.3: {}
+
+  fast-fifo@1.3.2: {}
 
   fast-glob@3.3.1:
     dependencies:
@@ -3915,6 +4052,14 @@ snapshots:
       es-errors: 1.3.0
       internal-slot: 1.1.0
 
+  streamx@2.23.0:
+    dependencies:
+      events-universal: 1.0.1
+      fast-fifo: 1.3.2
+      text-decoder: 1.2.3
+    transitivePeerDependencies:
+      - react-native-b4a
+
   string.prototype.includes@2.0.1:
     dependencies:
       call-bind: 1.0.8
@@ -4012,6 +4157,20 @@ snapshots:
       resolve: 1.22.10
     transitivePeerDependencies:
       - ts-node
+
+  tar-stream@3.1.7:
+    dependencies:
+      b4a: 1.7.3
+      fast-fifo: 1.3.2
+      streamx: 2.23.0
+    transitivePeerDependencies:
+      - react-native-b4a
+
+  text-decoder@1.2.3:
+    dependencies:
+      b4a: 1.7.3
+    transitivePeerDependencies:
+      - react-native-b4a
 
   text-table@0.2.0: {}
 
