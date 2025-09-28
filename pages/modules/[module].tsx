@@ -20,7 +20,8 @@ import {
 import { GithubRepositoryMetadata } from '../../data/githubMetadata'
 import { formatDistance, parseISO } from 'date-fns'
 import { faGlobe, faScaleBalanced } from '@fortawesome/free-solid-svg-icons'
-import { ModuleInfo as StardocModuleInfo } from '@buf/bazel_bazel.bufbuild_es/src/main/java/com/google/devtools/build/skydoc/rendering/proto/stardoc_output_pb.js'
+import { StardocModuleInfo } from '../../data/stardoc'
+import ReactMarkdown from 'react-markdown'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -370,30 +371,38 @@ const ModulePage: NextPage<ModulePageProps> = ({
 
                 {versionInfo.stardocs.length > 0 && (
                   <div className="mt-4">
-                    <details>
-                      <summary>
-                        <span
-                          role="heading"
-                          aria-level={2}
-                          className="text-1xl mt-4"
+                    <h2 className="text-2xl font-bold mt-4">
+                      Starlark API Documentation
+                    </h2>
+                    {versionInfo.stardocs.map(
+                      (moduleInfo: StardocModuleInfo) => (
+                        <li
+                          key={moduleInfo.file}
+                          className="border rounded p-2 mt-2 flex items-center gap-4"
                         >
-                          <span className="font-bold">Documentation Files</span>{' '}
-                          ({versionInfo.stardocs.length})
-                        </span>
-                      </summary>
-                      <ul className="mt-4">
-                        {versionInfo.stardocs.map((moduleInfo) => (
-                          <li
-                            key={moduleInfo}
-                            className="border rounded p-2 mt-2 flex items-center gap-4"
-                          >
-                            <div className="font-mono text-sm text-gray-700">
-                              {moduleInfo}
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
+                          <details>
+                            <summary>
+                              <span
+                                role="heading"
+                                aria-level={2}
+                                className="text-1xl mt-4"
+                              >
+                                <span className="font-bold font-mono">
+                                  {moduleInfo.file}
+                                </span>
+                              </span>
+                            </summary>
+                            <ul className="mt-4">
+                              <div className="text-sm text-gray-700">
+                                <ReactMarkdown>
+                                  {moduleInfo.moduleDocstring}
+                                </ReactMarkdown>
+                              </div>
+                            </ul>
+                          </details>
+                        </li>
+                      )
+                    )}
                   </div>
                 )}
               </div>

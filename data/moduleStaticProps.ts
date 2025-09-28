@@ -7,10 +7,10 @@ import {
   ModuleInfo,
   reverseDependencies,
   getSourceJson,
-  fetchDocsList,
   SourceJson,
 } from './utils'
 import { getGithubRepositoryMetadata } from './githubMetadata'
+import { fetchDocsList, StardocModuleInfo } from './stardoc'
 
 export interface VersionInfo {
   version: string
@@ -23,7 +23,7 @@ export interface VersionInfo {
   yankReason: string | null
   hasAttestationFile: boolean
   sourceJson: SourceJson | null
-  stardocs: string[]
+  stardocs: StardocModuleInfo[]
 }
 
 // [module]/[version] needs to reuse the same logic
