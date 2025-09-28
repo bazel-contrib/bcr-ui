@@ -12,6 +12,12 @@ importers:
 
   .:
     dependencies:
+      '@buf/bazel_bazel.bufbuild_es':
+        specifier: 2.0.0-20240806194025-8f5cf9629ba6.1
+        version: 2.0.0-20240806194025-8f5cf9629ba6.1(@bufbuild/protobuf@2.9.0)
+      '@bufbuild/protobuf':
+        specifier: ^2
+        version: 2.9.0
       '@floating-ui/react-dom':
         specifier: ^2.0.0
         version: 2.1.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -100,6 +106,29 @@ packages:
   '@babel/runtime@7.28.4':
     resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
     engines: {node: '>=6.9.0'}
+
+  '@buf/bazel_bazel.bufbuild_es@2.0.0-20240806194025-8f5cf9629ba6.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/bazel_bazel.bufbuild_es/-/bazel_bazel.bufbuild_es-2.0.0-20240806194025-8f5cf9629ba6.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@buf/bazel_remote-apis.bufbuild_es@2.0.0-20230602030542-b202931f28c0.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/bazel_remote-apis.bufbuild_es/-/bazel_remote-apis.bufbuild_es-2.0.0-20230602030542-b202931f28c0.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20230502210827-cc916c318597.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/googleapis_googleapis.bufbuild_es/-/googleapis_googleapis.bufbuild_es-2.0.0-20230502210827-cc916c318597.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20240729201550-8bc2c51e08c4.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/googleapis_googleapis.bufbuild_es/-/googleapis_googleapis.bufbuild_es-2.0.0-20240729201550-8bc2c51e08c4.1.tgz}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.0.0
+
+  '@bufbuild/protobuf@2.9.0':
+    resolution: {integrity: sha512-rnJenoStJ8nvmt9Gzye8nkYd6V22xUAnu4086ER7h1zJ508vStko4pMvDeQ446ilDTFpV5wnoc5YS7XvMwwMqA==}
 
   '@emnapi/core@1.5.0':
     resolution: {integrity: sha512-sbP8GzB1WDzacS8fgNPpHlp6C9VZe+SJP3F90W9rLemaQj2PzIuTEl1qDOYQf58YIpyjViI24y9aPWCjEzY2cg==}
@@ -1992,6 +2021,27 @@ packages:
 snapshots:
 
   '@babel/runtime@7.28.4': {}
+
+  '@buf/bazel_bazel.bufbuild_es@2.0.0-20240806194025-8f5cf9629ba6.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@buf/bazel_remote-apis.bufbuild_es': 2.0.0-20230602030542-b202931f28c0.1(@bufbuild/protobuf@2.9.0)
+      '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20240729201550-8bc2c51e08c4.1(@bufbuild/protobuf@2.9.0)
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/bazel_remote-apis.bufbuild_es@2.0.0-20230602030542-b202931f28c0.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20230502210827-cc916c318597.1(@bufbuild/protobuf@2.9.0)
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20230502210827-cc916c318597.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@bufbuild/protobuf': 2.9.0
+
+  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20240729201550-8bc2c51e08c4.1(@bufbuild/protobuf@2.9.0)':
+    dependencies:
+      '@bufbuild/protobuf': 2.9.0
+
+  '@bufbuild/protobuf@2.9.0': {}
 
   '@emnapi/core@1.5.0':
     dependencies:

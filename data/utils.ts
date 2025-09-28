@@ -1,7 +1,9 @@
+import { fromBinary } from '@bufbuild/protobuf'
+import { ModuleInfoSchema } from '@buf/bazel_bazel.bufbuild_es/src/main/java/com/google/devtools/build/skydoc/rendering/proto/stardoc_output_pb.js'
 import path from 'path'
 import { formatISO, parse } from 'date-fns'
 import { execa } from 'execa'
-import { promises as fs } from 'fs'
+import { promises as fs } from 'node:fs'
 import { gitlogPromise } from 'gitlog'
 import * as os from 'os'
 import pMemoize from 'p-memoize'
@@ -487,13 +489,9 @@ export const getSourceJson = async (
   }
 }
 
-export const fetchDocsArchiveFileList = async (
-  docsUrl: string
-): Promise<string[]> => {
+export const fetchDocsList = async (docsUrl: string): Promise<string[]> => {
   if (typeof window !== 'undefined') {
-    throw new Error(
-      'fetchDocsArchiveFileList should only be called server-side'
-    )
+    throw new Error('fetchDocsList should only be called server-side')
   }
 
   try {
@@ -507,7 +505,7 @@ export const fetchDocsArchiveFileList = async (
 
     const tempFile = path.join(os.tmpdir(), `docs-${Date.now()}.tar.gz`)
     await fs.writeFile(tempFile, buffer)
-
+    const moduleDocs = []
     try {
       const { stdout } = await execa('tar', ['-tzf', tempFile])
       const files = stdout
@@ -516,7 +514,16 @@ export const fetchDocsArchiveFileList = async (
         .map((file) => file.replace(/^\.\//, '').trim())
         .sort()
 
-      return files
+      for (const file of files) {
+        const protoInputPath = path.join(os.tmpdir(), file)
+        const bytes = await fs.readFile(protoInputPath)
+        const currentDoc = fromBinary(ModuleInfoSchema, bytes)
+        moduleDocs.push(
+          currentDoc.funcInfo.map((func) => func.functionName).join(', ')
+        )
+      }
+
+      return moduleDocs
     } finally {
       try {
         await fs.unlink(tempFile)

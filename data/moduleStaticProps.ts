@@ -7,7 +7,7 @@ import {
   ModuleInfo,
   reverseDependencies,
   getSourceJson,
-  fetchDocsArchiveFileList,
+  fetchDocsList,
   SourceJson,
 } from './utils'
 import { getGithubRepositoryMetadata } from './githubMetadata'
@@ -40,7 +40,7 @@ export const getStaticPropsModulePage = async (
     versions.map(async (version) => {
       const sourceJson = await getSourceJson(module, version)
       const binaryprotoFiles = sourceJson?.docs_url
-        ? await fetchDocsArchiveFileList(sourceJson.docs_url)
+        ? await fetchDocsList(sourceJson.docs_url)
         : []
 
       return {
