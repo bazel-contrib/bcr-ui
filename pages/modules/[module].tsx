@@ -21,8 +21,6 @@ import {
 import { GithubRepositoryMetadata } from '../../data/githubMetadata'
 import { formatDistance, parseISO } from 'date-fns'
 import { faGlobe, faScaleBalanced } from '@fortawesome/free-solid-svg-icons'
-import { StardocModuleInfo } from '../../data/stardoc'
-import ReactMarkdown from 'react-markdown'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -117,400 +115,390 @@ const ModulePage: NextPage<ModulePageProps> = ({
 
       <Header />
       <main>
-        <div className="w-4xl mx-auto mt-8">
-          <div className="border rounded p-4 divide-y">
-            <div className="flex items-center gap-1">
-              {versionInfo.hasAttestationFile && (
-                <span className="w-7 h-7 inline-block">
-                  <AttestationBadge
-                    hasAttestationFile={true}
-                    placement="bottom-start"
-                  />
-                </span>
-              )}
-              <span
-                role="heading"
-                aria-level={1}
-                className="text-3xl translate-y-[-3px]"
-              >
-                {module}
+        <div className="border rounded p-4 divide-y">
+          <div className="flex items-center gap-1">
+            {versionInfo.hasAttestationFile && (
+              <span className="w-7 h-7 inline-block">
+                <AttestationBadge
+                  hasAttestationFile={true}
+                  placement="bottom-start"
+                />
               </span>
-              <span className="text-lg ml-2">{selectedVersion}</span>
-            </div>
-            <div className="mt-4 flex flex-col md:flex-row flex-wrap sm:divide-x gap-2">
-              <div id="install_history_dependencies" className="basis-0 grow">
-                <h2 className="text-2xl font-bold mt-4">Install</h2>
-                <div className="mt-2">
+            )}
+            <span
+              role="heading"
+              aria-level={1}
+              className="text-3xl translate-y-[-3px]"
+            >
+              {module}
+            </span>
+            <span className="text-lg ml-2">{selectedVersion}</span>
+          </div>
+          <div className="mt-4 flex flex-col md:flex-row flex-wrap sm:divide-x gap-2">
+            <div id="install_history_dependencies" className="basis-0 grow">
+              <h2 className="text-2xl font-bold mt-4">Install</h2>
+              <div className="mt-2">
+                <p>
+                  To start using this module, make sure you have set up Bzlmod
+                  according to the <a href={USER_GUIDE_LINK}>user guide</a>, and
+                  add the following to your <code>MODULE.bazel</code> file:
+                </p>
+                <CopyCode
+                  code={`bazel_dep(name = "${module}", version = "${selectedVersion}")`}
+                />
+                {!!releaseNotesLink && (
                   <p>
-                    To start using this module, make sure you have set up Bzlmod
-                    according to the <a href={USER_GUIDE_LINK}>user guide</a>,
-                    and add the following to your <code>MODULE.bazel</code>{' '}
-                    file:
+                    Read the{' '}
+                    <a
+                      href={releaseNotesLink}
+                      className="text-link-color hover:text-link-color-hover"
+                    >
+                      Release Notes
+                    </a>
                   </p>
-                  <CopyCode
-                    code={`bazel_dep(name = "${module}", version = "${selectedVersion}")`}
-                  />
-                  {!!releaseNotesLink && (
-                    <p>
-                      Read the{' '}
-                      <a
-                        href={releaseNotesLink}
-                        className="text-link-color hover:text-link-color-hover"
+                )}
+              </div>
+              <h2 className="text-2xl font-bold mt-4">Version history</h2>
+              <div>
+                <ul className="mt-4">
+                  {shownVersions.map((version) => (
+                    <>
+                      <li
+                        key={version.version}
+                        className="border rounded mt-2 "
                       >
-                        Release Notes
-                      </a>
-                    </p>
-                  )}
-                </div>
-                <h2 className="text-2xl font-bold mt-4">Version history</h2>
-                <div>
-                  <ul className="mt-4">
-                    {shownVersions.map((version) => (
-                      <>
-                        <li
-                          key={version.version}
-                          className="border rounded mt-2 "
-                        >
-                          {version.isYanked && (
-                            <div
-                              key={`${version.version}-yanked`}
-                              className="p-2 mb-2 bg-amber-300"
+                        {version.isYanked && (
+                          <div
+                            key={`${version.version}-yanked`}
+                            className="p-2 mb-2 bg-amber-300"
+                          >
+                            <a
+                              href="https://bazel.build/external/module#yanked_versions"
+                              className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
                             >
-                              <a
-                                href="https://bazel.build/external/module#yanked_versions"
-                                className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
+                              Version yanked
+                            </a>{' '}
+                            with comment: <p>{version.yankReason}</p>
+                          </div>
+                        )}
+                        <div className="flex items-stretch gap-4">
+                          <div className="flex flex-1 justify-between">
+                            <div className="flex p-2 flex-col gap-2 justify-between border-r hover:border-link-color hover:border-r-4">
+                              <Link
+                                href={`/modules/${module}/${version.version}`}
                               >
-                                Version yanked
-                              </a>{' '}
-                              with comment: <p>{version.yankReason}</p>
-                            </div>
-                          )}
-                          <div className="flex items-stretch gap-4">
-                            <div className="flex flex-1 justify-between">
-                              <div className="flex p-2 flex-col gap-2 justify-between border-r hover:border-link-color hover:border-r-4">
-                                <Link
-                                  href={`/modules/${module}/${version.version}`}
+                                <div className="place-items-center hover:border-gray-800 flex items-center gap-2">
+                                  {version.version}
+                                  <AttestationBadge
+                                    hasAttestationFile={
+                                      version.hasAttestationFile
+                                    }
+                                  />
+                                </div>
+                              </Link>
+                              <div className="self-end text-gray-500">
+                                <a
+                                  href="https://bazel.build/external/module#compatibility_level"
+                                  className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
                                 >
-                                  <div className="place-items-center hover:border-gray-800 flex items-center gap-2">
-                                    {version.version}
-                                    <AttestationBadge
-                                      hasAttestationFile={
-                                        version.hasAttestationFile
-                                      }
-                                    />
-                                  </div>
-                                </Link>
-                                <div className="self-end text-gray-500">
-                                  <a
-                                    href="https://bazel.build/external/module#compatibility_level"
-                                    className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
-                                  >
-                                    compatibility level
-                                  </a>{' '}
-                                  {version.moduleInfo.compatibilityLevel}
-                                </div>
+                                  compatibility level
+                                </a>{' '}
+                                {version.moduleInfo.compatibilityLevel}
                               </div>
-                              <div className="flex p-2 justify-end">
-                                <div className="flex flex-col justify-between items-end">
-                                  <a
-                                    href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
-                                    className="text-link-color hover:text-link-color-hover"
-                                  >
-                                    view registry source
-                                  </a>
-                                  <a
-                                    href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
-                                    className="text-link-color hover:text-link-color-hover"
-                                    suppressHydrationWarning
-                                  >
-                                    published{' '}
-                                    {formatDistance(
-                                      parseISO(
-                                        version.submission.authorDateIso
-                                      ),
-                                      new Date(),
-                                      { addSuffix: true }
-                                    )}
-                                  </a>
-                                </div>
+                            </div>
+                            <div className="flex p-2 justify-end">
+                              <div className="flex flex-col justify-between items-end">
+                                <a
+                                  href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
+                                  className="text-link-color hover:text-link-color-hover"
+                                >
+                                  view registry source
+                                </a>
+                                <a
+                                  href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
+                                  className="text-link-color hover:text-link-color-hover"
+                                  suppressHydrationWarning
+                                >
+                                  published{' '}
+                                  {formatDistance(
+                                    parseISO(version.submission.authorDateIso),
+                                    new Date(),
+                                    { addSuffix: true }
+                                  )}
+                                </a>
                               </div>
                             </div>
                           </div>
-                        </li>
-                      </>
-                    ))}
-                  </ul>
-                  {displayShowAllVersionsButton && (
-                    <button
-                      className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg"
-                      onClick={() => setTriggeredShowAllVersions(true)}
+                        </div>
+                      </li>
+                    </>
+                  ))}
+                </ul>
+                {displayShowAllVersionsButton && (
+                  <button
+                    className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg"
+                    onClick={() => setTriggeredShowAllVersions(true)}
+                  >
+                    Show all {versionInfos.length} versions
+                  </button>
+                )}
+              </div>
+              <div className="mt-4">
+                <h2 className="text-2xl font-bold mt-4">Dependency graph</h2>
+              </div>
+              <div className="mt-4">
+                <details open>
+                  <summary>
+                    <span
+                      role="heading"
+                      aria-level={2}
+                      className="text-1xl mt-4"
                     >
-                      Show all {versionInfos.length} versions
-                    </button>
-                  )}
-                </div>
-                <div className="mt-4">
-                  <h2 className="text-2xl font-bold mt-4">Dependency graph</h2>
-                </div>
-                <div className="mt-4">
-                  <details open>
-                    <summary>
-                      <span
-                        role="heading"
-                        aria-level={2}
-                        className="text-1xl mt-4"
-                      >
-                        <span className="font-bold">Direct</span> (
-                        {versionInfo.moduleInfo.dependencies.filter(
-                          (d) => !d.dev
-                        ).length || 'None'}
-                        ){' '}
-                        <small className="text-sm font-normal text-gray-500">
-                          at version {selectedVersion}
-                        </small>
-                      </span>
-                    </summary>
-                    <ul className="mt-4">
-                      {versionInfo.moduleInfo.dependencies
-                        .filter((d) => !d.dev)
-                        .map((dependency) => (
-                          <Link
-                            key={dependency.module}
-                            href={`/modules/${dependency.module}/${dependency.version}`}
-                          >
-                            <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                              <div className="rounded-full border h-14 w-14 grid place-items-center">
-                                {dependency.version}
-                              </div>
-                              <div>{dependency.module}</div>
-                            </li>
-                          </Link>
-                        ))}
+                      <span className="font-bold">Direct</span> (
                       {versionInfo.moduleInfo.dependencies.filter((d) => !d.dev)
-                        .length === 0 && <span>No dependencies</span>}
-                    </ul>
-                  </details>
-                </div>
-                <div className="mt-4">
-                  <details>
-                    <summary>
-                      <span
-                        role="heading"
-                        aria-level={2}
-                        className="text-1xl mt-4"
-                      >
-                        <span className="font-bold">Dev Dependencies</span> (
-                        {versionInfo.moduleInfo.dependencies.filter(
-                          (d) => d.dev
-                        ).length || 'None'}
-                        ){' '}
-                      </span>
-                    </summary>
-                    <ul className="mt-4">
-                      {versionInfo.moduleInfo.dependencies
-                        .filter((d) => d.dev)
-                        .map((dependency) => (
-                          <Link
-                            key={dependency.module}
-                            href={`/modules/${dependency.module}/${dependency.version}`}
-                          >
-                            <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                              <div className="rounded-full border h-14 w-14 grid place-items-center">
-                                {dependency.version}
-                              </div>
-                              <div>{dependency.module}</div>
-                            </li>
-                          </Link>
-                        ))}
-                      {versionInfo.moduleInfo.dependencies.length === 0 && (
-                        <span>No dependencies</span>
-                      )}
-                    </ul>
-                  </details>
-                </div>
-                <div className="mt-4">
-                  <details>
-                    <summary>
-                      <span
-                        role="heading"
-                        aria-level={2}
-                        className="text-1xl mt-4"
-                      >
-                        <span className="font-bold">Dependents</span>{' '}
-                        {reverseDependencies.length > 0
-                          ? `(${reverseDependencies.length})`
-                          : ''}
-                      </span>
-                    </summary>
-                    <ul className="mt-4">
-                      {shownReverseDependencies.map((revDependency) => (
+                        .length || 'None'}
+                      ){' '}
+                      <small className="text-sm font-normal text-gray-500">
+                        at version {selectedVersion}
+                      </small>
+                    </span>
+                  </summary>
+                  <ul className="mt-4">
+                    {versionInfo.moduleInfo.dependencies
+                      .filter((d) => !d.dev)
+                      .map((dependency) => (
                         <Link
-                          key={revDependency}
-                          href={`/modules/${revDependency}`}
+                          key={dependency.module}
+                          href={`/modules/${dependency.module}/${dependency.version}`}
                         >
                           <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                            <div>{revDependency}</div>
+                            <div className="rounded-full border h-14 w-14 grid place-items-center">
+                              {dependency.version}
+                            </div>
+                            <div>{dependency.module}</div>
                           </li>
                         </Link>
                       ))}
-                      {reverseDependencies.length === 0 && (
-                        <span>No dependent modules yet</span>
-                      )}
-                    </ul>
-                    {displayShowAllReverseDependenciesButton && (
-                      <button
-                        className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg"
-                        onClick={() =>
-                          setTriggeredShowAllReverseDependencies(true)
-                        }
-                      >
-                        Show all {reverseDependencies.length} dependent modules
-                      </button>
-                    )}
-                  </details>
-                </div>
-
-                {versionInfo.stardocs.length > 0 && (
-                  <div className="mt-6">
-                    <h2 className="text-2xl font-bold mb-4">
-                      Starlark API Documentation
-                    </h2>
-                    <div className="space-y-4">
-                      {versionInfo.stardocs.map((stardoc, index) => (
-                        <StardocRenderer
-                          key={stardoc.file || index}
-                          stardoc={stardoc}
-                          fileName={stardoc.file}
-                        />
+                    {versionInfo.moduleInfo.dependencies.filter((d) => !d.dev)
+                      .length === 0 && <span>No dependencies</span>}
+                  </ul>
+                </details>
+              </div>
+              <div className="mt-4">
+                <details>
+                  <summary>
+                    <span
+                      role="heading"
+                      aria-level={2}
+                      className="text-1xl mt-4"
+                    >
+                      <span className="font-bold">Dev Dependencies</span> (
+                      {versionInfo.moduleInfo.dependencies.filter((d) => d.dev)
+                        .length || 'None'}
+                      ){' '}
+                    </span>
+                  </summary>
+                  <ul className="mt-4">
+                    {versionInfo.moduleInfo.dependencies
+                      .filter((d) => d.dev)
+                      .map((dependency) => (
+                        <Link
+                          key={dependency.module}
+                          href={`/modules/${dependency.module}/${dependency.version}`}
+                        >
+                          <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                            <div className="rounded-full border h-14 w-14 grid place-items-center">
+                              {dependency.version}
+                            </div>
+                            <div>{dependency.module}</div>
+                          </li>
+                        </Link>
                       ))}
-                    </div>
+                    {versionInfo.moduleInfo.dependencies.length === 0 && (
+                      <span>No dependencies</span>
+                    )}
+                  </ul>
+                </details>
+              </div>
+              <div className="mt-4">
+                <details>
+                  <summary>
+                    <span
+                      role="heading"
+                      aria-level={2}
+                      className="text-1xl mt-4"
+                    >
+                      <span className="font-bold">Dependents</span>{' '}
+                      {reverseDependencies.length > 0
+                        ? `(${reverseDependencies.length})`
+                        : ''}
+                    </span>
+                  </summary>
+                  <ul className="mt-4">
+                    {shownReverseDependencies.map((revDependency) => (
+                      <Link
+                        key={revDependency}
+                        href={`/modules/${revDependency}`}
+                      >
+                        <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                          <div>{revDependency}</div>
+                        </li>
+                      </Link>
+                    ))}
+                    {reverseDependencies.length === 0 && (
+                      <span>No dependent modules yet</span>
+                    )}
+                  </ul>
+                  {displayShowAllReverseDependenciesButton && (
+                    <button
+                      className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg"
+                      onClick={() =>
+                        setTriggeredShowAllReverseDependencies(true)
+                      }
+                    >
+                      Show all {reverseDependencies.length} dependent modules
+                    </button>
+                  )}
+                </details>
+              </div>
+            </div>
+            <div id="metadata" className="sm:pl-2 basis-8 md:basis-[12rem]">
+              <h2 className="text-2xl font-bold mt-4 mb-2">About</h2>
+              <div>
+                {repoDescription && (
+                  <div className="mb-2">
+                    <p className="text-md">{repoDescription}</p>
                   </div>
                 )}
-              </div>
-              <div id="metadata" className="sm:pl-2 basis-8 md:basis-[12rem]">
-                <h2 className="text-2xl font-bold mt-4 mb-2">About</h2>
-                <div>
-                  {repoDescription && (
-                    <div className="mb-2">
-                      <p className="text-md">{repoDescription}</p>
+                <div className="space-y-1">
+                  {repoTopics && (
+                    <div className="mb-4 mt-4 flex flex-row flex-wrap gap-1">
+                      {repoTopics.map((topic) => {
+                        return (
+                          <span
+                            className="rounded-xl pl-3 pr-3 pt-0.5 pb-0.5 font-semibold mr-1 text-sm text-[#0b713b] bg-[#0b713b1a]"
+                            key={topic}
+                          >
+                            {topic}
+                          </span>
+                        )
+                      })}
                     </div>
                   )}
-                  <div className="space-y-1">
-                    {repoTopics && (
-                      <div className="mb-4 mt-4 flex flex-row flex-wrap gap-1">
-                        {repoTopics.map((topic) => {
-                          return (
-                            <span
-                              className="rounded-xl pl-3 pr-3 pt-0.5 pb-0.5 font-semibold mr-1 text-sm text-[#0b713b] bg-[#0b713b1a]"
-                              key={topic}
-                            >
-                              {topic}
-                            </span>
-                          )
-                        })}
-                      </div>
-                    )}
 
-                    {metadata.homepage !== githubLink ? (
+                  {metadata.homepage !== githubLink ? (
+                    <a
+                      href={metadata.homepage}
+                      className="block text-link-color hover:text-link-color-hover"
+                      title={metadata.homepage}
+                    >
+                      <FontAwesomeIcon
+                        icon={faGlobe}
+                        className="mr-1 min-w-[30px]"
+                      />
+                      Homepage
+                    </a>
+                  ) : null}
+
+                  {repoStargazers && (
+                    <div className="text-black">
+                      <FontAwesomeIcon
+                        className="mr-1 min-w-[30px]"
+                        icon={faStar}
+                      />
+                      {repoStargazers} Stars
+                    </div>
+                  )}
+
+                  {repoLicense && (
+                    <a
+                      href={repoLicense.url}
+                      className="block text-link-color hover:text-link-color-hover cursor-pointer"
+                      title={repoLicense.spdx_id}
+                    >
+                      <FontAwesomeIcon
+                        className="mr-1 min-w-[30px]"
+                        icon={faScaleBalanced}
+                      />
+                      {repoLicense.name}
+                    </a>
+                  )}
+
+                  {githubLink && (
+                    <div>
                       <a
-                        href={metadata.homepage}
-                        className="block text-link-color hover:text-link-color-hover"
-                        title={metadata.homepage}
+                        href={githubLink}
+                        className="text-link-color hover:text-link-color-hover"
+                        title={githubLink}
                       >
                         <FontAwesomeIcon
-                          icon={faGlobe}
+                          icon={faGithub}
                           className="mr-1 min-w-[30px]"
                         />
-                        Homepage
+                        GitHub repository
                       </a>
-                    ) : null}
-
-                    {repoStargazers && (
-                      <div className="text-black">
-                        <FontAwesomeIcon
-                          className="mr-1 min-w-[30px]"
-                          icon={faStar}
-                        />
-                        {repoStargazers} Stars
-                      </div>
-                    )}
-
-                    {repoLicense && (
-                      <a
-                        href={repoLicense.url}
-                        className="block text-link-color hover:text-link-color-hover cursor-pointer"
-                        title={repoLicense.spdx_id}
-                      >
-                        <FontAwesomeIcon
-                          className="mr-1 min-w-[30px]"
-                          icon={faScaleBalanced}
-                        />
-                        {repoLicense.name}
-                      </a>
-                    )}
-
-                    {githubLink && (
-                      <div>
-                        <a
-                          href={githubLink}
-                          className="text-link-color hover:text-link-color-hover"
-                          title={githubLink}
-                        >
-                          <FontAwesomeIcon
-                            icon={faGithub}
-                            className="mr-1 min-w-[30px]"
-                          />
-                          GitHub repository
-                        </a>
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
+              </div>
 
-                <div className="mt-4">
-                  <h2 className="text-2xl font-bold mt-4 mb-2">Tested on</h2>
-                  <PlatformSupport
-                    platforms={versionInfo.moduleInfo.supportedPlatforms || []}
-                  />
-                  <BazelVersionSupport
-                    versions={
-                      versionInfo.moduleInfo.supportedBazelVersions || []
-                    }
-                  />
-                </div>
+              <div className="mt-4">
+                <h2 className="text-2xl font-bold mt-4 mb-2">Tested on</h2>
+                <PlatformSupport
+                  platforms={versionInfo.moduleInfo.supportedPlatforms || []}
+                />
+                <BazelVersionSupport
+                  versions={versionInfo.moduleInfo.supportedBazelVersions || []}
+                />
+              </div>
 
-                <h2 className="text-2xl font-bold mt-4 mb-2">Maintainers</h2>
-                <div>
-                  <ul>
-                    {metadata.maintainers?.map(({ name, email, github }) => (
-                      <li key={name} className="ml-1.5">
-                        <span className="flex">
-                          {email && (
-                            <a
-                              className="text-black hover:text-green-800 hover:scale-125 cursor-pointer mr-1"
-                              href={`mailto:${email}`}
-                            >
-                              <FontAwesomeIcon icon={faEnvelope} />
-                            </a>
-                          )}
-                          {github && (
-                            <a
-                              className="text-black hover:text-green-600 hover:scale-125 cursor-pointer mr-1"
-                              href={`https://github.com/${github}`}
-                            >
-                              <FontAwesomeIcon icon={faGithub} />
-                            </a>
-                          )}
-                          {name}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <h2 className="text-2xl font-bold mt-4 mb-2">Maintainers</h2>
+              <div>
+                <ul>
+                  {metadata.maintainers?.map(({ name, email, github }) => (
+                    <li key={name} className="ml-1.5">
+                      <span className="flex">
+                        {email && (
+                          <a
+                            className="text-black hover:text-green-800 hover:scale-125 cursor-pointer mr-1"
+                            href={`mailto:${email}`}
+                          >
+                            <FontAwesomeIcon icon={faEnvelope} />
+                          </a>
+                        )}
+                        {github && (
+                          <a
+                            className="text-black hover:text-green-600 hover:scale-125 cursor-pointer mr-1"
+                            href={`https://github.com/${github}`}
+                          >
+                            <FontAwesomeIcon icon={faGithub} />
+                          </a>
+                        )}
+                        {name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
         </div>
+        {versionInfo.stardocs.length > 0 && (
+          <div className="mt-6">
+            <h2 className="text-2xl font-bold mb-4">
+              Starlark API Documentation
+            </h2>
+            <div className="space-y-4">
+              {versionInfo.stardocs.map((stardoc, index) => (
+                <StardocRenderer
+                  key={stardoc.file || index}
+                  stardoc={stardoc}
+                  fileName={stardoc.file}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </main>
       <div className="flex-grow" />
       <Footer />
