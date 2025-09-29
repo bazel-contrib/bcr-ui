@@ -6,11 +6,10 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 import { StardocModuleInfo } from '../data/stardoc'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLink, faCopy, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCopy, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 interface StardocRendererProps {
   stardoc: StardocModuleInfo
-  fileName?: string
 }
 
 // Helper function to generate anchor IDs
@@ -153,7 +152,6 @@ const markdownComponents = {
 
 export const StardocRenderer: React.FC<StardocRendererProps> = ({
   stardoc,
-  fileName,
 }) => {
   if (!stardoc) {
     return (
@@ -230,23 +228,32 @@ export const StardocRenderer: React.FC<StardocRendererProps> = ({
                   {/* Function parameters */}
                   {func.parameter && func.parameter.length > 0 && (
                     <div className="mt-3">
-                      <h5 className="text-sm font-medium text-gray-700 mb-2">
+                      <h5 className="text-sm font-bold text-gray-700 mb-2">
                         Parameters
                       </h5>
-                      <ul className="space-y-2">
-                        {func.parameter.map((param, paramIndex) => (
-                          <li key={paramIndex} className="text-sm">
-                            <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
-                              {param.name}
-                            </code>
-                            {param.docString && (
-                              <span className="ml-2 text-gray-600">
-                                - {param.docString}
-                              </span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
+                      <table className="w-full text-sm">
+                        <tbody>
+                          {func.parameter.map((param, paramIndex) => (
+                            <tr key={paramIndex}>
+                              <td className="align-top pr-3 py-1 w-32 whitespace-nowrap text-right">
+                                <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
+                                  {param.name}
+                                </code>
+                              </td>
+                              {param.docString && (
+                                <td className="align-top text-gray-600 py-1">
+                                  <ReactMarkdown
+                                    components={markdownComponents}
+                                    remarkPlugins={[remarkGfm, remarkBreaks]}
+                                  >
+                                    {param.docString}
+                                  </ReactMarkdown>
+                                </td>
+                              )}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   )}
                 </div>
@@ -292,20 +299,29 @@ export const StardocRenderer: React.FC<StardocRendererProps> = ({
                       <h5 className="text-sm font-medium text-gray-700 mb-2">
                         Attributes
                       </h5>
-                      <ul className="space-y-2">
-                        {rule.attribute.map((attr, attrIndex) => (
-                          <li key={attrIndex} className="text-sm">
-                            <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
-                              {attr.name}
-                            </code>
-                            {attr.docString && (
-                              <span className="ml-2 text-gray-600">
-                                - {attr.docString}
-                              </span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
+                      <table className="w-full text-sm">
+                        <tbody>
+                          {rule.attribute.map((attr, attrIndex) => (
+                            <tr key={attrIndex}>
+                              <td className="align-top pr-3 py-1 w-32 whitespace-nowrap text-right">
+                                <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
+                                  {attr.name}
+                                </code>
+                              </td>
+                              {attr.docString && (
+                                <td className="align-top text-gray-600 py-1">
+                                  <ReactMarkdown
+                                    components={markdownComponents}
+                                    remarkPlugins={[remarkGfm, remarkBreaks]}
+                                  >
+                                    {attr.docString}
+                                  </ReactMarkdown>
+                                </td>
+                              )}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   )}
                 </div>
@@ -354,20 +370,29 @@ export const StardocRenderer: React.FC<StardocRendererProps> = ({
                       <h5 className="text-sm font-medium text-gray-700 mb-2">
                         Fields
                       </h5>
-                      <ul className="space-y-2">
-                        {provider.fieldInfo.map((field, fieldIndex) => (
-                          <li key={fieldIndex} className="text-sm">
-                            <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
-                              {field.name}
-                            </code>
-                            {field.docString && (
-                              <span className="ml-2 text-gray-600">
-                                - {field.docString}
-                              </span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
+                      <table className="w-full text-sm">
+                        <tbody>
+                          {provider.fieldInfo.map((field, fieldIndex) => (
+                            <tr key={fieldIndex}>
+                              <td className="align-top pr-3 py-1 w-32 whitespace-nowrap text-right">
+                                <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
+                                  {field.name}
+                                </code>
+                              </td>
+                              {field.docString && (
+                                <td className="align-top text-gray-600 py-1">
+                                  <ReactMarkdown
+                                    components={markdownComponents}
+                                    remarkPlugins={[remarkGfm, remarkBreaks]}
+                                  >
+                                    {field.docString}
+                                  </ReactMarkdown>
+                                </td>
+                              )}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   )}
                 </div>

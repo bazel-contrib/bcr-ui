@@ -503,7 +503,6 @@ const ModulePage: NextPage<ModulePageProps> = ({
                   <StardocRenderer
                     key={stardoc.file || index}
                     stardoc={stardoc}
-                    fileName={stardoc.file}
                   />
                 ))}
               </div>
