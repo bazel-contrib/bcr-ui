@@ -423,8 +423,8 @@ const ModulePage: NextPage<ModulePageProps> = ({
                           This repository is archived
                         </h3>
                         <div className="mt-2 text-sm text-yellow-700">
-                          This module's repository is archived and no longer
-                          actively maintained.
+                          This module&apos;s repository is archived and no
+                          longer actively maintained.
                         </div>
                       </div>
                     </div>
