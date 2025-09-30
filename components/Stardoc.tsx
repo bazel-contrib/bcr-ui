@@ -233,25 +233,45 @@ export const StardocRenderer: React.FC<StardocRendererProps> = ({
                       </h5>
                       <table className="w-full text-sm">
                         <tbody>
-                          {func.parameter.map((param, paramIndex) => (
-                            <tr key={paramIndex}>
-                              <td className="align-top pr-3 py-1 w-32 whitespace-nowrap text-right">
-                                <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
-                                  {param.name}
-                                </code>
-                              </td>
-                              {param.docString && (
-                                <td className="align-top text-gray-600 py-1">
-                                  <ReactMarkdown
-                                    components={markdownComponents}
-                                    remarkPlugins={[remarkGfm, remarkBreaks]}
-                                  >
-                                    {param.docString}
-                                  </ReactMarkdown>
+                          {func.parameter.map((param, paramIndex) => {
+                            return (
+                              <tr key={paramIndex}>
+                                <td className="align-top pr-3 py-1 w-32 whitespace-nowrap text-right">
+                                  <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
+                                    {param.mandatory && (
+                                      <span
+                                        className="mr-1 text-red-600 select-none cursor-help"
+                                        title="Required parameter"
+                                      >
+                                        *
+                                      </span>
+                                    )}
+                                    {param.name}
+                                  </code>
                                 </td>
-                              )}
-                            </tr>
-                          ))}
+                                <td className="align-top text-gray-600 py-1">
+                                  {param.docString && (
+                                    <ReactMarkdown
+                                      components={markdownComponents}
+                                      remarkPlugins={[remarkGfm, remarkBreaks]}
+                                    >
+                                      {param.docString}
+                                    </ReactMarkdown>
+                                  )}
+                                  {param.defaultValue && (
+                                    <div className="mt-1 text-xs text-gray-500">
+                                      <span className="font-medium">
+                                        Default:
+                                      </span>{' '}
+                                      <code className="bg-gray-50 px-1 py-0.5 rounded">
+                                        {param.defaultValue}
+                                      </code>
+                                    </div>
+                                  )}
+                                </td>
+                              </tr>
+                            )
+                          })}
                         </tbody>
                       </table>
                     </div>
@@ -301,25 +321,45 @@ export const StardocRenderer: React.FC<StardocRendererProps> = ({
                       </h5>
                       <table className="w-full text-sm">
                         <tbody>
-                          {rule.attribute.map((attr, attrIndex) => (
-                            <tr key={attrIndex}>
-                              <td className="align-top pr-3 py-1 w-32 whitespace-nowrap text-right">
-                                <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
-                                  {attr.name}
-                                </code>
-                              </td>
-                              {attr.docString && (
-                                <td className="align-top text-gray-600 py-1">
-                                  <ReactMarkdown
-                                    components={markdownComponents}
-                                    remarkPlugins={[remarkGfm, remarkBreaks]}
-                                  >
-                                    {attr.docString}
-                                  </ReactMarkdown>
+                          {rule.attribute.map((attr, attrIndex) => {
+                            return (
+                              <tr key={attrIndex}>
+                                <td className="align-top pr-3 py-1 w-32 whitespace-nowrap text-right">
+                                  <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
+                                    {attr.mandatory && (
+                                      <span
+                                        className="mr-1 text-red-600 select-none cursor-help"
+                                        title="Required attribute"
+                                      >
+                                        *
+                                      </span>
+                                    )}
+                                    {attr.name}
+                                  </code>
                                 </td>
-                              )}
-                            </tr>
-                          ))}
+                                <td className="align-top text-gray-600 py-1">
+                                  {attr.docString && (
+                                    <ReactMarkdown
+                                      components={markdownComponents}
+                                      remarkPlugins={[remarkGfm, remarkBreaks]}
+                                    >
+                                      {attr.docString}
+                                    </ReactMarkdown>
+                                  )}
+                                  {attr.defaultValue && (
+                                    <div className="mt-1 text-xs text-gray-500">
+                                      <span className="font-medium">
+                                        Default:
+                                      </span>{' '}
+                                      <code className="bg-gray-50 px-1 py-0.5 rounded">
+                                        {attr.defaultValue}
+                                      </code>
+                                    </div>
+                                  )}
+                                </td>
+                              </tr>
+                            )
+                          })}
                         </tbody>
                       </table>
                     </div>

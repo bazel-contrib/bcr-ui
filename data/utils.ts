@@ -258,7 +258,9 @@ const buildAllModuleInfoInner = async (): Promise<AllModuleInfo> => {
     reverseDependencies: {},
   }
 
-  const modulesNames = await listModuleNames()
+  const modulesNames = process.env.MODULE_NAMES
+    ? process.env.MODULE_NAMES.split(',').map((name) => name.trim())
+    : await listModuleNames()
   for (const moduleName of modulesNames) {
     const versions = await listModuleVersions(moduleName)
     for (const moduleVersion of versions) {
