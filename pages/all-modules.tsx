@@ -40,6 +40,8 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
                   authorDateIso: authorDate,
                   hasAttestationFile,
                   isArchived,
+                  deprecated,
+                  deprecationMessage,
                 }) => (
                   <ModuleCard
                     key={module}
@@ -49,6 +51,8 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
                       authorDate,
                       hasAttestationFile,
                       isArchived,
+                      deprecated,
+                      deprecationMessage,
                     }}
                   />
                 )

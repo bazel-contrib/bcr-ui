@@ -179,15 +179,28 @@ const ModulePage: NextPage<ModulePageProps> = ({
                           {version.isYanked && (
                             <div
                               key={`${version.version}-yanked`}
-                              className="p-2 mb-2 bg-amber-300"
+                              className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-3xl"
                             >
-                              <a
-                                href="https://bazel.build/external/module#yanked_versions"
-                                className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
-                              >
-                                Version yanked
-                              </a>{' '}
-                              with comment: <p>{version.yankReason}</p>
+                              <div className="flex items-start">
+                                <div className="flex-shrink-0">
+                                  <span className="text-yellow-500 text-xl">
+                                    🚫
+                                  </span>
+                                </div>
+                                <div className="ml-3">
+                                  <h3 className="text-sm font-medium text-yellow-800">
+                                    <a
+                                      href="https://bazel.build/external/module#yanked_versions"
+                                      className="underline decoration-dashed decoration-yellow-600 hover:decoration-yellow-800"
+                                    >
+                                      Version yanked
+                                    </a>
+                                  </h3>
+                                  <div className="mt-2 text-sm text-yellow-700">
+                                    {version.yankReason}
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           )}
                           <div className="flex items-stretch gap-4">
@@ -382,6 +395,41 @@ const ModulePage: NextPage<ModulePageProps> = ({
               </div>
               <div id="metadata" className="sm:pl-2 basis-8 md:basis-[12rem]">
                 <h2 className="text-2xl font-bold mt-4 mb-2">About</h2>
+                {deprecated && metadata.deprecated && (
+                  <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-3xl">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <span className="text-yellow-500 text-xl">⚠️</span>
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-yellow-800">
+                          This module is deprecated
+                        </h3>
+                        <div className="mt-2 text-sm text-yellow-700">
+                          {metadata.deprecated}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {githubMetadata?.isArchived && (
+                  <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-3xl">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <span className="text-yellow-500 text-xl">📦</span>
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-yellow-800">
+                          This repository is archived
+                        </h3>
+                        <div className="mt-2 text-sm text-yellow-700">
+                          This module's repository is archived and no longer
+                          actively maintained.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div>
                   {repoDescription && (
                     <div className="mb-2">
@@ -454,11 +502,6 @@ const ModulePage: NextPage<ModulePageProps> = ({
                             className="mr-1 min-w-[30px]"
                           />
                           GitHub repository
-                          {githubMetadata?.isArchived && (
-                            <span className="ml-1 cursor-help" title="Archived">
-                              🔒
-                            </span>
-                          )}
                         </a>
                       </div>
                     )}

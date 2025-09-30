@@ -10,7 +10,7 @@ export interface ModuleCardProps {
   hasAttestationFile?: boolean
   isArchived?: boolean
   deprecated?: boolean
-  deprecationMessage?: string
+  deprecationMessage?: string | null
 }
 
 export const ModuleCard: React.FC<ModuleCardProps> = ({

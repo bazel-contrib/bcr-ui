@@ -84,7 +84,14 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
               {searchResults && searchResults.length ? (
                 searchResults.map(
-                  ({ module, version, hasAttestationFile, isArchived }) => (
+                  ({
+                    module,
+                    version,
+                    hasAttestationFile,
+                    isArchived,
+                    deprecated,
+                    deprecationMessage,
+                  }) => (
                     <ModuleCard
                       key={module}
                       {...{
@@ -92,6 +99,8 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
                         version,
                         hasAttestationFile,
                         isArchived,
+                        deprecated,
+                        deprecationMessage,
                       }}
                     />
                   )

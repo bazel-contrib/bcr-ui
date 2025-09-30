@@ -57,6 +57,8 @@ export interface SearchIndexEntry {
   authorDateIso: string
   hasAttestationFile: boolean
   isArchived: boolean
+  deprecated: boolean
+  deprecationMessage: string | null
 }
 
 export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
@@ -80,6 +82,8 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
         authorDateIso,
         hasAttestationFile: await hasAttestationFile(module, latestVersion),
         isArchived: githubMetadata?.isArchived || false,
+        deprecated: !!metadata.deprecated,
+        deprecationMessage: metadata.deprecated || null,
       }
     })
   )
@@ -292,6 +296,25 @@ export const moduleInfo = async (
   version: string
 ): Promise<ModuleInfo> => {
   const all = await allModuleInfo()
+
+  if (!all || !all.allModules) {
+    throw new Error(
+      `allModuleInfo returned invalid data structure for module ${module} version ${version}`
+    )
+  }
+
+  if (!all.allModules[module]) {
+    throw new Error(`Module ${module} not found in allModules`)
+  }
+
+  if (!all.allModules[module][version]) {
+    throw new Error(
+      `Version ${version} not found for module ${module}. Available versions: ${Object.keys(
+        all.allModules[module]
+      ).join(', ')}`
+    )
+  }
+
   return all.allModules[module][version]
 }
 

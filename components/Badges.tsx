@@ -5,7 +5,7 @@ export interface BadgesProps {
   hasAttestationFile: boolean
   isArchived?: boolean
   deprecated?: boolean
-  deprecationMessage?: string
+  deprecationMessage?: string | null
   placement?: Placement
 }
 
@@ -16,9 +16,10 @@ export const Badges: React.FC<BadgesProps> = ({
   deprecationMessage,
   placement,
 }) => {
-  const [showTooltip, setShowTooltip] = useState<boolean>(false)
+  const [showAttestationTooltip, setShowAttestationTooltip] =
+    useState<boolean>(false)
 
-  const { x, y, refs, strategy } = useFloating({
+  const attestationFloating = useFloating({
     placement: placement ?? 'top',
   })
 
@@ -47,14 +48,14 @@ export const Badges: React.FC<BadgesProps> = ({
     <div className="flex items-center gap-1">
       {hasAttestationFile && (
         <span
-          ref={refs.setReference}
+          ref={attestationFloating.refs.setReference}
           className="fill-white font-bold w-5 h-5 text-center rounded-full cursor-help"
           aria-label="Attested release provenance"
           role="img"
-          onMouseEnter={() => setShowTooltip(true)}
-          onMouseLeave={() => setShowTooltip(false)}
-          onFocus={() => setShowTooltip(true)}
-          onBlur={() => setShowTooltip(false)}
+          onMouseEnter={() => setShowAttestationTooltip(true)}
+          onMouseLeave={() => setShowAttestationTooltip(false)}
+          onFocus={() => setShowAttestationTooltip(true)}
+          onBlur={() => setShowAttestationTooltip(false)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +72,7 @@ export const Badges: React.FC<BadgesProps> = ({
       )}
       {isWarning && (
         <span
-          className="w-5 h-5 text-center cursor-help text-lg"
+          className="w-5 h-5 text-center text-lg"
           aria-label="Warning"
           role="img"
           title={warningTitle}
@@ -79,18 +80,18 @@ export const Badges: React.FC<BadgesProps> = ({
           ⚠️
         </span>
       )}
-      {showTooltip && (
+      {showAttestationTooltip && (
         <div
-          ref={refs.setFloating}
+          ref={attestationFloating.refs.setFloating}
           style={{
-            position: strategy,
-            top: y ?? 0,
-            left: x ?? 0,
+            position: attestationFloating.strategy,
+            top: attestationFloating.y ?? 0,
+            left: attestationFloating.x ?? 0,
             zIndex: 1000,
           }}
           className="text-black font-medium text-sm rounded-md p-3 max-w-sm shadow-lg backdrop-blur-lg bg-[#eaf1ed] border-2 border-[#166533]"
-          onMouseEnter={() => setShowTooltip(true)}
-          onMouseLeave={() => setShowTooltip(false)}
+          onMouseEnter={() => setShowAttestationTooltip(true)}
+          onMouseLeave={() => setShowAttestationTooltip(false)}
         >
           This release includes a provenance attestation, which is verifiable
           proof that it was built using secure, trusted build infrastructure.
