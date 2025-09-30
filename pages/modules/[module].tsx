@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
-import { AttestationBadge } from '../../components/AttestationBadge'
+import { Badges } from '../../components/Badges'
 import { PlatformSupport } from '../../components/PlatformSupport'
 import { BazelVersionSupport } from '../../components/BazelVersionSupport'
 import React, { useEffect, useState } from 'react'
@@ -118,10 +118,12 @@ const ModulePage: NextPage<ModulePageProps> = ({
         <div className="max-w-7xl w-7xl mx-auto mt-8">
           <div className="border rounded p-4 divide-y">
             <div className="flex items-center gap-1">
-              {versionInfo.hasAttestationFile && (
+              {(versionInfo.hasAttestationFile ||
+                githubMetadata?.isArchived) && (
                 <span className="w-7 h-7 inline-block">
-                  <AttestationBadge
-                    hasAttestationFile={true}
+                  <Badges
+                    hasAttestationFile={versionInfo.hasAttestationFile}
+                    isArchived={githubMetadata?.isArchived || false}
                     placement="bottom-start"
                   />
                 </span>
@@ -191,9 +193,12 @@ const ModulePage: NextPage<ModulePageProps> = ({
                                 >
                                   <div className="place-items-center hover:border-gray-800 flex items-center gap-2">
                                     {version.version}
-                                    <AttestationBadge
+                                    <Badges
                                       hasAttestationFile={
                                         version.hasAttestationFile
+                                      }
+                                      isArchived={
+                                        githubMetadata?.isArchived || false
                                       }
                                     />
                                   </div>
@@ -442,6 +447,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
                             className="mr-1 min-w-[30px]"
                           />
                           GitHub repository
+                          {githubMetadata?.isArchived && (
+                            <span className="ml-1 cursor-help" title="Archived">
+                              🔒
+                            </span>
+                          )}
                         </a>
                       </div>
                     )}

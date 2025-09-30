@@ -6,6 +6,7 @@ export interface GithubRepositoryMetadata {
   license: { spdx_id: string; name: string; url: string } | null
   topics: string[] | null
   stargazers: number | null
+  isArchived: boolean | null
 }
 
 /**
@@ -47,6 +48,7 @@ export async function getGithubRepositoryMetadata(
           (topic: { name: string }) => topic.name
         ) || null,
       stargazers: rawData.stargazerCount || null,
+      isArchived: rawData.isArchived || null,
     }
   } catch (error) {
     console.warn(`Failed to read GitHub metadata for ${moduleName}:`, error)
