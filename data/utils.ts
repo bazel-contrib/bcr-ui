@@ -27,6 +27,7 @@ export interface Metadata {
   yanked_versions?: {
     [key: string]: string
   }
+  deprecated?: string
 }
 
 export const listModuleNames = async (): Promise<string[]> => {

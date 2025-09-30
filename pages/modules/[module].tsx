@@ -28,6 +28,7 @@ interface ModulePageProps {
   selectedVersion: string
   reverseDependencies: string[]
   githubMetadata: GithubRepositoryMetadata | null
+  deprecated: boolean
 }
 
 const GITHUB_API_USER_AGENT = 'Bazel Central Registry UI'
@@ -44,6 +45,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
   selectedVersion,
   reverseDependencies,
   githubMetadata,
+  deprecated,
 }) => {
   const router = useRouter()
   const { module } = router.query
@@ -119,11 +121,14 @@ const ModulePage: NextPage<ModulePageProps> = ({
           <div className="border rounded p-4 divide-y">
             <div className="flex items-center gap-1">
               {(versionInfo.hasAttestationFile ||
-                githubMetadata?.isArchived) && (
+                githubMetadata?.isArchived ||
+                deprecated) && (
                 <span className="w-7 h-7 inline-block">
                   <Badges
                     hasAttestationFile={versionInfo.hasAttestationFile}
                     isArchived={githubMetadata?.isArchived || false}
+                    deprecated={deprecated}
+                    deprecationMessage={metadata.deprecated}
                     placement="bottom-start"
                   />
                 </span>
@@ -200,6 +205,8 @@ const ModulePage: NextPage<ModulePageProps> = ({
                                       isArchived={
                                         githubMetadata?.isArchived || false
                                       }
+                                      deprecated={deprecated}
+                                      deprecationMessage={metadata.deprecated}
                                     />
                                   </div>
                                 </Link>

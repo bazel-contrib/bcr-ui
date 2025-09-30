@@ -4,12 +4,16 @@ import { useFloating, Placement } from '@floating-ui/react-dom'
 export interface BadgesProps {
   hasAttestationFile: boolean
   isArchived?: boolean
+  deprecated?: boolean
+  deprecationMessage?: string
   placement?: Placement
 }
 
 export const Badges: React.FC<BadgesProps> = ({
   hasAttestationFile,
   isArchived = false,
+  deprecated = false,
+  deprecationMessage,
   placement,
 }) => {
   const [showTooltip, setShowTooltip] = useState<boolean>(false)
@@ -18,8 +22,25 @@ export const Badges: React.FC<BadgesProps> = ({
     placement: placement ?? 'top',
   })
 
-  if (!hasAttestationFile && !isArchived) {
+  if (!hasAttestationFile && !isArchived && !deprecated) {
     return null
+  }
+
+  // Determine warning message and title for single warning badge
+  const isWarning = isArchived || deprecated
+  let warningMessage = ''
+  let warningTitle = ''
+
+  if (deprecated && isArchived) {
+    warningMessage =
+      deprecationMessage || 'This module is deprecated and archived'
+    warningTitle = 'This module is deprecated and archived'
+  } else if (deprecated) {
+    warningMessage = deprecationMessage || 'This module is deprecated'
+    warningTitle = 'This module is deprecated'
+  } else if (isArchived) {
+    warningMessage = 'This module is archived or unmaintained'
+    warningTitle = 'This module is archived or unmaintained'
   }
 
   return (
@@ -48,14 +69,14 @@ export const Badges: React.FC<BadgesProps> = ({
           </svg>
         </span>
       )}
-      {isArchived && (
+      {isWarning && (
         <span
           className="w-5 h-5 text-center cursor-help text-lg"
-          aria-label="Deprecated module"
+          aria-label="Warning"
           role="img"
-          title="This module is deprecated or unmaintained"
+          title={warningTitle}
         >
-          📦
+          ⚠️
         </span>
       )}
       {showTooltip && (

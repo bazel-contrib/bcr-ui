@@ -9,6 +9,8 @@ export interface ModuleCardProps {
   authorDate?: string
   hasAttestationFile?: boolean
   isArchived?: boolean
+  deprecated?: boolean
+  deprecationMessage?: string
 }
 
 export const ModuleCard: React.FC<ModuleCardProps> = ({
@@ -17,6 +19,8 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
   authorDate,
   hasAttestationFile = false,
   isArchived = false,
+  deprecated = false,
+  deprecationMessage,
 }) => {
   const authorDateRel = authorDate
     ? formatDistance(parseISO(authorDate), new Date(), { addSuffix: true })
@@ -33,6 +37,8 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
               <Badges
                 hasAttestationFile={hasAttestationFile}
                 isArchived={isArchived}
+                deprecated={deprecated}
+                deprecationMessage={deprecationMessage}
               />
             </div>
           </div>

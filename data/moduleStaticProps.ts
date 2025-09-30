@@ -72,6 +72,7 @@ export const getStaticPropsModulePage = async (
       selectedVersion,
       reverseDependencies: await reverseDependencies(module),
       githubMetadata,
+      deprecated: !!metadata.deprecated,
     },
   }
 }
