@@ -472,7 +472,8 @@ const ModulePage: NextPage<ModulePageProps> = ({
                           className="mr-1 min-w-[30px]"
                           icon={faStar}
                         />
-                        {repoStargazers} Stars
+                        {repoStargazers}{' '}
+                        {repoStargazers === 1 ? 'Star' : 'Stars'}
                       </div>
                     )}
 
