@@ -88,24 +88,10 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
               <h2 className="font-bold text-lg">Highlighted modules</h2>
               <div className="grid grid-cols-1 gap-8 mt-4">
                 {highlightedModules.map(
-                  ({
-                    module,
-                    version,
-                    hasAttestationFile,
-                    isArchived,
-                    deprecated,
-                    deprecationMessage,
-                  }) => (
+                  ({ module, version, hasAttestationFile }) => (
                     <ModuleCard
                       key={module}
-                      {...{
-                        module,
-                        version,
-                        hasAttestationFile,
-                        isArchived,
-                        deprecated,
-                        deprecationMessage,
-                      }}
+                      {...{ module, version, hasAttestationFile }}
                     />
                   )
                 )}
@@ -120,21 +106,10 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
                     version,
                     authorDateIso: authorDate,
                     hasAttestationFile,
-                    isArchived,
-                    deprecated,
-                    deprecationMessage,
                   }) => (
                     <ModuleCard
                       key={module}
-                      {...{
-                        module,
-                        version,
-                        authorDate,
-                        hasAttestationFile,
-                        isArchived,
-                        deprecated,
-                        deprecationMessage,
-                      }}
+                      {...{ module, version, authorDate, hasAttestationFile }}
                     />
                   )
                 )}

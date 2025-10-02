@@ -45,10 +45,10 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
     }
     const results = fuseIndex.search(searchQuery)
     setSearchResults(results.map((n) => n.item))
-  }, [searchQuery, fuseIndex])
+  }, [searchQuery])
   useEffect(() => {
     setSearchQueryInput(getSearchQuery() || '')
-  }, [searchQuery, getSearchQuery])
+  }, [searchQuery])
 
   const handleSubmitSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -83,28 +83,12 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
             <h2 className="font-bold text-lg">Search results</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
               {searchResults && searchResults.length ? (
-                searchResults.map(
-                  ({
-                    module,
-                    version,
-                    hasAttestationFile,
-                    isArchived,
-                    deprecated,
-                    deprecationMessage,
-                  }) => (
-                    <ModuleCard
-                      key={module}
-                      {...{
-                        module,
-                        version,
-                        hasAttestationFile,
-                        isArchived,
-                        deprecated,
-                        deprecationMessage,
-                      }}
-                    />
-                  )
-                )
+                searchResults.map(({ module, version, hasAttestationFile }) => (
+                  <ModuleCard
+                    key={module}
+                    {...{ module, version, hasAttestationFile }}
+                  />
+                ))
               ) : (
                 <div className="text-gray-600">
                   <p>

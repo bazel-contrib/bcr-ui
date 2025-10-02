@@ -6,7 +6,6 @@ import { gitlogPromise } from 'gitlog'
 import * as os from 'os'
 import pMemoize from 'p-memoize'
 import * as yaml from 'js-yaml'
-import { getGithubRepositoryMetadata } from './githubMetadata'
 
 export const MODULES_ROOT_DIR = path.join(
   process.cwd(),
@@ -27,7 +26,6 @@ export interface Metadata {
   yanked_versions?: {
     [key: string]: string
   }
-  deprecated?: string
 }
 
 export const listModuleNames = async (): Promise<string[]> => {
@@ -56,9 +54,6 @@ export interface SearchIndexEntry {
   version: string
   authorDateIso: string
   hasAttestationFile: boolean
-  isArchived: boolean
-  deprecated: boolean
-  deprecationMessage: string | null
 }
 
 export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
@@ -73,17 +68,11 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
         latestVersion
       )
 
-      // Get GitHub metadata to check if repository is archived
-      const githubMetadata = await getGithubRepositoryMetadata(module)
-
       return {
         module,
         version: latestVersion,
         authorDateIso,
         hasAttestationFile: await hasAttestationFile(module, latestVersion),
-        isArchived: githubMetadata?.isArchived || false,
-        deprecated: !!metadata.deprecated,
-        deprecationMessage: metadata.deprecated || null,
       }
     })
   )
@@ -296,7 +285,6 @@ export const moduleInfo = async (
   version: string
 ): Promise<ModuleInfo> => {
   const all = await allModuleInfo()
-
   return all.allModules[module][version]
 }
 

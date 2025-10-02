@@ -39,21 +39,10 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
                   version,
                   authorDateIso: authorDate,
                   hasAttestationFile,
-                  isArchived,
-                  deprecated,
-                  deprecationMessage,
                 }) => (
                   <ModuleCard
                     key={module}
-                    {...{
-                      module,
-                      version,
-                      authorDate,
-                      hasAttestationFile,
-                      isArchived,
-                      deprecated,
-                      deprecationMessage,
-                    }}
+                    {...{ module, version, authorDate, hasAttestationFile }}
                   />
                 )
               )}
