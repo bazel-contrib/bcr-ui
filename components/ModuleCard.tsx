@@ -1,13 +1,16 @@
 import React from 'react'
 import Link from 'next/link'
 import { formatDistance, parseISO } from 'date-fns'
-import { AttestationBadge } from './AttestationBadge'
+import { Badges } from './Badges'
 
 export interface ModuleCardProps {
   module: string
   version: string
   authorDate?: string
   hasAttestationFile?: boolean
+  isArchived?: boolean
+  deprecated?: boolean
+  deprecationMessage?: string | null
 }
 
 export const ModuleCard: React.FC<ModuleCardProps> = ({
@@ -15,6 +18,9 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
   version,
   authorDate,
   hasAttestationFile = false,
+  isArchived = false,
+  deprecated = false,
+  deprecationMessage,
 }) => {
   const authorDateRel = authorDate
     ? formatDistance(parseISO(authorDate), new Date(), { addSuffix: true })
@@ -28,7 +34,12 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
             <div className="font-bold">{module}</div>
             <div className="flex items-center gap-2">
               {version}
-              <AttestationBadge hasAttestationFile={hasAttestationFile} />
+              <Badges
+                hasAttestationFile={hasAttestationFile}
+                isArchived={isArchived}
+                deprecated={deprecated}
+                deprecationMessage={deprecationMessage}
+              />
             </div>
           </div>
           <div className="flex">
