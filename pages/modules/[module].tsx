@@ -167,7 +167,9 @@ const ModulePage: NextPage<ModulePageProps> = ({
                       <>
                         <li
                           key={version.version}
-                          className="border rounded mt-2 "
+                          className={
+                            version.isYanked ? 'mt-2' : 'border rounded mt-2'
+                          }
                         >
                           {version.isYanked && (
                             <div
