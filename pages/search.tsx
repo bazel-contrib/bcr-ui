@@ -45,10 +45,10 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
     }
     const results = fuseIndex.search(searchQuery)
     setSearchResults(results.map((n) => n.item))
-  }, [searchQuery, fuseIndex])
+  }, [searchQuery])
   useEffect(() => {
     setSearchQueryInput(getSearchQuery() || '')
-  }, [searchQuery, getSearchQuery])
+  }, [searchQuery])
 
   const handleSubmitSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
