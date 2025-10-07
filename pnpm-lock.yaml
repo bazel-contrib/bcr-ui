@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@buf/bazel_bazel.bufbuild_es':
-        specifier: 2.0.0-20240806194025-8f5cf9629ba6.1
-        version: 2.0.0-20240806194025-8f5cf9629ba6.1(@bufbuild/protobuf@2.9.0)
+        specifier: 2.9.0-00000000000000-058f986da217.1
+        version: 2.9.0-00000000000000-058f986da217.1(@bufbuild/protobuf@2.9.0)
       '@bufbuild/protobuf':
         specifier: ^2
         version: 2.9.0
@@ -131,65 +131,10 @@ packages:
     resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
     engines: {node: '>=6.9.0'}
 
-  '@buf/bazel_bazel.bufbuild_es@2.0.0-20240806194025-8f5cf9629ba6.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/bazel_bazel.bufbuild_es/-/bazel_bazel.bufbuild_es-2.0.0-20240806194025-8f5cf9629ba6.1.tgz}
+  '@buf/bazel_bazel.bufbuild_es@2.9.0-00000000000000-058f986da217.1':
+    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/bazel_bazel.bufbuild_es/-/bazel_bazel.bufbuild_es-2.9.0-00000000000000-058f986da217.1.tgz}
     peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/bazel_remote-apis.bufbuild_es@2.0.0-20230602030542-b202931f28c0.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/bazel_remote-apis.bufbuild_es/-/bazel_remote-apis.bufbuild_es-2.0.0-20230602030542-b202931f28c0.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/cncf_xds.bufbuild_es@2.0.0-20230428204815-197fca8a74c5.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/cncf_xds.bufbuild_es/-/cncf_xds.bufbuild_es-2.0.0-20230428204815-197fca8a74c5.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/envoyproxy_envoy.bufbuild_es@2.0.0-20230516211932-3afde44c0a3a.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/envoyproxy_envoy.bufbuild_es/-/envoyproxy_envoy.bufbuild_es-2.0.0-20230516211932-3afde44c0a3a.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/envoyproxy_protoc-gen-validate.bufbuild_es@2.0.0-20221025150516-6607b10f00ed.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/envoyproxy_protoc-gen-validate.bufbuild_es/-/envoyproxy_protoc-gen-validate.bufbuild_es-2.0.0-20221025150516-6607b10f00ed.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20230329151039-5ae7f88519b0.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/googleapis_googleapis.bufbuild_es/-/googleapis_googleapis.bufbuild_es-2.0.0-20230329151039-5ae7f88519b0.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20230502210827-cc916c318597.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/googleapis_googleapis.bufbuild_es/-/googleapis_googleapis.bufbuild_es-2.0.0-20230502210827-cc916c318597.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20240729201550-8bc2c51e08c4.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/googleapis_googleapis.bufbuild_es/-/googleapis_googleapis.bufbuild_es-2.0.0-20240729201550-8bc2c51e08c4.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/grpc_grpc.bufbuild_es@2.0.0-20230516211939-d8bc6b0fb32a.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/grpc_grpc.bufbuild_es/-/grpc_grpc.bufbuild_es-2.0.0-20230516211939-d8bc6b0fb32a.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/opencensus_opencensus.bufbuild_es@2.0.0-20230503204408-7e4755513505.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/opencensus_opencensus.bufbuild_es/-/opencensus_opencensus.bufbuild_es-2.0.0-20230503204408-7e4755513505.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/opentelemetry_opentelemetry.bufbuild_es@2.0.0-20230516211923-547fa0c6b925.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/opentelemetry_opentelemetry.bufbuild_es/-/opentelemetry_opentelemetry.bufbuild_es-2.0.0-20230516211923-547fa0c6b925.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
-
-  '@buf/prometheus_client-model.bufbuild_es@2.0.0-20230331140308-55bcfe88c9e5.1':
-    resolution: {tarball: https://buf.build/gen/npm/v1/@buf/prometheus_client-model.bufbuild_es/-/prometheus_client-model.bufbuild_es-2.0.0-20230331140308-55bcfe88c9e5.1.tgz}
-    peerDependencies:
-      '@bufbuild/protobuf': ^2.0.0
+      '@bufbuild/protobuf': ^2.9.0
 
   '@bufbuild/protobuf@2.9.0':
     resolution: {integrity: sha512-rnJenoStJ8nvmt9Gzye8nkYd6V22xUAnu4086ER7h1zJ508vStko4pMvDeQ446ilDTFpV5wnoc5YS7XvMwwMqA==}
@@ -2499,76 +2444,7 @@ snapshots:
 
   '@babel/runtime@7.28.4': {}
 
-  '@buf/bazel_bazel.bufbuild_es@2.0.0-20240806194025-8f5cf9629ba6.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@buf/bazel_remote-apis.bufbuild_es': 2.0.0-20230602030542-b202931f28c0.1(@bufbuild/protobuf@2.9.0)
-      '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20240729201550-8bc2c51e08c4.1(@bufbuild/protobuf@2.9.0)
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/bazel_remote-apis.bufbuild_es@2.0.0-20230602030542-b202931f28c0.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@buf/cncf_xds.bufbuild_es': 2.0.0-20230428204815-197fca8a74c5.1(@bufbuild/protobuf@2.9.0)
-      '@buf/envoyproxy_envoy.bufbuild_es': 2.0.0-20230516211932-3afde44c0a3a.1(@bufbuild/protobuf@2.9.0)
-      '@buf/envoyproxy_protoc-gen-validate.bufbuild_es': 2.0.0-20221025150516-6607b10f00ed.1(@bufbuild/protobuf@2.9.0)
-      '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20230502210827-cc916c318597.1(@bufbuild/protobuf@2.9.0)
-      '@buf/grpc_grpc.bufbuild_es': 2.0.0-20230516211939-d8bc6b0fb32a.1(@bufbuild/protobuf@2.9.0)
-      '@buf/opencensus_opencensus.bufbuild_es': 2.0.0-20230503204408-7e4755513505.1(@bufbuild/protobuf@2.9.0)
-      '@buf/opentelemetry_opentelemetry.bufbuild_es': 2.0.0-20230516211923-547fa0c6b925.1(@bufbuild/protobuf@2.9.0)
-      '@buf/prometheus_client-model.bufbuild_es': 2.0.0-20230331140308-55bcfe88c9e5.1(@bufbuild/protobuf@2.9.0)
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/cncf_xds.bufbuild_es@2.0.0-20230428204815-197fca8a74c5.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@buf/envoyproxy_protoc-gen-validate.bufbuild_es': 2.0.0-20221025150516-6607b10f00ed.1(@bufbuild/protobuf@2.9.0)
-      '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20230329151039-5ae7f88519b0.1(@bufbuild/protobuf@2.9.0)
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/envoyproxy_envoy.bufbuild_es@2.0.0-20230516211932-3afde44c0a3a.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@buf/cncf_xds.bufbuild_es': 2.0.0-20230428204815-197fca8a74c5.1(@bufbuild/protobuf@2.9.0)
-      '@buf/envoyproxy_protoc-gen-validate.bufbuild_es': 2.0.0-20221025150516-6607b10f00ed.1(@bufbuild/protobuf@2.9.0)
-      '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20230502210827-cc916c318597.1(@bufbuild/protobuf@2.9.0)
-      '@buf/opencensus_opencensus.bufbuild_es': 2.0.0-20230503204408-7e4755513505.1(@bufbuild/protobuf@2.9.0)
-      '@buf/opentelemetry_opentelemetry.bufbuild_es': 2.0.0-20230516211923-547fa0c6b925.1(@bufbuild/protobuf@2.9.0)
-      '@buf/prometheus_client-model.bufbuild_es': 2.0.0-20230331140308-55bcfe88c9e5.1(@bufbuild/protobuf@2.9.0)
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/envoyproxy_protoc-gen-validate.bufbuild_es@2.0.0-20221025150516-6607b10f00ed.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20230329151039-5ae7f88519b0.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20230502210827-cc916c318597.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/googleapis_googleapis.bufbuild_es@2.0.0-20240729201550-8bc2c51e08c4.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/grpc_grpc.bufbuild_es@2.0.0-20230516211939-d8bc6b0fb32a.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@buf/cncf_xds.bufbuild_es': 2.0.0-20230428204815-197fca8a74c5.1(@bufbuild/protobuf@2.9.0)
-      '@buf/envoyproxy_envoy.bufbuild_es': 2.0.0-20230516211932-3afde44c0a3a.1(@bufbuild/protobuf@2.9.0)
-      '@buf/envoyproxy_protoc-gen-validate.bufbuild_es': 2.0.0-20221025150516-6607b10f00ed.1(@bufbuild/protobuf@2.9.0)
-      '@buf/googleapis_googleapis.bufbuild_es': 2.0.0-20230502210827-cc916c318597.1(@bufbuild/protobuf@2.9.0)
-      '@buf/opencensus_opencensus.bufbuild_es': 2.0.0-20230503204408-7e4755513505.1(@bufbuild/protobuf@2.9.0)
-      '@buf/opentelemetry_opentelemetry.bufbuild_es': 2.0.0-20230516211923-547fa0c6b925.1(@bufbuild/protobuf@2.9.0)
-      '@buf/prometheus_client-model.bufbuild_es': 2.0.0-20230331140308-55bcfe88c9e5.1(@bufbuild/protobuf@2.9.0)
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/opencensus_opencensus.bufbuild_es@2.0.0-20230503204408-7e4755513505.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/opentelemetry_opentelemetry.bufbuild_es@2.0.0-20230516211923-547fa0c6b925.1(@bufbuild/protobuf@2.9.0)':
-    dependencies:
-      '@bufbuild/protobuf': 2.9.0
-
-  '@buf/prometheus_client-model.bufbuild_es@2.0.0-20230331140308-55bcfe88c9e5.1(@bufbuild/protobuf@2.9.0)':
+  '@buf/bazel_bazel.bufbuild_es@2.9.0-00000000000000-058f986da217.1(@bufbuild/protobuf@2.9.0)':
     dependencies:
       '@bufbuild/protobuf': 2.9.0
 

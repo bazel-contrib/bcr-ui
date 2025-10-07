@@ -13,7 +13,7 @@
     "prettier-fix": "prettier --write ."
   },
   "dependencies": {
-    "@buf/bazel_bazel.bufbuild_es": "2.0.0-20240806194025-8f5cf9629ba6.1",
+    "@buf/bazel_bazel.bufbuild_es": "2.9.0-00000000000000-058f986da217.1",
     "@bufbuild/protobuf": "^2",
     "@floating-ui/react-dom": "^2.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
