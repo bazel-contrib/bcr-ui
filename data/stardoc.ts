@@ -2,7 +2,7 @@ import { fromBinary } from '@bufbuild/protobuf'
 import {
   ModuleInfoSchema,
   ModuleInfo,
-} from '@buf/bazel_bazel.bufbuild_es/src/main/java/com/google/devtools/build/skydoc/rendering/proto/stardoc_output_pb.js'
+} from '@buf/bazel_bazel.bufbuild_es/stardoc_output/stardoc_output_pb.js'
 import * as tar from 'tar-stream'
 import * as zlib from 'zlib'
 import { Readable } from 'node:stream'
