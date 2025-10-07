@@ -47,11 +47,9 @@ function attributeTypeDescription(attributeType: number): string {
       return 'label'
     case 'OUTPUT_LIST':
       return 'list of labels'
-    case 'UNKNOWN':
-    case 'UNRECOGNIZED':
-      throw new Error('unknown attribute type ' + attributeType)
   }
-  throw new Error('unknown attribute type ' + attributeType)
+  console.warn('Unknown stardoc_output proto attribute type:', attributeType)
+  return 'unknown'
 }
 
 // port of https://github.com/bazelbuild/bazel/blob/09c621e4cf5b968f4c6cdf905ab142d5961f9ddc/src/main/java/com/google/devtools/build/skydoc/rendering/MarkdownUtil.java#L191-L221
