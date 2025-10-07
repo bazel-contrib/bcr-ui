@@ -11,15 +11,6 @@ import { AttributeType } from '@buf/bazel_bazel.bufbuild_es/src/main/java/com/go
 
 // port of https://github.com/bazelbuild/bazel/blob/09c621e4cf5b968f4c6cdf905ab142d5961f9ddc/src/main/java/com/google/devtools/build/skydoc/rendering/MarkdownUtil.java#L248-L282
 function attributeTypeDescription(attributeType: number): string {
-  // special handling for types that are missing from the outdated @buf/bazel_bazel.bufbuild_es
-  // See also: https://github.com/bazel-contrib/bcr-ui/issues/207
-  if (attributeType == 14) {
-    return 'dictionary: String → Label'
-  }
-  if (attributeType == 15) {
-    return 'dictionary: String → list of labels'
-  }
-
   switch (AttributeType[attributeType]) {
     case 'NAME':
       return 'name'
@@ -47,9 +38,11 @@ function attributeTypeDescription(attributeType: number): string {
       return 'label'
     case 'OUTPUT_LIST':
       return 'list of labels'
+    case 'UNKNOWN':
+    case 'UNRECOGNIZED':
+      throw new Error('unknown attribute type ' + attributeType)
   }
-  console.warn('Unknown stardoc_output proto attribute type:', attributeType)
-  return 'unknown'
+  throw new Error('unknown attribute type ' + attributeType)
 }
 
 // port of https://github.com/bazelbuild/bazel/blob/09c621e4cf5b968f4c6cdf905ab142d5961f9ddc/src/main/java/com/google/devtools/build/skydoc/rendering/MarkdownUtil.java#L191-L221
