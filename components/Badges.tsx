@@ -3,6 +3,7 @@ import { useFloating, Placement } from '@floating-ui/react-dom'
 
 export interface BadgesProps {
   hasAttestationFile: boolean
+  hasStardocs?: boolean
   isArchived?: boolean
   deprecated?: boolean
   deprecationMessage?: string | null
@@ -11,6 +12,7 @@ export interface BadgesProps {
 
 export const Badges: React.FC<BadgesProps> = ({
   hasAttestationFile,
+  hasStardocs = false,
   isArchived = false,
   deprecated = false,
   deprecationMessage,
@@ -23,7 +25,7 @@ export const Badges: React.FC<BadgesProps> = ({
     placement: placement ?? 'top',
   })
 
-  if (!hasAttestationFile && !isArchived && !deprecated) {
+  if (!hasAttestationFile && !hasStardocs && !isArchived && !deprecated) {
     return null
   }
 
@@ -68,6 +70,16 @@ export const Badges: React.FC<BadgesProps> = ({
               fill="#004aff"
             />
           </svg>
+        </span>
+      )}
+      {hasStardocs && (
+        <span
+          className="w-5 h-5 text-center text-lg"
+          aria-label="Has Starlark API documentation"
+          role="img"
+          title="This module has Starlark API documentation"
+        >
+          📚
         </span>
       )}
       {isWarning && (

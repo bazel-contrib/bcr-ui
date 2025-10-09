@@ -56,6 +56,7 @@ export interface SearchIndexEntry {
   version: string
   authorDateIso: string
   hasAttestationFile: boolean
+  hasStardocs: boolean
   isArchived: boolean
   deprecated: boolean
   deprecationMessage: string | null
@@ -76,11 +77,16 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
       // Get GitHub metadata to check if repository is archived
       const githubMetadata = await getGithubRepositoryMetadata(module)
 
+      // Check if module has stardocs (just check if docs_url exists, don't fetch docs)
+      const sourceJson = await getSourceJson(module, latestVersion)
+      const hasStardocs = !!sourceJson?.docs_url
+
       return {
         module,
         version: latestVersion,
         authorDateIso,
         hasAttestationFile: await hasAttestationFile(module, latestVersion),
+        hasStardocs,
         isArchived: githubMetadata?.isArchived || false,
         deprecated: !!metadata.deprecated,
         deprecationMessage: metadata.deprecated || null,
