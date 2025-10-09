@@ -463,6 +463,131 @@ export const StardocRenderer: React.FC<StardocRendererProps> = ({
         </div>
       )}
 
+      {/* Repository Rules */}
+      {stardoc.repositoryRuleInfo && stardoc.repositoryRuleInfo.length > 0 && (
+        <div className="mb-6">
+          <h4 className="text-lg font-medium text-gray-900 mb-3">Repository Rules</h4>
+          <div className="space-y-4">
+            {stardoc.repositoryRuleInfo.map((rule, ruleIndex) => {
+              const anchorId = generateAnchorId('repository_rule', rule.ruleName)
+              return (
+                <div
+                  key={ruleIndex}
+                  id={anchorId}
+                  className="border-l-4 border-yellow-500 pl-4 scroll-mt-20"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <code className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded text-sm font-mono">
+                      {rule.ruleName}
+                    </code>
+                    <CopyLinkButton anchorId={anchorId} />
+                  </div>
+                  {rule.docString && (
+                    <div className="prose prose-sm max-w-none">
+                      <ReactMarkdown
+                        components={markdownComponents}
+                        remarkPlugins={[remarkGfm, remarkBreaks]}
+                      >
+                        {rule.docString}
+                      </ReactMarkdown>
+                    </div>
+                  )}
+
+                  {/* Environment variables */}
+                  {rule.environ && rule.environ.length > 0 && (
+                    <div className="mt-3">
+                      <h5 className="text-sm font-medium text-gray-700 mb-2">
+                        Environment Variables
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        {rule.environ.map((env, envIndex) => (
+                          <code
+                            key={envIndex}
+                            className="bg-gray-100 px-2 py-1 rounded text-xs font-mono"
+                          >
+                            {env}
+                          </code>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Repository rule attributes */}
+                  {rule.attribute && rule.attribute.length > 0 && (
+                    <div className="mt-3">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-gray-200">
+                            <th className="text-right py-2 pr-3 w-32 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                              Attribute
+                            </th>
+                            <th className="text-center py-2 pr-3 w-24 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                              Type
+                            </th>
+                            <th className="text-left py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                              Description
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {rule.attribute.map((attr, attrIndex) => {
+                            return (
+                              <tr
+                                key={attrIndex}
+                                className="border-b border-gray-100"
+                              >
+                                <td className="align-top pr-3 py-2 w-32 whitespace-nowrap text-right">
+                                  <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
+                                    {attr.mandatory && (
+                                      <span
+                                        className="mr-1 text-red-600 select-none cursor-help"
+                                        title="Required attribute"
+                                      >
+                                        *
+                                      </span>
+                                    )}
+                                    {attr.name}
+                                  </code>
+                                </td>
+                                <td className="align-top pr-3 py-2 w-24 text-center">
+                                  <code className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-mono">
+                                    {attributeTypeWithLink(attr.type)}
+                                  </code>
+                                </td>
+                                <td className="align-top text-gray-600 py-2">
+                                  {attr.docString && (
+                                    <ReactMarkdown
+                                      components={markdownComponents}
+                                      remarkPlugins={[remarkGfm, remarkBreaks]}
+                                    >
+                                      {attr.docString}
+                                    </ReactMarkdown>
+                                  )}
+                                  {attr.defaultValue && (
+                                    <div className="mt-1 text-xs text-gray-500">
+                                      <span className="font-medium">
+                                        Default:
+                                      </span>{' '}
+                                      <code className="bg-gray-50 px-1 py-0.5 rounded">
+                                        {attr.defaultValue}
+                                      </code>
+                                    </div>
+                                  )}
+                                </td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Providers */}
       {stardoc.providerInfo && stardoc.providerInfo.length > 0 && (
         <div className="mb-6">
