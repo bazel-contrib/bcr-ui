@@ -84,6 +84,7 @@ function attributeTypeWithLink(attributeType: number): React.ReactNode {
 
 interface StardocRendererProps {
   stardoc: StardocModuleInfo
+  moduleName?: string
 }
 
 // Helper function to generate anchor IDs
@@ -226,6 +227,7 @@ const markdownComponents = {
 
 export const StardocRenderer: React.FC<StardocRendererProps> = ({
   stardoc,
+  moduleName,
 }) => {
   if (!stardoc) {
     return (
@@ -236,13 +238,14 @@ export const StardocRenderer: React.FC<StardocRendererProps> = ({
   }
 
   return (
-    <div className="border-2 border-[#004300] border-b-2 border-b-[#004300] rounded-lg">
+    <div className="border-2 border-bzl-green-dark rounded-lg">
       {(() => {
         const fileAnchorId = generateAnchorId('file', stardoc.file || 'module')
         return (
           <div id={fileAnchorId} className="scroll-mt-20 sticky top-0">
             <div className="flex items-center gap-2 mb-3 bg-bzl-green-light/30 p-4">
               <h4 className="text-lg font-medium font-mono text-gray-900">
+                @{moduleName}
                 {stardoc.file}
               </h4>
               <CopyLinkButton anchorId={fileAnchorId} />

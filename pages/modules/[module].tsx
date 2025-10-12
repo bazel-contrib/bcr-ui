@@ -21,6 +21,7 @@ import { GithubRepositoryMetadata } from '../../data/githubMetadata'
 import { formatDistance, parseISO } from 'date-fns'
 import { faGlobe, faScaleBalanced } from '@fortawesome/free-solid-svg-icons'
 import { StardocRenderer } from '../../components/Stardoc'
+import { LeftNavComponent } from '../../components/LeftNavComponent'
 
 interface ModulePageProps {
   metadata: Metadata
@@ -127,25 +128,11 @@ const ModulePage: NextPage<ModulePageProps> = ({
 
       <Header />
       <div className="flex flex-1 min-h-screen">
-        <aside className="w-48 bg-bzl-green-light/50 border-r-2 border-r-[#004300] p-4 flex-shrink-0 sticky top-0 h-screen">
-          <h1 className="text-sm font-semibold mb-4">
-            {module}@{selectedVersion}
-          </h1>
-          <nav className="space-y-2">
-            <a href="#" className="block px-2 py-1 rounded hover:bg-gray-100">
-              Overview
-            </a>
-            <a href="#" className="block px-2 py-1 rounded hover:bg-gray-100">
-              Docs
-            </a>
-            <a href="#" className="block px-2 py-1 rounded hover:bg-gray-100">
-              Examples
-            </a>
-            <a href="#" className="block px-2 py-1 rounded hover:bg-gray-100">
-              API
-            </a>
-          </nav>
-        </aside>
+        <LeftNavComponent
+          moduleName={module as string}
+          version={selectedVersion}
+          stardocs={versionInfo.stardocs}
+        />
 
         <main className="flex-1 overflow-y-auto">
           <section className="relative">
@@ -311,7 +298,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
 
             <div className="max-w-7xl w-7xl mx-auto p-6">
               <div className="divide-y">
-                <div className="flex items-center gap-1">
+                <div id="overview" className="flex items-center gap-1">
                   {(versionInfo.hasAttestationFile ||
                     githubMetadata?.isArchived ||
                     deprecated) && (
@@ -339,7 +326,9 @@ const ModulePage: NextPage<ModulePageProps> = ({
                     id="install_history_dependencies"
                     className="basis-0 grow"
                   >
-                    <h2 className="text-2xl font-bold mt-4">Install</h2>
+                    <h2 id="install" className="text-2xl font-bold mt-4">
+                      Install
+                    </h2>
                     <div className="mt-2">
                       <p>
                         To start using this module, make sure you have set up
@@ -362,7 +351,12 @@ const ModulePage: NextPage<ModulePageProps> = ({
                         </p>
                       )}
                     </div>
-                    <h2 className="text-2xl font-bold mt-4">Version history</h2>
+                    <h2
+                      id="version-history"
+                      className="text-2xl font-bold mt-4"
+                    >
+                      Version history
+                    </h2>
                     <div>
                       <ul className="mt-4">
                         {shownVersions.map((version) => (
@@ -528,7 +522,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                       )}
                     </div>
                     <div className="mt-4">
-                      <h2 className="text-2xl font-bold mt-4">
+                      <h2 id="dependencies" className="text-2xl font-bold mt-4">
                         Dependency graph
                       </h2>
                     </div>
@@ -664,7 +658,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
           {versionInfo.stardocs.length > 0 && (
             <div className="max-w-7xl w-7xl mx-auto mt-8">
               <div className="mt-6">
-                <h2 className="text-2xl font-bold m-4">
+                <h2 id="api-docs" className="text-2xl font-bold m-4">
                   Starlark API Documentation
                 </h2>
                 <div className="space-y-4 m-4">
@@ -672,6 +666,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                     <StardocRenderer
                       key={stardoc.file || index}
                       stardoc={stardoc}
+                      moduleName={module as string}
                     />
                   ))}
                 </div>
