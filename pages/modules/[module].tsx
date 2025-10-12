@@ -111,346 +111,47 @@ const ModulePage: NextPage<ModulePageProps> = ({
   return (
     <div className="flex flex-col">
       <Head>
-        <title>{`Bazel Central Registry | ${module}`}</title>
+        <title>{`${module}`}</title>
         <link rel="icon" href="/favicon.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
 
       <Header />
-      <main>
-        <div className="max-w-7xl w-7xl mx-auto mt-8">
-          <div className="border rounded p-4 divide-y">
-            <div className="flex items-center gap-1">
-              {(versionInfo.hasAttestationFile ||
-                githubMetadata?.isArchived ||
-                deprecated) && (
-                <span className="w-7 h-7 inline-block">
-                  <Badges
-                    hasAttestationFile={versionInfo.hasAttestationFile}
-                    isArchived={githubMetadata?.isArchived || false}
-                    deprecated={deprecated}
-                    deprecationMessage={metadata.deprecated}
-                    placement="bottom-start"
-                  />
-                </span>
-              )}
-              <span
-                role="heading"
-                aria-level={1}
-                className="text-3xl translate-y-[-3px]"
-              >
-                {module}
-              </span>
-              <span className="text-lg ml-2">{selectedVersion}</span>
-            </div>
-            <div className="mt-4 flex flex-col md:flex-row flex-wrap sm:divide-x gap-2">
-              <div id="install_history_dependencies" className="basis-0 grow">
-                <h2 className="text-2xl font-bold mt-4">Install</h2>
-                <div className="mt-2">
-                  <p>
-                    To start using this module, make sure you have set up Bzlmod
-                    according to the <a href={USER_GUIDE_LINK}>user guide</a>,
-                    and add the following to your <code>MODULE.bazel</code>{' '}
-                    file:
-                  </p>
-                  <CopyCode
-                    code={`bazel_dep(name = "${module}", version = "${selectedVersion}")`}
-                  />
-                  {!!releaseNotesLink && (
-                    <p>
-                      Read the{' '}
-                      <a
-                        href={releaseNotesLink}
-                        className="text-link-color hover:text-link-color-hover"
-                      >
-                        Release Notes
-                      </a>
-                    </p>
-                  )}
-                </div>
-                <h2 className="text-2xl font-bold mt-4">Version history</h2>
-                <div>
-                  <ul className="mt-4">
-                    {shownVersions.map((version) => (
-                      <>
-                        <li
-                          key={version.version}
-                          className="border rounded mt-2 "
-                        >
-                          {version.isYanked ? (
-                            <div className="p-4 bg-yellow-50 border-2 border-yellow-400 rounded-3xl">
-                              <div className="flex items-start mb-4">
-                                <div className="flex-shrink-0">
-                                  <span className="text-yellow-500 text-xl">
-                                    🚫
-                                  </span>
-                                </div>
-                                <div className="ml-3">
-                                  <h3 className="text-sm font-medium text-yellow-800">
-                                    <a
-                                      href="https://bazel.build/external/module#yanked_versions"
-                                      className="underline decoration-dashed decoration-yellow-600 hover:decoration-yellow-800"
-                                    >
-                                      Version yanked
-                                    </a>
-                                  </h3>
-                                  <div className="mt-2 text-sm text-yellow-700">
-                                    {version.yankReason}
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="flex items-stretch gap-4">
-                                <div className="flex flex-1 justify-between">
-                                  <div className="flex p-2 flex-col gap-2 justify-between border-r hover:border-link-color hover:border-r-4">
-                                    <Link
-                                      href={`/modules/${module}/${version.version}`}
-                                    >
-                                      <div className="place-items-center hover:border-gray-800 flex items-center gap-2">
-                                        {version.version}
-                                        <Badges
-                                          hasAttestationFile={
-                                            version.hasAttestationFile
-                                          }
-                                          isArchived={
-                                            githubMetadata?.isArchived || false
-                                          }
-                                          deprecated={deprecated}
-                                          deprecationMessage={
-                                            metadata.deprecated
-                                          }
-                                        />
-                                      </div>
-                                    </Link>
-                                    <div className="self-end text-gray-500">
-                                      <a
-                                        href="https://bazel.build/external/module#compatibility_level"
-                                        className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
-                                      >
-                                        compatibility level
-                                      </a>{' '}
-                                      {version.moduleInfo.compatibilityLevel}
-                                    </div>
-                                  </div>
-                                  <div className="flex p-2 justify-end">
-                                    <div className="flex flex-col justify-between items-end">
-                                      <a
-                                        href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
-                                        className="text-link-color hover:text-link-color-hover"
-                                      >
-                                        view registry source
-                                      </a>
-                                      <a
-                                        href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
-                                        className="text-link-color hover:text-link-color-hover"
-                                        suppressHydrationWarning
-                                      >
-                                        published{' '}
-                                        {formatDistance(
-                                          parseISO(
-                                            version.submission.authorDateIso
-                                          ),
-                                          new Date(),
-                                          { addSuffix: true }
-                                        )}
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="flex items-stretch gap-4">
-                              <div className="flex flex-1 justify-between">
-                                <div className="flex p-2 flex-col gap-2 justify-between border-r hover:border-link-color hover:border-r-4">
-                                  <Link
-                                    href={`/modules/${module}/${version.version}`}
-                                  >
-                                    <div className="place-items-center hover:border-gray-800 flex items-center gap-2">
-                                      {version.version}
-                                      <Badges
-                                        hasAttestationFile={
-                                          version.hasAttestationFile
-                                        }
-                                        isArchived={
-                                          githubMetadata?.isArchived || false
-                                        }
-                                        deprecated={deprecated}
-                                        deprecationMessage={metadata.deprecated}
-                                      />
-                                    </div>
-                                  </Link>
-                                  <div className="self-end text-gray-500">
-                                    <a
-                                      href="https://bazel.build/external/module#compatibility_level"
-                                      className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
-                                    >
-                                      compatibility level
-                                    </a>{' '}
-                                    {version.moduleInfo.compatibilityLevel}
-                                  </div>
-                                </div>
-                                <div className="flex p-2 justify-end">
-                                  <div className="flex flex-col justify-between items-end">
-                                    <a
-                                      href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
-                                      className="text-link-color hover:text-link-color-hover"
-                                    >
-                                      view registry source
-                                    </a>
-                                    <a
-                                      href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
-                                      className="text-link-color hover:text-link-color-hover"
-                                      suppressHydrationWarning
-                                    >
-                                      published{' '}
-                                      {formatDistance(
-                                        parseISO(
-                                          version.submission.authorDateIso
-                                        ),
-                                        new Date(),
-                                        { addSuffix: true }
-                                      )}
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </li>
-                      </>
-                    ))}
-                  </ul>
-                  {displayShowAllVersionsButton && (
-                    <button
-                      className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg"
-                      onClick={() => setTriggeredShowAllVersions(true)}
-                    >
-                      Show all {versionInfos.length} versions
-                    </button>
-                  )}
-                </div>
-                <div className="mt-4">
-                  <h2 className="text-2xl font-bold mt-4">Dependency graph</h2>
-                </div>
-                <div className="mt-4">
-                  <details open>
-                    <summary>
-                      <span
-                        role="heading"
-                        aria-level={2}
-                        className="text-1xl mt-4"
-                      >
-                        <span className="font-bold">Direct</span> (
-                        {versionInfo.moduleInfo.dependencies.filter(
-                          (d) => !d.dev
-                        ).length || 'None'}
-                        ){' '}
-                        <small className="text-sm font-normal text-gray-500">
-                          at version {selectedVersion}
-                        </small>
-                      </span>
-                    </summary>
-                    <ul className="mt-4">
-                      {versionInfo.moduleInfo.dependencies
-                        .filter((d) => !d.dev)
-                        .map((dependency) => (
-                          <Link
-                            key={dependency.module}
-                            href={`/modules/${dependency.module}/${dependency.version}`}
-                          >
-                            <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                              <div className="rounded-full border h-14 w-14 grid place-items-center">
-                                {dependency.version}
-                              </div>
-                              <div>{dependency.module}</div>
-                            </li>
-                          </Link>
-                        ))}
-                      {versionInfo.moduleInfo.dependencies.filter((d) => !d.dev)
-                        .length === 0 && <span>No dependencies</span>}
-                    </ul>
-                  </details>
-                </div>
-                <div className="mt-4">
-                  <details>
-                    <summary>
-                      <span
-                        role="heading"
-                        aria-level={2}
-                        className="text-1xl mt-4"
-                      >
-                        <span className="font-bold">Dev Dependencies</span> (
-                        {versionInfo.moduleInfo.dependencies.filter(
-                          (d) => d.dev
-                        ).length || 'None'}
-                        ){' '}
-                      </span>
-                    </summary>
-                    <ul className="mt-4">
-                      {versionInfo.moduleInfo.dependencies
-                        .filter((d) => d.dev)
-                        .map((dependency) => (
-                          <Link
-                            key={dependency.module}
-                            href={`/modules/${dependency.module}/${dependency.version}`}
-                          >
-                            <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                              <div className="rounded-full border h-14 w-14 grid place-items-center">
-                                {dependency.version}
-                              </div>
-                              <div>{dependency.module}</div>
-                            </li>
-                          </Link>
-                        ))}
-                      {versionInfo.moduleInfo.dependencies.length === 0 && (
-                        <span>No dependencies</span>
-                      )}
-                    </ul>
-                  </details>
-                </div>
-                <div className="mt-4">
-                  <details>
-                    <summary>
-                      <span
-                        role="heading"
-                        aria-level={2}
-                        className="text-1xl mt-4"
-                      >
-                        <span className="font-bold">Dependents</span>{' '}
-                        {reverseDependencies.length > 0
-                          ? `(${reverseDependencies.length})`
-                          : ''}
-                      </span>
-                    </summary>
-                    <ul className="mt-4">
-                      {shownReverseDependencies.map((revDependency) => (
-                        <Link
-                          key={revDependency}
-                          href={`/modules/${revDependency}`}
-                        >
-                          <li className="border rounded p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
-                            <div>{revDependency}</div>
-                          </li>
-                        </Link>
-                      ))}
-                      {reverseDependencies.length === 0 && (
-                        <span>No dependent modules yet</span>
-                      )}
-                    </ul>
-                    {displayShowAllReverseDependenciesButton && (
-                      <button
-                        className="font-semibold border rounded p-2 mt-4 w-full hover:shadow-lg"
-                        onClick={() =>
-                          setTriggeredShowAllReverseDependencies(true)
-                        }
-                      >
-                        Show all {reverseDependencies.length} dependent modules
-                      </button>
-                    )}
-                  </details>
-                </div>
-              </div>
+      <div className="flex flex-1 min-h-screen">
+        <aside className="w-48 bg-bzl-green-light/50 border-r-2 border-r-[#004300] p-4 flex-shrink-0 sticky top-0 h-screen">
+          <h1 className="text-sm font-semibold mb-4">
+            {module}@{selectedVersion}
+          </h1>
+          <nav className="space-y-2">
+            <a href="#" className="block px-2 py-1 rounded hover:bg-gray-100">
+              Overview
+            </a>
+            <a href="#" className="block px-2 py-1 rounded hover:bg-gray-100">
+              Docs
+            </a>
+            <a href="#" className="block px-2 py-1 rounded hover:bg-gray-100">
+              Examples
+            </a>
+            <a href="#" className="block px-2 py-1 rounded hover:bg-gray-100">
+              API
+            </a>
+          </nav>
+        </aside>
+
+        <main className="flex-1 overflow-y-auto">
+          <section className="relative">
+            <aside className="float-right p-4 w-64 overflow-y-auto flex-shrink-0">
               <div id="metadata" className="sm:pl-2 basis-8 md:basis-[12rem]">
-                <h2 className="text-2xl font-bold mt-4 mb-2">About</h2>
+                <h2 className="text-lg font-bold mt-4 mb-2">About</h2>
                 {deprecated && metadata.deprecated && (
                   <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-3xl">
                     <div className="flex items-start">
@@ -566,7 +267,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                 </div>
 
                 <div className="mt-4">
-                  <h2 className="text-2xl font-bold mt-4 mb-2">Tested on</h2>
+                  <h2 className="text-lg font-bold mt-4 mb-2">Tested on</h2>
                   <PlatformSupport
                     platforms={versionInfo.moduleInfo.supportedPlatforms || []}
                   />
@@ -577,7 +278,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                   />
                 </div>
 
-                <h2 className="text-2xl font-bold mt-4 mb-2">Maintainers</h2>
+                <h2 className="text-lg font-bold mt-4 mb-2">Maintainers</h2>
                 <div>
                   <ul>
                     {metadata.maintainers?.map(({ name, email, github }) => (
@@ -606,28 +307,379 @@ const ModulePage: NextPage<ModulePageProps> = ({
                   </ul>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        {versionInfo.stardocs.length > 0 && (
-          <div className="max-w-7xl w-7xl mx-auto mt-8">
-            <div className="mt-6">
-              <h2 className="text-2xl font-bold mb-4">
-                Starlark API Documentation
-              </h2>
-              <div className="space-y-4">
-                {versionInfo.stardocs.map((stardoc, index) => (
-                  <StardocRenderer
-                    key={stardoc.file || index}
-                    stardoc={stardoc}
-                  />
-                ))}
+            </aside>
+
+            <div className="max-w-7xl w-7xl mx-auto p-6">
+              <div className="divide-y">
+                <div className="flex items-center gap-1">
+                  {(versionInfo.hasAttestationFile ||
+                    githubMetadata?.isArchived ||
+                    deprecated) && (
+                    <span className="w-7 h-7 inline-block">
+                      <Badges
+                        hasAttestationFile={versionInfo.hasAttestationFile}
+                        isArchived={githubMetadata?.isArchived || false}
+                        deprecated={deprecated}
+                        deprecationMessage={metadata.deprecated}
+                        placement="bottom-start"
+                      />
+                    </span>
+                  )}
+                  <span
+                    role="heading"
+                    aria-level={1}
+                    className="text-3xl translate-y-[-3px] text-bold"
+                  >
+                    {module}
+                  </span>
+                  <span className="text-lg ml-2">{selectedVersion}</span>
+                </div>
+                <div className="mt-4 flex flex-col md:flex-row flex-wrap sm:divide-x gap-2">
+                  <div
+                    id="install_history_dependencies"
+                    className="basis-0 grow"
+                  >
+                    <h2 className="text-2xl font-bold mt-4">Install</h2>
+                    <div className="mt-2">
+                      <p>
+                        To start using this module, make sure you have set up
+                        Bzlmod according to the{' '}
+                        <a href={USER_GUIDE_LINK}>user guide</a>, and add the
+                        following to your <code>MODULE.bazel</code> file:
+                      </p>
+                      <CopyCode
+                        code={`bazel_dep(name = "${module}", version = "${selectedVersion}")`}
+                      />
+                      {!!releaseNotesLink && (
+                        <p>
+                          Read the{' '}
+                          <a
+                            href={releaseNotesLink}
+                            className="text-link-color hover:text-link-color-hover"
+                          >
+                            Release Notes
+                          </a>
+                        </p>
+                      )}
+                    </div>
+                    <h2 className="text-2xl font-bold mt-4">Version history</h2>
+                    <div>
+                      <ul className="mt-4">
+                        {shownVersions.map((version) => (
+                          <>
+                            <li key={version.version} className="mt-2">
+                              {version.isYanked ? (
+                                <div className="p-4 bg-yellow-50 border-2 border-yellow-400 rounded-3xl">
+                                  <div className="flex items-start mb-4">
+                                    <div className="flex-shrink-0">
+                                      <span className="text-yellow-500 text-xl">
+                                        🚫
+                                      </span>
+                                    </div>
+                                    <div className="ml-3">
+                                      <h3 className="text-sm font-medium text-yellow-800">
+                                        <a
+                                          href="https://bazel.build/external/module#yanked_versions"
+                                          className="underline decoration-dashed decoration-yellow-600 hover:decoration-yellow-800"
+                                        >
+                                          Version yanked
+                                        </a>
+                                      </h3>
+                                      <div className="mt-2 text-sm text-yellow-700">
+                                        {version.yankReason}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-stretch gap-4">
+                                    <div className="flex flex-1 justify-between">
+                                      <div className="flex p-2 flex-col gap-2 justify-between border-r hover:border-link-color hover:border-r-4">
+                                        <Link
+                                          href={`/modules/${module}/${version.version}`}
+                                        >
+                                          <div className="place-items-center hover:border-gray-800 flex items-center gap-2">
+                                            {version.version}
+                                            <Badges
+                                              hasAttestationFile={
+                                                version.hasAttestationFile
+                                              }
+                                              isArchived={
+                                                githubMetadata?.isArchived ||
+                                                false
+                                              }
+                                              deprecated={deprecated}
+                                              deprecationMessage={
+                                                metadata.deprecated
+                                              }
+                                            />
+                                          </div>
+                                        </Link>
+                                        <div className="self-end text-gray-500">
+                                          <a
+                                            href="https://bazel.build/external/module#compatibility_level"
+                                            className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
+                                          >
+                                            compatibility level
+                                          </a>{' '}
+                                          {
+                                            version.moduleInfo
+                                              .compatibilityLevel
+                                          }
+                                        </div>
+                                      </div>
+                                      <div className="flex p-2 justify-end">
+                                        <div className="flex flex-col justify-between items-end">
+                                          <a
+                                            href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
+                                            className="text-link-color hover:text-link-color-hover"
+                                          >
+                                            view registry source
+                                          </a>
+                                          <a
+                                            href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
+                                            className="text-link-color hover:text-link-color-hover"
+                                            suppressHydrationWarning
+                                          >
+                                            published{' '}
+                                            {formatDistance(
+                                              parseISO(
+                                                version.submission.authorDateIso
+                                              ),
+                                              new Date(),
+                                              { addSuffix: true }
+                                            )}
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="flex items-stretch gap-4">
+                                  <div className="flex flex-1 justify-between">
+                                    <div className="flex p-2 flex-col gap-2 justify-between border-r hover:border-link-color hover:border-r-4">
+                                      <Link
+                                        href={`/modules/${module}/${version.version}`}
+                                      >
+                                        <div className="place-items-center hover:border-gray-800 flex items-center gap-2">
+                                          {version.version}
+                                          <Badges
+                                            hasAttestationFile={
+                                              version.hasAttestationFile
+                                            }
+                                            isArchived={
+                                              githubMetadata?.isArchived ||
+                                              false
+                                            }
+                                            deprecated={deprecated}
+                                            deprecationMessage={
+                                              metadata.deprecated
+                                            }
+                                          />
+                                        </div>
+                                      </Link>
+                                      <div className="self-end text-gray-500">
+                                        <a
+                                          href="https://bazel.build/external/module#compatibility_level"
+                                          className="underline decoration-dashed decoration-gray-500 hover:decoration-black"
+                                        >
+                                          compatibility level
+                                        </a>{' '}
+                                        {version.moduleInfo.compatibilityLevel}
+                                      </div>
+                                    </div>
+                                    <div className="flex p-2 justify-end">
+                                      <div className="flex flex-col justify-between items-end">
+                                        <a
+                                          href={`https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/${module}/${version.version}`}
+                                          className="text-link-color hover:text-link-color-hover"
+                                        >
+                                          view registry source
+                                        </a>
+                                        <a
+                                          href={`https://github.com/bazelbuild/bazel-central-registry/commit/${version.submission.hash}`}
+                                          className="text-link-color hover:text-link-color-hover"
+                                          suppressHydrationWarning
+                                        >
+                                          published{' '}
+                                          {formatDistance(
+                                            parseISO(
+                                              version.submission.authorDateIso
+                                            ),
+                                            new Date(),
+                                            { addSuffix: true }
+                                          )}
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </li>
+                          </>
+                        ))}
+                      </ul>
+                      {displayShowAllVersionsButton && (
+                        <button
+                          className="font-semibold p-2 mt-4 w-full hover:shadow-lg"
+                          onClick={() => setTriggeredShowAllVersions(true)}
+                        >
+                          Show all {versionInfos.length} versions
+                        </button>
+                      )}
+                    </div>
+                    <div className="mt-4">
+                      <h2 className="text-2xl font-bold mt-4">
+                        Dependency graph
+                      </h2>
+                    </div>
+                    <div className="mt-4">
+                      <details open>
+                        <summary>
+                          <span
+                            role="heading"
+                            aria-level={2}
+                            className="text-1xl mt-4"
+                          >
+                            <span className="font-bold">Direct</span> (
+                            {versionInfo.moduleInfo.dependencies.filter(
+                              (d) => !d.dev
+                            ).length || 'None'}
+                            ){' '}
+                            <small className="text-sm font-normal text-gray-500">
+                              at version {selectedVersion}
+                            </small>
+                          </span>
+                        </summary>
+                        <ul className="mt-4">
+                          {versionInfo.moduleInfo.dependencies
+                            .filter((d) => !d.dev)
+                            .map((dependency) => (
+                              <Link
+                                key={dependency.module}
+                                href={`/modules/${dependency.module}/${dependency.version}`}
+                              >
+                                <li className="p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                                  <div className="rounded-full border h-14 w-14 grid place-items-center">
+                                    {dependency.version}
+                                  </div>
+                                  <div>{dependency.module}</div>
+                                </li>
+                              </Link>
+                            ))}
+                          {versionInfo.moduleInfo.dependencies.filter(
+                            (d) => !d.dev
+                          ).length === 0 && <span>No dependencies</span>}
+                        </ul>
+                      </details>
+                    </div>
+                    <div className="mt-4">
+                      <details>
+                        <summary>
+                          <span
+                            role="heading"
+                            aria-level={2}
+                            className="text-1xl mt-4"
+                          >
+                            <span className="font-bold">Dev Dependencies</span>{' '}
+                            (
+                            {versionInfo.moduleInfo.dependencies.filter(
+                              (d) => d.dev
+                            ).length || 'None'}
+                            ){' '}
+                          </span>
+                        </summary>
+                        <ul className="mt-4">
+                          {versionInfo.moduleInfo.dependencies
+                            .filter((d) => d.dev)
+                            .map((dependency) => (
+                              <Link
+                                key={dependency.module}
+                                href={`/modules/${dependency.module}/${dependency.version}`}
+                              >
+                                <li className="p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                                  <div className="rounded-full border h-14 w-14 grid place-items-center">
+                                    {dependency.version}
+                                  </div>
+                                  <div>{dependency.module}</div>
+                                </li>
+                              </Link>
+                            ))}
+                          {versionInfo.moduleInfo.dependencies.length === 0 && (
+                            <span>No dependencies</span>
+                          )}
+                        </ul>
+                      </details>
+                    </div>
+                    <div className="mt-4">
+                      <details>
+                        <summary>
+                          <span
+                            role="heading"
+                            aria-level={2}
+                            className="text-1xl mt-4"
+                          >
+                            <span className="font-bold">Dependents</span>{' '}
+                            {reverseDependencies.length > 0
+                              ? `(${reverseDependencies.length})`
+                              : ''}
+                          </span>
+                        </summary>
+                        <ul className="mt-4">
+                          {shownReverseDependencies.map((revDependency) => (
+                            <Link
+                              key={revDependency}
+                              href={`/modules/${revDependency}`}
+                            >
+                              <li className="p-2 mt-2 flex items-center gap-4 hover:border-gray-800">
+                                <div>{revDependency}</div>
+                              </li>
+                            </Link>
+                          ))}
+                          {reverseDependencies.length === 0 && (
+                            <span>No dependent modules yet</span>
+                          )}
+                        </ul>
+                        {displayShowAllReverseDependenciesButton && (
+                          <button
+                            className="font-semibold p-2 mt-4 w-full hover:shadow-lg"
+                            onClick={() =>
+                              setTriggeredShowAllReverseDependencies(true)
+                            }
+                          >
+                            Show all {reverseDependencies.length} dependent
+                            modules
+                          </button>
+                        )}
+                      </details>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </main>
-      <div className="flex-grow" />
+
+            {/* Clear the float so later sections don't wrap */}
+            <div className="clear-both"></div>
+          </section>
+
+          {versionInfo.stardocs.length > 0 && (
+            <div className="max-w-7xl w-7xl mx-auto mt-8">
+              <div className="mt-6">
+                <h2 className="text-2xl font-bold m-4">
+                  Starlark API Documentation
+                </h2>
+                <div className="space-y-4 m-4">
+                  {versionInfo.stardocs.map((stardoc, index) => (
+                    <StardocRenderer
+                      key={stardoc.file || index}
+                      stardoc={stardoc}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
       <Footer />
     </div>
   )

@@ -60,11 +60,6 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
 
   return (
     <div className="flex flex-col">
-      <Head>
-        <title>Bazel Central Registry</title>
-        <link rel="icon" href="/favicon.png" />
-      </Head>
-
       <Header />
       <main className="m-4 l:m-0">
         <div className="max-w-4xl w-4xl mx-auto mt-8 flex flex-col items-center">

@@ -181,10 +181,10 @@
   "moduleExtensions": {
     "@@aspect_rules_js+//npm:extensions.bzl%pnpm": {
       "general": {
-        "bzlTransitiveDigest": "TiFLTqZ07a2xqajCDdIsv7UseHvp+kahn6BCqoaCg8o=",
+        "bzlTransitiveDigest": "s7IQfaNfCfnElBtvyj3cfjthilDIi8nW+jdF5Ec7ukA=",
         "usagesDigest": "N3XLfP9qJIfx37ulW3MtZjMt8oxSbakVJST9UAK3bGs=",
         "recordedFileInputs": {
-          "@@//package.json": "eb4a33e6243aafbf763738366522e3229df0bdb066992f62464a3c73eccd2401"
+          "@@//package.json": "d1aea803104b786108d8ed3ed1d53b4e6176efe0e6a35550be5096fd5021972c"
         },
         "recordedDirentsInputs": {},
         "envVariables": {},

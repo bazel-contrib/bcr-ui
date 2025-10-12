@@ -6,7 +6,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 import { StardocModuleInfo } from '../data/stardoc'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCopy, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faLink, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { AttributeType } from '@buf/bazel_bazel.bufbuild_es//stardoc_output/stardoc_output_pb'
 
 // port of https://github.com/bazelbuild/bazel/blob/5b68c32bceec9f1c510870310a6edf391b22c0d2/src/main/java/com/google/devtools/build/docgen/RuleDocumentationAttribute.java#L65
@@ -121,7 +121,7 @@ const CopyLinkButton: React.FC<{ anchorId: string }> = ({ anchorId }) => {
       className="ml-2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
       title="Copy link to this section"
     >
-      <FontAwesomeIcon icon={copied ? faCheck : faCopy} className="w-3 h-3" />
+      <FontAwesomeIcon icon={copied ? faCheck : faLink} className="fa-solid" />
     </button>
   )
 }
@@ -236,339 +236,346 @@ export const StardocRenderer: React.FC<StardocRendererProps> = ({
   }
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4">
-      {/* Module-level documentation */}
-      {stardoc.moduleDocstring && (
-        <div className="mb-6">
-          {(() => {
-            const fileAnchorId = generateAnchorId(
-              'file',
-              stardoc.file || 'module'
-            )
-            return (
-              <div id={fileAnchorId} className="scroll-mt-20">
-                <div className="flex items-center gap-2 mb-3">
-                  <h4 className="text-lg font-medium font-mono text-gray-900">
-                    {stardoc.file}
-                  </h4>
-                  <CopyLinkButton anchorId={fileAnchorId} />
-                </div>
-              </div>
-            )
-          })()}
-          <div className="prose prose-sm max-w-none">
-            <ReactMarkdown
-              components={markdownComponents}
-              remarkPlugins={[remarkGfm, remarkBreaks]}
-            >
-              {stardoc.moduleDocstring}
-            </ReactMarkdown>
+    <div className="border-2 border-[#004300] border-b-2 border-b-[#004300] rounded-lg">
+      {(() => {
+        const fileAnchorId = generateAnchorId('file', stardoc.file || 'module')
+        return (
+          <div id={fileAnchorId} className="scroll-mt-20 sticky top-0">
+            <div className="flex items-center gap-2 mb-3 bg-bzl-green-light/30 p-4">
+              <h4 className="text-lg font-medium font-mono text-gray-900">
+                {stardoc.file}
+              </h4>
+              <CopyLinkButton anchorId={fileAnchorId} />
+            </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
+      <div className="p-4">
+        {/* Module-level documentation */}
+        {stardoc.moduleDocstring && (
+          <div className="mb-6">
+            <div className="prose prose-sm max-w-none">
+              <ReactMarkdown
+                components={markdownComponents}
+                remarkPlugins={[remarkGfm, remarkBreaks]}
+              >
+                {stardoc.moduleDocstring}
+              </ReactMarkdown>
+            </div>
+          </div>
+        )}
 
-      {/* Functions */}
-      {stardoc.funcInfo && stardoc.funcInfo.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-lg font-medium text-gray-900 mb-3">
-            Functions & Macros
-          </h4>
-          <div className="space-y-4">
-            {stardoc.funcInfo.map((func, funcIndex) => {
-              const anchorId = generateAnchorId('function', func.functionName)
-              return (
-                <div
-                  key={funcIndex}
-                  id={anchorId}
-                  className="border-l-4 border-blue-500 pl-4 scroll-mt-20"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <code className="bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm font-mono">
-                      {func.functionName}
-                    </code>
-                    <CopyLinkButton anchorId={anchorId} />
-                  </div>
-                  {func.docString && (
-                    <div className="prose prose-sm max-w-none">
-                      <ReactMarkdown
-                        components={markdownComponents}
-                        remarkPlugins={[remarkGfm, remarkBreaks]}
-                      >
-                        {func.docString}
-                      </ReactMarkdown>
+        {/* Functions */}
+        {stardoc.funcInfo && stardoc.funcInfo.length > 0 && (
+          <div className="mb-6">
+            <h4 className="text-lg font-medium text-gray-900 mb-3">
+              Functions & Macros
+            </h4>
+            <div className="space-y-4">
+              {stardoc.funcInfo.map((func, funcIndex) => {
+                const anchorId = generateAnchorId('function', func.functionName)
+                return (
+                  <div
+                    key={funcIndex}
+                    id={anchorId}
+                    className="border-l-4 border-blue-500 pl-4 scroll-mt-20"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <code className="bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm font-mono">
+                        {func.functionName}
+                      </code>
+                      <CopyLinkButton anchorId={anchorId} />
                     </div>
-                  )}
+                    {func.docString && (
+                      <div className="prose prose-sm max-w-none">
+                        <ReactMarkdown
+                          components={markdownComponents}
+                          remarkPlugins={[remarkGfm, remarkBreaks]}
+                        >
+                          {func.docString}
+                        </ReactMarkdown>
+                      </div>
+                    )}
 
-                  {/* Function parameters */}
-                  {func.parameter && func.parameter.length > 0 && (
-                    <div className="mt-3">
-                      <h5 className="text-sm font-bold text-gray-700 mb-2">
-                        Parameters
-                      </h5>
-                      <table className="w-full text-sm">
-                        <tbody>
-                          {func.parameter.map((param, paramIndex) => {
-                            return (
-                              <tr key={paramIndex}>
+                    {/* Function parameters */}
+                    {func.parameter && func.parameter.length > 0 && (
+                      <div className="mt-3">
+                        <h5 className="text-sm font-bold text-gray-700 mb-2">
+                          Parameters
+                        </h5>
+                        <table className="w-full text-sm">
+                          <tbody>
+                            {func.parameter.map((param, paramIndex) => {
+                              return (
+                                <tr key={paramIndex}>
+                                  <td className="align-top pr-3 py-1 w-32 whitespace-nowrap text-right">
+                                    <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
+                                      {param.mandatory && (
+                                        <span
+                                          className="mr-1 text-red-600 select-none cursor-help"
+                                          title="Required parameter"
+                                        >
+                                          *
+                                        </span>
+                                      )}
+                                      {param.name}
+                                    </code>
+                                  </td>
+                                  <td className="align-top text-gray-600 py-1">
+                                    {param.docString && (
+                                      <ReactMarkdown
+                                        components={markdownComponents}
+                                        remarkPlugins={[
+                                          remarkGfm,
+                                          remarkBreaks,
+                                        ]}
+                                      >
+                                        {param.docString}
+                                      </ReactMarkdown>
+                                    )}
+                                    {param.defaultValue && (
+                                      <div className="mt-1 text-xs text-gray-500">
+                                        <span className="font-medium">
+                                          Default:
+                                        </span>{' '}
+                                        <code className="bg-gray-50 px-1 py-0.5 rounded">
+                                          {param.defaultValue}
+                                        </code>
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Rules */}
+        {stardoc.ruleInfo && stardoc.ruleInfo.length > 0 && (
+          <div className="mb-6">
+            <h4 className="text-lg font-medium text-gray-900 mb-3">Rules</h4>
+            <div className="space-y-4">
+              {stardoc.ruleInfo.map((rule, ruleIndex) => {
+                const anchorId = generateAnchorId('rule', rule.ruleName)
+                return (
+                  <div
+                    key={ruleIndex}
+                    id={anchorId}
+                    className="border-l-4 border-green-500 pl-4 scroll-mt-20"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <code className="bg-green-100 text-green-800 px-3 py-1 rounded text-sm font-mono">
+                        {rule.ruleName}
+                      </code>
+                      <CopyLinkButton anchorId={anchorId} />
+                    </div>
+                    {rule.docString && (
+                      <div className="prose prose-sm max-w-none">
+                        <ReactMarkdown
+                          components={markdownComponents}
+                          remarkPlugins={[remarkGfm, remarkBreaks]}
+                        >
+                          {rule.docString}
+                        </ReactMarkdown>
+                      </div>
+                    )}
+
+                    {/* Rule attributes */}
+                    {rule.attribute && rule.attribute.length > 0 && (
+                      <div className="mt-3">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="border-b border-gray-200">
+                              <th className="text-right py-2 pr-3 w-32 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                                Attribute
+                              </th>
+                              <th className="text-center py-2 pr-3 w-24 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                                Type
+                              </th>
+                              <th className="text-left py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                                Description
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {rule.attribute.map((attr, attrIndex) => {
+                              return (
+                                <tr
+                                  key={attrIndex}
+                                  className="border-b border-gray-100"
+                                >
+                                  <td className="align-top pr-3 py-2 w-32 whitespace-nowrap text-right">
+                                    <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
+                                      {attr.mandatory && (
+                                        <span
+                                          className="mr-1 text-red-600 select-none cursor-help"
+                                          title="Required attribute"
+                                        >
+                                          *
+                                        </span>
+                                      )}
+                                      {attr.name}
+                                    </code>
+                                  </td>
+                                  <td className="align-top pr-3 py-2 w-24 text-center">
+                                    <code className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-mono">
+                                      {attributeTypeWithLink(attr.type)}
+                                    </code>
+                                  </td>
+                                  <td className="align-top text-gray-600 py-2">
+                                    {attr.docString && (
+                                      <ReactMarkdown
+                                        components={markdownComponents}
+                                        remarkPlugins={[
+                                          remarkGfm,
+                                          remarkBreaks,
+                                        ]}
+                                      >
+                                        {attr.docString}
+                                      </ReactMarkdown>
+                                    )}
+                                    {attr.defaultValue && (
+                                      <div className="mt-1 text-xs text-gray-500">
+                                        <span className="font-medium">
+                                          Default:
+                                        </span>{' '}
+                                        <code className="bg-gray-50 px-1 py-0.5 rounded">
+                                          {attr.defaultValue}
+                                        </code>
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Providers */}
+        {stardoc.providerInfo && stardoc.providerInfo.length > 0 && (
+          <div className="mb-6">
+            <h4 className="text-lg font-medium text-gray-900 mb-3">
+              Providers
+            </h4>
+            <div className="space-y-4">
+              {stardoc.providerInfo.map((provider, providerIndex) => {
+                const anchorId = generateAnchorId(
+                  'provider',
+                  provider.providerName
+                )
+                return (
+                  <div
+                    key={providerIndex}
+                    id={anchorId}
+                    className="border-l-4 border-purple-500 pl-4 scroll-mt-20"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <code className="bg-purple-100 text-purple-800 px-3 py-1 rounded text-sm font-mono">
+                        {provider.providerName}
+                      </code>
+                      <CopyLinkButton anchorId={anchorId} />
+                    </div>
+                    {provider.docString && (
+                      <div className="prose prose-sm max-w-none">
+                        <ReactMarkdown
+                          components={markdownComponents}
+                          remarkPlugins={[remarkGfm, remarkBreaks]}
+                        >
+                          {provider.docString}
+                        </ReactMarkdown>
+                      </div>
+                    )}
+
+                    {/* Provider fields */}
+                    {provider.fieldInfo && provider.fieldInfo.length > 0 && (
+                      <div className="mt-3">
+                        <h5 className="text-sm font-medium text-gray-700 mb-2">
+                          Fields
+                        </h5>
+                        <table className="w-full text-sm">
+                          <tbody>
+                            {provider.fieldInfo.map((field, fieldIndex) => (
+                              <tr key={fieldIndex}>
                                 <td className="align-top pr-3 py-1 w-32 whitespace-nowrap text-right">
                                   <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
-                                    {param.mandatory && (
-                                      <span
-                                        className="mr-1 text-red-600 select-none cursor-help"
-                                        title="Required parameter"
-                                      >
-                                        *
-                                      </span>
-                                    )}
-                                    {param.name}
+                                    {field.name}
                                   </code>
                                 </td>
-                                <td className="align-top text-gray-600 py-1">
-                                  {param.docString && (
+                                {field.docString && (
+                                  <td className="align-top text-gray-600 py-1">
                                     <ReactMarkdown
                                       components={markdownComponents}
                                       remarkPlugins={[remarkGfm, remarkBreaks]}
                                     >
-                                      {param.docString}
+                                      {field.docString}
                                     </ReactMarkdown>
-                                  )}
-                                  {param.defaultValue && (
-                                    <div className="mt-1 text-xs text-gray-500">
-                                      <span className="font-medium">
-                                        Default:
-                                      </span>{' '}
-                                      <code className="bg-gray-50 px-1 py-0.5 rounded">
-                                        {param.defaultValue}
-                                      </code>
-                                    </div>
-                                  )}
-                                </td>
+                                  </td>
+                                )}
                               </tr>
-                            )
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Rules */}
-      {stardoc.ruleInfo && stardoc.ruleInfo.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-lg font-medium text-gray-900 mb-3">Rules</h4>
-          <div className="space-y-4">
-            {stardoc.ruleInfo.map((rule, ruleIndex) => {
-              const anchorId = generateAnchorId('rule', rule.ruleName)
-              return (
-                <div
-                  key={ruleIndex}
-                  id={anchorId}
-                  className="border-l-4 border-green-500 pl-4 scroll-mt-20"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <code className="bg-green-100 text-green-800 px-3 py-1 rounded text-sm font-mono">
-                      {rule.ruleName}
-                    </code>
-                    <CopyLinkButton anchorId={anchorId} />
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
-                  {rule.docString && (
-                    <div className="prose prose-sm max-w-none">
-                      <ReactMarkdown
-                        components={markdownComponents}
-                        remarkPlugins={[remarkGfm, remarkBreaks]}
-                      >
-                        {rule.docString}
-                      </ReactMarkdown>
-                    </div>
-                  )}
-
-                  {/* Rule attributes */}
-                  {rule.attribute && rule.attribute.length > 0 && (
-                    <div className="mt-3">
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="border-b border-gray-200">
-                            <th className="text-right py-2 pr-3 w-32 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                              Attribute
-                            </th>
-                            <th className="text-center py-2 pr-3 w-24 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                              Type
-                            </th>
-                            <th className="text-left py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                              Description
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {rule.attribute.map((attr, attrIndex) => {
-                            return (
-                              <tr
-                                key={attrIndex}
-                                className="border-b border-gray-100"
-                              >
-                                <td className="align-top pr-3 py-2 w-32 whitespace-nowrap text-right">
-                                  <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
-                                    {attr.mandatory && (
-                                      <span
-                                        className="mr-1 text-red-600 select-none cursor-help"
-                                        title="Required attribute"
-                                      >
-                                        *
-                                      </span>
-                                    )}
-                                    {attr.name}
-                                  </code>
-                                </td>
-                                <td className="align-top pr-3 py-2 w-24 text-center">
-                                  <code className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-mono">
-                                    {attributeTypeWithLink(attr.type)}
-                                  </code>
-                                </td>
-                                <td className="align-top text-gray-600 py-2">
-                                  {attr.docString && (
-                                    <ReactMarkdown
-                                      components={markdownComponents}
-                                      remarkPlugins={[remarkGfm, remarkBreaks]}
-                                    >
-                                      {attr.docString}
-                                    </ReactMarkdown>
-                                  )}
-                                  {attr.defaultValue && (
-                                    <div className="mt-1 text-xs text-gray-500">
-                                      <span className="font-medium">
-                                        Default:
-                                      </span>{' '}
-                                      <code className="bg-gray-50 px-1 py-0.5 rounded">
-                                        {attr.defaultValue}
-                                      </code>
-                                    </div>
-                                  )}
-                                </td>
-                              </tr>
-                            )
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Providers */}
-      {stardoc.providerInfo && stardoc.providerInfo.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-lg font-medium text-gray-900 mb-3">Providers</h4>
-          <div className="space-y-4">
-            {stardoc.providerInfo.map((provider, providerIndex) => {
-              const anchorId = generateAnchorId(
-                'provider',
-                provider.providerName
-              )
-              return (
-                <div
-                  key={providerIndex}
-                  id={anchorId}
-                  className="border-l-4 border-purple-500 pl-4 scroll-mt-20"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <code className="bg-purple-100 text-purple-800 px-3 py-1 rounded text-sm font-mono">
-                      {provider.providerName}
-                    </code>
-                    <CopyLinkButton anchorId={anchorId} />
+        {/* Aspects */}
+        {stardoc.aspectInfo && stardoc.aspectInfo.length > 0 && (
+          <div className="mb-6">
+            <h4 className="text-lg font-medium text-gray-900 mb-3">Aspects</h4>
+            <div className="space-y-4">
+              {stardoc.aspectInfo.map((aspect, aspectIndex) => {
+                const anchorId = generateAnchorId('aspect', aspect.aspectName)
+                return (
+                  <div
+                    key={aspectIndex}
+                    id={anchorId}
+                    className="border-l-4 border-orange-500 pl-4 scroll-mt-20"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <code className="bg-orange-100 text-orange-800 px-3 py-1 rounded text-sm font-mono">
+                        {aspect.aspectName}
+                      </code>
+                      <CopyLinkButton anchorId={anchorId} />
+                    </div>
+                    {aspect.docString && (
+                      <div className="prose prose-sm max-w-none">
+                        <ReactMarkdown
+                          components={markdownComponents}
+                          remarkPlugins={[remarkGfm, remarkBreaks]}
+                        >
+                          {aspect.docString}
+                        </ReactMarkdown>
+                      </div>
+                    )}
                   </div>
-                  {provider.docString && (
-                    <div className="prose prose-sm max-w-none">
-                      <ReactMarkdown
-                        components={markdownComponents}
-                        remarkPlugins={[remarkGfm, remarkBreaks]}
-                      >
-                        {provider.docString}
-                      </ReactMarkdown>
-                    </div>
-                  )}
-
-                  {/* Provider fields */}
-                  {provider.fieldInfo && provider.fieldInfo.length > 0 && (
-                    <div className="mt-3">
-                      <h5 className="text-sm font-medium text-gray-700 mb-2">
-                        Fields
-                      </h5>
-                      <table className="w-full text-sm">
-                        <tbody>
-                          {provider.fieldInfo.map((field, fieldIndex) => (
-                            <tr key={fieldIndex}>
-                              <td className="align-top pr-3 py-1 w-32 whitespace-nowrap text-right">
-                                <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">
-                                  {field.name}
-                                </code>
-                              </td>
-                              {field.docString && (
-                                <td className="align-top text-gray-600 py-1">
-                                  <ReactMarkdown
-                                    components={markdownComponents}
-                                    remarkPlugins={[remarkGfm, remarkBreaks]}
-                                  >
-                                    {field.docString}
-                                  </ReactMarkdown>
-                                </td>
-                              )}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
-        </div>
-      )}
-
-      {/* Aspects */}
-      {stardoc.aspectInfo && stardoc.aspectInfo.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-lg font-medium text-gray-900 mb-3">Aspects</h4>
-          <div className="space-y-4">
-            {stardoc.aspectInfo.map((aspect, aspectIndex) => {
-              const anchorId = generateAnchorId('aspect', aspect.aspectName)
-              return (
-                <div
-                  key={aspectIndex}
-                  id={anchorId}
-                  className="border-l-4 border-orange-500 pl-4 scroll-mt-20"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <code className="bg-orange-100 text-orange-800 px-3 py-1 rounded text-sm font-mono">
-                      {aspect.aspectName}
-                    </code>
-                    <CopyLinkButton anchorId={anchorId} />
-                  </div>
-                  {aspect.docString && (
-                    <div className="prose prose-sm max-w-none">
-                      <ReactMarkdown
-                        components={markdownComponents}
-                        remarkPlugins={[remarkGfm, remarkBreaks]}
-                      >
-                        {aspect.docString}
-                      </ReactMarkdown>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
