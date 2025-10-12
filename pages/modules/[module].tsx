@@ -117,15 +117,17 @@ const ModulePage: NextPage<ModulePageProps> = ({
 
       <Header />
       <div className="flex flex-1 min-h-screen">
-        <LeftNavComponent
-          moduleName={module as string}
-          version={selectedVersion}
-          stardocs={versionInfo.stardocs}
-        />
+        <div className="hidden lg:block">
+          <LeftNavComponent
+            moduleName={module as string}
+            version={selectedVersion}
+            stardocs={versionInfo.stardocs}
+          />
+        </div>
 
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto lg:ml-0">
           <section className="relative">
-            <aside className="float-right p-4 w-64 overflow-y-auto flex-shrink-0">
+            <aside className="md:float-right md:p-4 md:w-64 md:overflow-y-auto md:flex-shrink-0">
               <div id="metadata" className="sm:pl-2 basis-8 md:basis-[12rem]">
                 <h2 className="text-lg font-bold mt-4 mb-2">About</h2>
                 {deprecated && metadata.deprecated && (
@@ -285,7 +287,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
               </div>
             </aside>
 
-            <div className="max-w-7xl w-7xl mx-auto p-6">
+            <div className="max-w-7xl w-7xl mx-auto p-6 md:mr-80">
               <div className="divide-y">
                 <div id="overview" className="flex items-center gap-1">
                   {(versionInfo.hasAttestationFile ||
