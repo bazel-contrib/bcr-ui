@@ -113,17 +113,6 @@ const ModulePage: NextPage<ModulePageProps> = ({
     <div className="flex flex-col">
       <Head>
         <title>{`${module}`}</title>
-        <link rel="icon" href="/favicon.png" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Playwrite+US+Modern:wght@100..400&display=swap"
-          rel="stylesheet"
-        ></link>
       </Head>
 
       <Header />
