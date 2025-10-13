@@ -18,7 +18,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { faClock, faCompass } from '@fortawesome/free-regular-svg-icons'
 
-interface LeftNavComponentProps {
+interface LeftNavProps {
   moduleName: string
   version: string
   stardocs: StardocModuleInfo[]
@@ -179,7 +179,7 @@ const getTypeIcon = (type: string, label: string) => {
   }
 }
 
-export const LeftNavComponent: React.FC<LeftNavComponentProps> = ({
+export const LeftNav: React.FC<LeftNavProps> = ({
   moduleName,
   version,
   stardocs,

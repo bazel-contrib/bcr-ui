@@ -19,7 +19,7 @@ import {
 import { GithubRepositoryMetadata } from '../../data/githubMetadata'
 import { faGlobe, faScaleBalanced } from '@fortawesome/free-solid-svg-icons'
 import { StardocRenderer } from '../../components/Stardoc'
-import { LeftNavComponent } from '../../components/LeftNavComponent'
+import { LeftNav } from '../../components/LeftNav'
 import { VersionHistory } from '../../components/VersionHistory'
 import { Dependencies } from '../../components/Dependencies'
 
@@ -118,7 +118,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
       <Header />
       <div className="flex flex-1 min-h-screen">
         <div className="hidden lg:block">
-          <LeftNavComponent
+          <LeftNav
             moduleName={module as string}
             version={selectedVersion}
             stardocs={versionInfo.stardocs}
