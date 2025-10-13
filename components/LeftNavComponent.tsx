@@ -238,7 +238,7 @@ export const LeftNavComponent: React.FC<LeftNavComponentProps> = ({
       setActiveSection(sectionId)
 
       element.scrollIntoView({
-        behavior: 'smooth',
+        behavior: 'instant',
         block: 'start',
       })
       // Update the URL hash
@@ -374,11 +374,9 @@ export const LeftNavComponent: React.FC<LeftNavComponentProps> = ({
 
   return (
     <aside className="w-64 bg-bzl-green-light/30 border-r-2 border-r-bzl-green-dark flex-shrink-0 sticky top-0 h-screen overflow-y-auto">
-      <div className="mb-4 pl-2">
-        <h1 className="text-sm font-semibold text-gray-900 mb-1">
-          {moduleName}
-        </h1>
-        <p className="text-xs text-gray-600">@{version}</p>
+      <div className="p-4 text-center text-sm">
+        <span className="font-semibold">{moduleName}</span>
+        <span className="text-gray-600">@{version}</span>
       </div>
 
       <nav className="space-y-1">
