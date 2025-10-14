@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StardocModuleInfo } from '../data/stardoc'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faLink,
-  faCheck,
   faBook,
-  faFolder,
   faCog,
   faWrench,
   faBox,
@@ -14,7 +11,7 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
 
-interface LeftNavProps {
+interface StardocNavProps {
   moduleName: string
   version: string
   stardocs: StardocModuleInfo[]
@@ -128,7 +125,7 @@ const getTypeIcon = (type: string, label: string) => {
   }
 }
 
-export const LeftNav: React.FC<LeftNavProps> = ({
+export const StardocNav: React.FC<StardocNavProps> = ({
   moduleName,
   version,
   stardocs,
@@ -276,9 +273,9 @@ export const LeftNav: React.FC<LeftNavProps> = ({
             isHeader
               ? 'cursor-default'
               : isActive
-                ? 'bg-bzl-green-light text-gray-900 font-medium cursor-pointer'
+                ? 'bg-bzl-green-light/30 text-gray-900 font-medium cursor-pointer'
                 : 'hover:bg-gray-100 text-gray-600 cursor-pointer'
-          } ${item.level === 2 ? 'pl-4' : 'pl-2'}`}
+          } ${item.level > 0 ? 'pl-4' : 'pl-2'}`}
           onClick={isHeader ? undefined : () => handleNavItemClick(item)}
         >
           {hasChildren && !isHeader && (
@@ -316,7 +313,7 @@ export const LeftNav: React.FC<LeftNavProps> = ({
   }
 
   return (
-    <aside className="w-64 bg-bzl-green-light/30 border-r-2 border-r-bzl-green-dark flex-shrink-0 sticky top-0 h-screen overflow-y-auto">
+    <aside className="w-64 flex-shrink-0 sticky top-0 h-screen overflow-y-auto">
       <nav className="space-y-1">
         {navStructure.map((item) => renderNavItem(item))}
       </nav>

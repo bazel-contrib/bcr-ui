@@ -1,10 +1,9 @@
 import type { GetStaticProps, NextPage } from 'next'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Header } from '../../components/Header'
 import { Footer } from '../../components/Footer'
 import { StardocRenderer } from '../../components/Stardoc'
-import { LeftNav } from '../../components/LeftNav'
+import { StardocNav } from '../../components/StardocNav'
 import {
   getStaticPropsModulePage,
   VersionInfo,
@@ -33,9 +32,20 @@ const DocsPage: NextPage<DocsPageProps> = ({
   return (
     <div className="flex flex-col">
       <Header />
+      <div id="overview" className="p-6 border-b-2 border-bzl-green-light">
+        <span
+          role="heading"
+          aria-level={1}
+          className="text-3xl translate-y-[-3px] text-bold"
+        >
+          {module}
+        </span>
+        <span className="text-lg ml-2">API docs @{selectedVersion}</span>
+      </div>
+
       <div className="flex flex-1 min-h-screen">
         <div className="hidden lg:block">
-          <LeftNav
+          <StardocNav
             moduleName={module as string}
             version={selectedVersion}
             stardocs={versionInfo.stardocs}
@@ -44,17 +54,6 @@ const DocsPage: NextPage<DocsPageProps> = ({
 
         <main className="flex-1 overflow-y-auto lg:ml-0">
           <div className="max-w-7xl w-7xl mx-auto p-6">
-            <div id="overview" className="pb-6">
-              <span
-                role="heading"
-                aria-level={1}
-                className="text-3xl translate-y-[-3px] text-bold"
-              >
-                {module}
-              </span>
-              <span className="text-lg ml-2">API docs @{selectedVersion}</span>
-            </div>
-
             {versionInfo.stardocs.length > 0 ? (
               <div className="space-y-4">
                 {versionInfo.stardocs.map((stardoc, index) => (
@@ -72,7 +71,8 @@ const DocsPage: NextPage<DocsPageProps> = ({
                 </h2>
                 <p className="text-gray-500">
                   This module does not publish Starlark API documentation yet.
-                  Module authors: read https://github.com/bazelbuild/bazel-central-registry/blob/main/docs/stardocs.md
+                  Module authors: read
+                  https://github.com/bazelbuild/bazel-central-registry/blob/main/docs/stardocs.md
                 </p>
               </div>
             )}
