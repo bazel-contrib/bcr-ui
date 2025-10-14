@@ -112,14 +112,6 @@ const ModulePage: NextPage<ModulePageProps> = ({
       <Header />
 
       <div className="flex flex-1 min-h-screen">
-        <div className="hidden lg:block">
-          <LeftNav
-            moduleName={module as string}
-            version={selectedVersion}
-            stardocs={versionInfo.stardocs}
-          />
-        </div>
-
         <main className="flex-1 overflow-y-auto lg:ml-0">
           <section className="relative">
             <ModuleMetadata
@@ -128,6 +120,8 @@ const ModulePage: NextPage<ModulePageProps> = ({
               githubMetadata={githubMetadata}
               deprecated={deprecated}
               firstGithubRepository={firstGithubRepository}
+              moduleName={module as string}
+              version={selectedVersion}
             />
 
             <div className="max-w-7xl w-7xl mx-auto p-6 md:mr-80">
@@ -217,25 +211,6 @@ const ModulePage: NextPage<ModulePageProps> = ({
             {/* Clear the float so later sections don't wrap */}
             <div className="clear-both"></div>
           </section>
-
-          {versionInfo.stardocs.length > 0 && (
-            <div className="max-w-7xl w-7xl mx-auto mt-8">
-              <div className="mt-6">
-                <h2 id="api-docs" className="text-2xl font-bold m-4">
-                  Starlark API Documentation
-                </h2>
-                <div className="space-y-4 m-4">
-                  {versionInfo.stardocs.map((stardoc, index) => (
-                    <StardocRenderer
-                      key={stardoc.file || index}
-                      stardoc={stardoc}
-                      moduleName={module as string}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
         </main>
       </div>
 

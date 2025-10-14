@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faStar } from '@fortawesome/free-regular-svg-icons'
@@ -6,6 +7,7 @@ import {
   faGlobe,
   faScaleBalanced,
   faEnvelope,
+  faBook,
 } from '@fortawesome/free-solid-svg-icons'
 import { PlatformSupport } from './PlatformSupport'
 import { BazelVersionSupport } from './BazelVersionSupport'
@@ -19,6 +21,8 @@ interface ModuleMetadataProps {
   githubMetadata: GithubRepositoryMetadata | null
   deprecated: boolean
   firstGithubRepository?: string
+  moduleName?: string
+  version?: string
 }
 
 export const ModuleMetadata: React.FC<ModuleMetadataProps> = ({
@@ -27,6 +31,8 @@ export const ModuleMetadata: React.FC<ModuleMetadataProps> = ({
   githubMetadata,
   deprecated,
   firstGithubRepository,
+  moduleName,
+  version,
 }) => {
   // Process GitHub metadata
   const repoDescription = githubMetadata?.description || undefined
@@ -147,6 +153,21 @@ export const ModuleMetadata: React.FC<ModuleMetadataProps> = ({
             )}
           </div>
         </div>
+
+        {moduleName && versionInfo.stardocs.length > 0 && (
+          <div className="mt-4">
+            <h2 className="text-lg font-bold mt-4 mb-2">Documentation</h2>
+            <div>
+              <Link
+                href={`/docs/${moduleName}${version ? `/${version}` : ''}`}
+                className="flex items-center text-sm text-link-color hover:text-link-color-hover transition-colors"
+              >
+                <FontAwesomeIcon icon={faBook} className="mr-2" />
+                View API Documentation
+              </Link>
+            </div>
+          </div>
+        )}
 
         <div className="mt-4">
           <h2 className="text-lg font-bold mt-4 mb-2">Tested on</h2>

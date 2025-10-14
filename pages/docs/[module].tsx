@@ -1,0 +1,108 @@
+import type { GetStaticProps, NextPage } from 'next'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { Header } from '../../components/Header'
+import { Footer } from '../../components/Footer'
+import { StardocRenderer } from '../../components/Stardoc'
+import { LeftNav } from '../../components/LeftNav'
+import {
+  getStaticPropsModulePage,
+  VersionInfo,
+} from '../../data/moduleStaticProps'
+
+interface DocsPageProps {
+  versionInfos: VersionInfo[]
+  selectedVersion: string
+}
+
+const DocsPage: NextPage<DocsPageProps> = ({
+  versionInfos,
+  selectedVersion,
+}) => {
+  const router = useRouter()
+  const { module } = router.query
+
+  const versionInfo = versionInfos.find((n) => n.version === selectedVersion)
+
+  if (!versionInfo) {
+    throw Error(
+      `Version information for version \`${selectedVersion}\` of module \`${module}\` could not be retrieved`
+    )
+  }
+
+  return (
+    <div className="flex flex-col">
+      <Header />
+      <div className="flex flex-1 min-h-screen">
+        <div className="hidden lg:block">
+          <LeftNav
+            moduleName={module as string}
+            version={selectedVersion}
+            stardocs={versionInfo.stardocs}
+          />
+        </div>
+
+        <main className="flex-1 overflow-y-auto lg:ml-0">
+          <div className="max-w-7xl w-7xl mx-auto p-6">
+            <div id="overview" className="pb-6">
+              <span
+                role="heading"
+                aria-level={1}
+                className="text-3xl translate-y-[-3px] text-bold"
+              >
+                {module}
+              </span>
+              <span className="text-lg ml-2">API docs @{selectedVersion}</span>
+            </div>
+
+            {versionInfo.stardocs.length > 0 ? (
+              <div className="space-y-4">
+                {versionInfo.stardocs.map((stardoc, index) => (
+                  <StardocRenderer
+                    key={stardoc.file || index}
+                    stardoc={stardoc}
+                    moduleName={module as string}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 border border-gray-200 rounded-lg bg-gray-50 text-center">
+                <h2 className="text-xl font-semibold text-gray-700 mb-2">
+                  No API Documentation Available
+                </h2>
+                <p className="text-gray-500">
+                  This module doesn't have any Starlark API documentation yet.
+                </p>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+      <Footer />
+    </div>
+  )
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { module } = params as any
+
+  return await getStaticPropsModulePage(module, null)
+}
+
+export async function getStaticPaths() {
+  // For now, we'll use the same module list as the main module pages
+  // In the future, we might want to filter this to only modules that have documentation
+  const { listModuleNames } = await import('../../data/utils')
+  const modulesNames = await listModuleNames()
+
+  const paths = modulesNames.map((name) => ({
+    params: { module: name },
+  }))
+
+  return {
+    paths,
+    fallback: false,
+  }
+}
+
+export default DocsPage

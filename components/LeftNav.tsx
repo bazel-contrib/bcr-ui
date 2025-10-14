@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faLink,
   faCheck,
-  faFile,
   faBook,
   faFolder,
   faCog,
@@ -13,10 +12,7 @@ import {
   faSearch,
   faChevronDown,
   faChevronRight,
-  faDownload,
-  faBoxesStacked,
 } from '@fortawesome/free-solid-svg-icons'
-import { faClock, faCompass } from '@fortawesome/free-regular-svg-icons'
 
 interface LeftNavProps {
   moduleName: string
@@ -27,14 +23,7 @@ interface LeftNavProps {
 interface NavItem {
   id: string
   label: string
-  type:
-    | 'section'
-    | 'header'
-    | 'file'
-    | 'function'
-    | 'rule'
-    | 'provider'
-    | 'aspect'
+  type: 'header' | 'file' | 'function' | 'rule' | 'provider' | 'aspect'
   level: number
   children?: NavItem[]
 }
@@ -54,97 +43,68 @@ const generateAnchorId = (type: string, name: string): string => {
 
 // Generate navigation structure from stardocs
 const generateNavStructure = (stardocs: StardocModuleInfo[]): NavItem[] => {
-  const navItems: NavItem[] = [
-    {
-      id: 'overview',
-      label: 'Overview',
-      type: 'section',
-      level: 0,
-    },
-    {
-      id: 'install',
-      label: 'Install',
-      type: 'section',
-      level: 0,
-    },
-    {
-      id: 'version-history',
-      label: 'Version History',
-      type: 'section',
-      level: 0,
-    },
-    {
-      id: 'dependencies',
-      label: 'Dependencies',
-      type: 'section',
-      level: 0,
-    },
-  ]
+  const navItems: NavItem[] = []
 
   // Add stardocs if they exist
   if (stardocs && stardocs.length > 0) {
-    navItems.push({
-      id: 'api-docs',
-      label: 'API Documentation',
-      type: 'header',
-      level: 0,
-      children: stardocs.map((stardoc) => {
-        const fileAnchorId = generateAnchorId('file', stardoc.file || 'module')
-        const fileItem: NavItem = {
-          id: fileAnchorId,
-          label: stardoc.file || 'Module',
-          type: 'file',
+    const fileItems = stardocs.map((stardoc) => {
+      const fileAnchorId = generateAnchorId('file', stardoc.file || 'module')
+      const fileItem: NavItem = {
+        id: fileAnchorId,
+        label: stardoc.file || 'Module',
+        type: 'file',
+        level: 0,
+        children: [],
+      }
+
+      // Add functions
+      if (stardoc.funcInfo && stardoc.funcInfo.length > 0) {
+        const functions = stardoc.funcInfo.map((func) => ({
+          id: generateAnchorId('function', func.functionName),
+          label: func.functionName,
+          type: 'function' as const,
           level: 1,
-          children: [],
-        }
+        }))
+        fileItem.children!.push(...functions)
+      }
 
-        // Add functions
-        if (stardoc.funcInfo && stardoc.funcInfo.length > 0) {
-          const functions = stardoc.funcInfo.map((func) => ({
-            id: generateAnchorId('function', func.functionName),
-            label: func.functionName,
-            type: 'function' as const,
-            level: 2,
-          }))
-          fileItem.children!.push(...functions)
-        }
+      // Add rules
+      if (stardoc.ruleInfo && stardoc.ruleInfo.length > 0) {
+        const rules = stardoc.ruleInfo.map((rule) => ({
+          id: generateAnchorId('rule', rule.ruleName),
+          label: rule.ruleName,
+          type: 'rule' as const,
+          level: 1,
+        }))
+        fileItem.children!.push(...rules)
+      }
 
-        // Add rules
-        if (stardoc.ruleInfo && stardoc.ruleInfo.length > 0) {
-          const rules = stardoc.ruleInfo.map((rule) => ({
-            id: generateAnchorId('rule', rule.ruleName),
-            label: rule.ruleName,
-            type: 'rule' as const,
-            level: 2,
-          }))
-          fileItem.children!.push(...rules)
-        }
+      // Add providers
+      if (stardoc.providerInfo && stardoc.providerInfo.length > 0) {
+        const providers = stardoc.providerInfo.map((provider) => ({
+          id: generateAnchorId('provider', provider.providerName),
+          label: provider.providerName,
+          type: 'provider' as const,
+          level: 1,
+        }))
+        fileItem.children!.push(...providers)
+      }
 
-        // Add providers
-        if (stardoc.providerInfo && stardoc.providerInfo.length > 0) {
-          const providers = stardoc.providerInfo.map((provider) => ({
-            id: generateAnchorId('provider', provider.providerName),
-            label: provider.providerName,
-            type: 'provider' as const,
-            level: 2,
-          }))
-          fileItem.children!.push(...providers)
-        }
+      // Add aspects
+      if (stardoc.aspectInfo && stardoc.aspectInfo.length > 0) {
+        const aspects = stardoc.aspectInfo.map((aspect) => ({
+          id: generateAnchorId('aspect', aspect.aspectName),
+          label: aspect.aspectName,
+          type: 'aspect' as const,
+          level: 1,
+        }))
+        fileItem.children!.push(...aspects)
+      }
 
-        // Add aspects
-        if (stardoc.aspectInfo && stardoc.aspectInfo.length > 0) {
-          const aspects = stardoc.aspectInfo.map((aspect) => ({
-            id: generateAnchorId('aspect', aspect.aspectName),
-            label: aspect.aspectName,
-            type: 'aspect' as const,
-            level: 2,
-          }))
-          fileItem.children!.push(...aspects)
-        }
-
-        return fileItem
-      }),
+      return fileItem
     })
+
+    navItems.push(...fileItems)
   }
 
   return navItems
@@ -153,17 +113,6 @@ const generateNavStructure = (stardocs: StardocModuleInfo[]): NavItem[] => {
 // Get icon for different types
 const getTypeIcon = (type: string, label: string) => {
   switch (type) {
-    case 'section':
-      switch (label) {
-        case 'Overview':
-          return faCompass
-        case 'Install':
-          return faDownload
-        case 'Version History':
-          return faClock
-        case 'Dependencies':
-          return faBoxesStacked
-      }
     case 'header':
       return faBook
     case 'file':
@@ -184,15 +133,9 @@ export const LeftNav: React.FC<LeftNavProps> = ({
   version,
   stardocs,
 }) => {
-  const [activeSection, setActiveSection] = useState<string>('overview')
+  const [activeSection, setActiveSection] = useState<string>('')
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set([
-      'overview',
-      'install',
-      'version-history',
-      'dependencies',
-      'api-docs',
-    ])
+    new Set()
   )
   const [copiedItems, setCopiedItems] = useState<Set<string>>(new Set())
   const [isUserNavigating, setIsUserNavigating] = useState(false)
@@ -374,11 +317,6 @@ export const LeftNav: React.FC<LeftNavProps> = ({
 
   return (
     <aside className="w-64 bg-bzl-green-light/30 border-r-2 border-r-bzl-green-dark flex-shrink-0 sticky top-0 h-screen overflow-y-auto">
-      <div className="p-4 text-center text-sm">
-        <span className="font-semibold">{moduleName}</span>
-        <span className="text-gray-600">@{version}</span>
-      </div>
-
       <nav className="space-y-1">
         {navStructure.map((item) => renderNavItem(item))}
       </nav>
