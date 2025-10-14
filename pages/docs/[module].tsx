@@ -71,7 +71,8 @@ const DocsPage: NextPage<DocsPageProps> = ({
                   No API Documentation Available
                 </h2>
                 <p className="text-gray-500">
-                  This module doesn't have any Starlark API documentation yet.
+                  This module does not publish Starlark API documentation yet.
+                  Module authors: read https://github.com/bazelbuild/bazel-central-registry/blob/main/docs/stardocs.md
                 </p>
               </div>
             )}
