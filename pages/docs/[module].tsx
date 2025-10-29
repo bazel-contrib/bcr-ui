@@ -71,9 +71,10 @@ const DocsPage: NextPage<DocsPageProps> = ({
                 </h2>
                 <p className="text-gray-500">
                   This module does not publish Starlark API documentation yet.
-                  <br/>
-                  Module authors: you can add documentaton. Read the instructions at:
-                  <br/>
+                  <br />
+                  Module authors: you can add documentaton. Read the
+                  instructions at:
+                  <br />
                   <a href="https://github.com/bazelbuild/bazel-central-registry/blob/main/docs/stardoc.md">
                     https://github.com/bazelbuild/bazel-central-registry/blob/main/docs/stardoc.md
                   </a>
