@@ -2,7 +2,7 @@ bazel_dep(name = "bazel_env.bzl", version = "0.5.0")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
 bazel_dep(name = "buildozer", version = "8.2.1")
 bazel_dep(name = "aspect_bazel_lib", version = "2.21.1")
-bazel_dep(name = "aspect_rules_js", version = "2.6.0")
+bazel_dep(name = "aspect_rules_js", version = "2.7.0")
 bazel_dep(name = "aspect_rules_ts", version = "3.7.0")
 
 pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
