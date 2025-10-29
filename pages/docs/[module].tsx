@@ -11,7 +11,7 @@ import {
 
 interface DocsPageProps {
   versionInfos: VersionInfo[]
-  selectedVersion: string
+  selectedVersion: string | null
 }
 
 const DocsPage: NextPage<DocsPageProps> = ({
@@ -21,11 +21,14 @@ const DocsPage: NextPage<DocsPageProps> = ({
   const router = useRouter()
   const { module } = router.query
 
-  const versionInfo = versionInfos.find((n) => n.version === selectedVersion)
+  // If no selectedVersion or version not found, use the latest version
+  const latestVersion = versionInfos[0]?.version
+  const targetVersion = selectedVersion || latestVersion
+  const versionInfo = versionInfos.find((n) => n.version === targetVersion)
 
   if (!versionInfo) {
     throw Error(
-      `Version information for version \`${selectedVersion}\` of module \`${module}\` could not be retrieved`
+      `Version information for version \`${targetVersion}\` of module \`${module}\` could not be retrieved`
     )
   }
 
@@ -40,14 +43,14 @@ const DocsPage: NextPage<DocsPageProps> = ({
         >
           {module}
         </span>
-        <span className="text-lg ml-2">API docs @{selectedVersion}</span>
+        <span className="text-lg ml-2">API docs @{targetVersion}</span>
       </div>
 
       <div className="flex flex-1 min-h-screen">
         <div className="hidden lg:block">
           <StardocNav
             moduleName={module as string}
-            version={selectedVersion}
+            version={targetVersion}
             stardocs={versionInfo.stardocs}
           />
         </div>
