@@ -7,6 +7,7 @@ export interface GithubRepositoryMetadata {
   topics: string[] | null
   stargazers: number | null
   isArchived: boolean | null
+  fundingLinks: { url: string; platform: string }[]
 }
 
 /**
@@ -43,6 +44,7 @@ export async function getGithubRepositoryMetadata(
               : '',
           }
         : null,
+      fundingLinks: rawData.fundingLinks || [],
       topics:
         rawData.repositoryTopics?.nodes?.map(
           (topic: { name: string }) => topic.name

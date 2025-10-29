@@ -7,7 +7,11 @@ import { Footer } from '../../components/Footer'
 import { listModuleNames, Metadata } from '../../data/utils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
-import { faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons'
+import {
+  faEnvelope,
+  faStar,
+  faHeart,
+} from '@fortawesome/free-regular-svg-icons'
 import { CopyCode } from '../../components/CopyCode'
 import { Badges } from '../../components/Badges'
 import { PlatformSupport } from '../../components/PlatformSupport'
@@ -75,6 +79,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
   const repoLicense = githubMetadata?.license || undefined
   const repoTopics = githubMetadata?.topics || undefined
   const repoStargazers = githubMetadata?.stargazers || undefined
+  const repoFundingLinks = githubMetadata?.fundingLinks || []
 
   const isQualifiedForShowAllVersions =
     versionInfos.length > NUM_VERSIONS_ON_PAGE_LOAD
@@ -126,9 +131,10 @@ const ModulePage: NextPage<ModulePageProps> = ({
               {(versionInfo.hasAttestationFile ||
                 githubMetadata?.isArchived ||
                 deprecated) && (
-                <span className="w-7 h-7 inline-block">
+                <span className="inline-block">
                   <Badges
                     hasAttestationFile={versionInfo.hasAttestationFile}
+                    hasFundingLinks={repoFundingLinks?.length > 0 || false}
                     isArchived={githubMetadata?.isArchived || false}
                     deprecated={deprecated}
                     deprecationMessage={metadata.deprecated}
@@ -510,7 +516,6 @@ const ModulePage: NextPage<ModulePageProps> = ({
                         })}
                       </div>
                     )}
-
                     {metadata.homepage !== githubLink ? (
                       <a
                         href={metadata.homepage}
@@ -525,6 +530,28 @@ const ModulePage: NextPage<ModulePageProps> = ({
                       </a>
                     ) : null}
 
+                    {repoFundingLinks.length > 0 && (
+                      <div className="text-black">
+                        {repoFundingLinks.map(
+                          (fundingLink: { url: string; platform: string }) => (
+                            <a
+                              href={fundingLink.url}
+                              className="block text-link-color hover:text-link-color-hover"
+                              title={fundingLink.platform}
+                            >
+                              <FontAwesomeIcon
+                                icon={faHeart}
+                                className="mr-1 min-w-[30px] text-pink-500"
+                              />
+                              {fundingLink.platform
+                                .replace('_', ' ')
+                                .toLowerCase()
+                                .replace(/\b\w/g, (l) => l.toUpperCase())}
+                            </a>
+                          )
+                        )}
+                      </div>
+                    )}
                     {repoStargazers && (
                       <div className="text-black">
                         <FontAwesomeIcon

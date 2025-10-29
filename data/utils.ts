@@ -58,6 +58,7 @@ export interface SearchIndexEntry {
   hasAttestationFile: boolean
   hasStardocs: boolean
   isArchived: boolean
+  hasFundingLinks: boolean
   deprecated: boolean
   deprecationMessage: string | null
 }
@@ -87,6 +88,7 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
         authorDateIso,
         hasAttestationFile: await hasAttestationFile(module, latestVersion),
         hasStardocs,
+        hasFundingLinks: githubMetadata?.fundingLinks?.length > 0 || false,
         isArchived: githubMetadata?.isArchived || false,
         deprecated: !!metadata.deprecated,
         deprecationMessage: metadata.deprecated || null,

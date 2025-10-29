@@ -91,6 +91,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
                     hasAttestationFile,
                     hasStardocs,
                     isArchived,
+                    hasFundingLinks,
                     deprecated,
                     deprecationMessage,
                   }) => (
@@ -102,6 +103,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
                         hasAttestationFile,
                         hasStardocs,
                         isArchived,
+                        hasFundingLinks,
                         deprecated,
                         deprecationMessage,
                       }}
@@ -121,6 +123,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
                     hasAttestationFile,
                     hasStardocs,
                     isArchived,
+                    hasFundingLinks,
                     deprecated,
                     deprecationMessage,
                   }) => (
@@ -133,6 +136,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
                         hasAttestationFile,
                         hasStardocs,
                         isArchived,
+                        hasFundingLinks,
                         deprecated,
                         deprecationMessage,
                       }}

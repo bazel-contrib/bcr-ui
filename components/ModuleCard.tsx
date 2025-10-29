@@ -9,6 +9,7 @@ export interface ModuleCardProps {
   authorDate?: string
   hasAttestationFile?: boolean
   hasStardocs?: boolean
+  hasFundingLinks?: boolean
   isArchived?: boolean
   deprecated?: boolean
   deprecationMessage?: string | null
@@ -20,6 +21,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
   authorDate,
   hasAttestationFile = false,
   hasStardocs = false,
+  hasFundingLinks = false,
   isArchived = false,
   deprecated = false,
   deprecationMessage,
@@ -39,6 +41,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
               <Badges
                 hasAttestationFile={hasAttestationFile}
                 hasStardocs={hasStardocs}
+                hasFundingLinks={hasFundingLinks}
                 isArchived={isArchived}
                 deprecated={deprecated}
                 deprecationMessage={deprecationMessage}
