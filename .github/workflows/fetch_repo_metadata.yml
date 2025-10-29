@@ -24,7 +24,7 @@ jobs:
           run: |
             ./.github/workflows/fetch_repo_metadata.sh
         - name: Upload metadata
-          uses: actions/upload-artifact@v4
+          uses: actions/upload-artifact@v5
           with:
             name: github_metadata
             path: ${{ steps.fetch_repo_metadata.outputs.metadata }}
