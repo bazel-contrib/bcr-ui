@@ -38,7 +38,7 @@ SCRIPT_DIR=$(dirname "$0")
             continue
         fi
         
-        gh repo view --json description,licenseInfo,repositoryTopics,stargazerCount,isArchived "$organdrepo" > $OUT/$module.github_metadata.json
+        gh repo view --json description,licenseInfo,repositoryTopics,stargazerCount,isArchived,fundingLinks "$organdrepo" > $OUT/$module.github_metadata.json
     done
 )
 
