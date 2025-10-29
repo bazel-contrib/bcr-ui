@@ -535,6 +535,7 @@ const ModulePage: NextPage<ModulePageProps> = ({
                         {repoFundingLinks.map(
                           (fundingLink: { url: string; platform: string }) => (
                             <a
+                              key={fundingLink.url}
                               href={fundingLink.url}
                               className="block text-link-color hover:text-link-color-hover"
                               title={fundingLink.platform}
