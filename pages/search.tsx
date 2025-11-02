@@ -77,7 +77,7 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
           <div className="w-full max-w-4xl">
             <h2 className="font-bold text-lg">
               Search results
-              {getSearchQuery() && (
+              {getSearchQuery() && searchResults && (
                 <span className="text-gray-600 font-normal ml-2">
                   ({searchResults.length} {searchResults.length === 1 ? 'module' : 'modules'})
                 </span>
