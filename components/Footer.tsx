@@ -11,9 +11,8 @@ export const Footer: React.FC<FooterProps> = () => {
   return (
     <footer className="flex flex-col bg-bzl-green-dark text-white items-center justify-center gap-2 h-18 p-4 bottom-2">
       <div className="text-center">
-        The Bazel Central Registry is maintained by the Bazel team and the
+        The Bazel Central Registry is maintained by the Bazel team and the{' '}
         <a href={SIG_LINK} className="underline hover:text-gray-200">
-          {' '}
           Bazel Rules authors SIG.
         </a>
       </div>

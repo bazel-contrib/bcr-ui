@@ -76,7 +76,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
               autoFocus
               id="search-navbar"
               className="my-6 h-12 block p-2 pl-10 w-full max-w-xl text-gray-900 bg-white rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Search for module..."
+              placeholder={`Search ${searchIndex.length} modules...`}
               onChange={(e) => setSearchQueryInput(e.target.value)}
             />
           </form>
