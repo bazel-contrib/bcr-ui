@@ -21,6 +21,12 @@ conditions.
 
 ### Getting Started
 
+Note that the git repo is enormous, due to the regularly published files in the `gh-pages` branch. To avoid downloading tens of gigabytes of data, use a shallow clone:
+
+```bash
+git clone --depth 5 https://github.com/bazel-contrib/bcr-ui
+```
+
 We use git submodules to include the data from bazelbuild/bazel-central-registry, so after cloning this repo you need to run:
 
 ```bash
