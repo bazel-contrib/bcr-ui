@@ -281,6 +281,11 @@ const buildAllModuleInfoInner = async (): Promise<AllModuleInfo> => {
     ? process.env.MODULE_NAMES.split(',').map((name) => name.trim())
     : await listModuleNames()
   for (const moduleName of modulesNames) {
+    if (moduleName === 'boost') {
+      // Next.js would write the static props snapshot for a "modules/boost" dynamic route to "boost.json"
+      // but there is also a BCR module of that name. So skip build-time pre-rendering of the boost module.
+      continue
+    }
     const versions = await listModuleVersions(moduleName)
     for (const moduleVersion of versions) {
       const moduleInfo = await extractModuleInfo(moduleName, moduleVersion)
