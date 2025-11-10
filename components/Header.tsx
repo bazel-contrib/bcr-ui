@@ -105,7 +105,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <line className="st1" x1="43.4" y1="22.1" x2="43.4" y2="43.1" />
               </svg>
 
-              <span className="self-center font-playwrite text-xl font-normal whitespace-nowrap text-white cursor-pointer pl-2">
+              <span className="self-center text-2xl font-normal whitespace-nowrap text-white cursor-pointer pl-2">
                 Bazel Central Registry
               </span>
             </Link>
