@@ -104,13 +104,17 @@ export async function getStaticPaths() {
   const { listModuleNames } = await import('../../data/utils')
   const modulesNames = await listModuleNames()
 
-  const paths = modulesNames.map((name) => ({
-    params: { module: name },
-  }))
+  // Next.js would write the static props snapshot for a "modules/boost" dynamic route to "boost.json"
+  // but there is also a BCR module of that name. So skip build-time pre-rendering of the boost module.
+  const paths = modulesNames
+    .filter((name) => name != 'boost')
+    .map((name) => ({
+      params: { module: name },
+    }))
 
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   }
 }
 
