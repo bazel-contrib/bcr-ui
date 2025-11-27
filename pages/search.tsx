@@ -79,7 +79,8 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
               Search results
               {getSearchQuery() && searchResults && (
                 <span className="text-gray-600 font-normal ml-2">
-                  ({searchResults.length} {searchResults.length === 1 ? 'module' : 'modules'})
+                  ({searchResults.length}{' '}
+                  {searchResults.length === 1 ? 'module' : 'modules'})
                 </span>
               )}
             </h2>
@@ -115,7 +116,8 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
                 <div className="text-gray-600">
                   <p>
                     No results for &quot;
-                    <span className="text-black">{router.query.q}</span>&quot; (0 modules).
+                    <span className="text-black">{router.query.q}</span>&quot;
+                    (0 modules).
                   </p>
                   <p>
                     You can{' '}
