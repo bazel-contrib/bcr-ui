@@ -94,6 +94,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
                     hasFundingLinks,
                     deprecated,
                     deprecationMessage,
+                    repoDescription,
                   }) => (
                     <ModuleCard
                       key={module}
@@ -106,6 +107,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
                         hasFundingLinks,
                         deprecated,
                         deprecationMessage,
+                        repoDescription,
                       }}
                     />
                   )
@@ -126,6 +128,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
                     hasFundingLinks,
                     deprecated,
                     deprecationMessage,
+                    repoDescription,
                   }) => (
                     <ModuleCard
                       key={module}
@@ -139,6 +142,7 @@ const Home: NextPage<HomePageProps> = ({ searchIndex }) => {
                         hasFundingLinks,
                         deprecated,
                         deprecationMessage,
+                        repoDescription,
                       }}
                     />
                   )

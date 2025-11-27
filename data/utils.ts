@@ -61,6 +61,7 @@ export interface SearchIndexEntry {
   hasFundingLinks: boolean
   deprecated: boolean
   deprecationMessage: string | null
+  repoDescription: string | null
 }
 
 export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
@@ -92,6 +93,7 @@ export const buildSearchIndex = async (): Promise<SearchIndexEntry[]> => {
         isArchived: githubMetadata?.isArchived || false,
         deprecated: !!metadata.deprecated,
         deprecationMessage: metadata.deprecated || null,
+        repoDescription: githubMetadata?.description || null,
       }
     })
   )

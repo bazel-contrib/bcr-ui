@@ -39,6 +39,7 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
                   hasFundingLinks,
                   deprecated,
                   deprecationMessage,
+                  repoDescription,
                 }) => (
                   <ModuleCard
                     key={module}
@@ -52,6 +53,7 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
                       hasFundingLinks,
                       deprecated,
                       deprecationMessage,
+                      repoDescription,
                     }}
                   />
                 )

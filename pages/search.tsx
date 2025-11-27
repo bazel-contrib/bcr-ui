@@ -32,11 +32,12 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
   const [searchQueryInput, setSearchQueryInput] = useState<string>(
     getSearchQuery() || ''
   )
-
   const fuseIndex = new Fuse(searchIndex, {
     includeScore: true,
-    threshold: 0.4,
-    keys: ['module'],
+    threshold: 0.3,
+    keys: ['module','repoDescription'],
+    useExtendedSearch: true,
+    ignoreLocation: true,
   })
 
   useEffect(() => {
@@ -88,6 +89,7 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
                     hasFundingLinks,
                     deprecated,
                     deprecationMessage,
+                    repoDescription,
                   }) => (
                     <ModuleCard
                       key={module}
@@ -100,6 +102,7 @@ const Search: NextPage<SearchPageProps> = ({ searchIndex }) => {
                         hasFundingLinks,
                         deprecated,
                         deprecationMessage,
+                        repoDescription,
                       }}
                     />
                   )
