@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { NextRouter, useRouter } from 'next/router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBoxOpen,
@@ -17,6 +17,23 @@ interface HeaderProps {
 export const USER_GUIDE_LINK = 'https://bazel.build/docs/bzlmod'
 export const CONTRIBUTE_CTA_LINK =
   'https://github.com/bazelbuild/bazel-central-registry/blob/main/docs/README.md'
+
+const PREVIEW_BASE = 'https://registry-preview.bazel.build'
+
+function previewUrl(router: NextRouter): string {
+  const { module, version } = router.query
+  if (router.pathname === '/modules/[module]' && typeof module === 'string') {
+    return `${PREVIEW_BASE}/modules/${module}`
+  }
+  if (
+    router.pathname === '/modules/[module]/[version]' &&
+    typeof module === 'string' &&
+    typeof version === 'string'
+  ) {
+    return `${PREVIEW_BASE}/modules/${module}/${version}`
+  }
+  return PREVIEW_BASE
+}
 
 export const Header: React.FC<HeaderProps> = ({
   minHeight = '100px',
@@ -37,6 +54,14 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header>
+      <a
+        href={previewUrl(router)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full text-center py-2 px-4 bg-yellow-100 text-yellow-900 hover:bg-yellow-200 hover:underline text-sm font-medium"
+      >
+        Try the new Bazel Central Registry UI →
+      </a>
       <nav
         style={{ minHeight: minHeight }}
         className="flex border-gray-200 px-2 sm:px-4 py-2.5 bg-bzl-green"
