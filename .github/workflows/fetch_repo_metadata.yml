@@ -10,7 +10,7 @@ jobs:
   fetch_repo_metadata:  
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v5
+        - uses: actions/checkout@v6
           # Note, in this case we only need the latest commit, so it's okay with does a depth=1
           with:
             submodules: true
