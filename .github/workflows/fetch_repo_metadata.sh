@@ -38,7 +38,11 @@ SCRIPT_DIR=$(dirname "$0")
             continue
         fi
         
-        gh repo view --json description,licenseInfo,repositoryTopics,stargazerCount,isArchived,fundingLinks "$organdrepo" > $OUT/$module.github_metadata.json
+        if ! gh repo view --json description,licenseInfo,repositoryTopics,stargazerCount,isArchived,fundingLinks "$organdrepo" > $OUT/$module.github_metadata.json; then
+            echo "  Failed to fetch metadata for $organdrepo, skipping..."
+            rm -f "$OUT/$module.github_metadata.json"
+            continue
+        fi
     done
 )
 
